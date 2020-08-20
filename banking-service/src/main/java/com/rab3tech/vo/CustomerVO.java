@@ -1,5 +1,6 @@
 package com.rab3tech.vo;
 
+import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.List;
 
@@ -38,8 +39,20 @@ public class CustomerVO {
     private byte[] image;
     private String role;
     private String token;
-    
-    private List<Integer> roleids;
+	private Timestamp doe;
+	
+	
+    public Timestamp getDoe() {
+		return doe;
+	}
+
+	public void setDoe(Timestamp doe) {
+		this.doe = doe;
+	}
+
+
+
+	private List<Integer> roleids;
     
 	
 	public List<Integer> getRoleids() {

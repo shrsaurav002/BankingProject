@@ -199,7 +199,6 @@ public class CustomerUIController {
 
 		return "customer/customerSearch";
 	}
-
 	@GetMapping("/customer/addPayee")
 	public String customerAddPayee() {
 

@@ -74,10 +74,10 @@ public class CustomerServiceImpl implements CustomerService {
 
 	@Autowired
 	private CustomerAccountInfoRepository customerAccountInfoRepository;
-	
+
 	@Autowired
-	private CustomerRepository CustomerRepository;
-	
+	private CustomerRepository customerRepo;
+
 	@Autowired
 	private PayeeRepository payeeRepository;
 
@@ -154,20 +154,19 @@ public class CustomerServiceImpl implements CustomerService {
 	public List<CustomerVO> findCustomers() {
 		List<Customer> customers = customerRepository.findAll();
 		/*
-		 * List<CustomerVO> customerVOs=new ArrayList<CustomerVO>(); 
-		 * for(Customer customer:customers) {
-		 *  CustomerVO customerVO=CustomerMapper.toVO(customer);
+		 * List<CustomerVO> customerVOs=new ArrayList<CustomerVO>(); for(Customer
+		 * customer:customers) { CustomerVO customerVO=CustomerMapper.toVO(customer);
 		 * customerVOs.add(customerVO); } return customerVOs;
 		 */
-		return customers.stream(). //Stream<Customer>
-		map(CustomerMapper::toVO).//Stream<CustomerVO>
-		collect(Collectors.toList()); //List<CustomerVO>
+		return customers.stream(). // Stream<Customer>
+				map(CustomerMapper::toVO).// Stream<CustomerVO>
+				collect(Collectors.toList()); // List<CustomerVO>
 	}
-	
+
 	@Override
 	public void updateProfile(CustomerUpdateVO customerVO) {
-		//I have loaded entity inside persistence context - >>Session
-		Customer customer=customerRepository.findById(customerVO.getCid()).get();
+		// I have loaded entity inside persistence context - >>Session
+		Customer customer = customerRepository.findById(customerVO.getCid()).get();
 		try {
 			customer.setImage(customerVO.getPhoto().getBytes());
 		} catch (IOException e) {
@@ -176,130 +175,154 @@ public class CustomerServiceImpl implements CustomerService {
 		customer.setName(customerVO.getName());
 		customer.setMobile(customerVO.getMobile());
 		customer.setDom(new Timestamp(new Date().getTime()));
-		///customerRepository.save(customer);
+		/// customerRepository.save(customer);
 	}
-	
-	
+
 	@Override
 	public byte[] findPhotoByid(int cid) {
-		Optional<Customer> optionalCustomer=customerRepository.findById(cid);
-		if(optionalCustomer.isPresent()) {
+		Optional<Customer> optionalCustomer = customerRepository.findById(cid);
+		if (optionalCustomer.isPresent()) {
 			return optionalCustomer.get().getImage();
-		}else {
+		} else {
 			return null;
 		}
-		
+
 	}
-	
-   @Override
-	public List<RoleVO> getRoles(){
-		
+
+	@Override
+	public List<RoleVO> getRoles() {
+
 		List<Role> roles = roleRepository.findAll();
-		List<RoleVO> rolesVO = new ArrayList<RoleVO>(); 
-		for(Role role : roles) {
-			System.out.println("MY ROLE========"+role.toString());
+		List<RoleVO> rolesVO = new ArrayList<RoleVO>();
+		for (Role role : roles) {
+			System.out.println("MY ROLE========" + role.toString());
 			RoleVO roleVO = new RoleVO();
 			BeanUtils.copyProperties(role, roleVO);
 			rolesVO.add(roleVO);
 		}
-		
+
 		return rolesVO;
 	}
-	
-   @Override
-   public String findCustomerByEmail(String email) {
-	   Optional<CustomerSaving> customer = customerAccountEnquiryRepository.findByEmail(email);  
-	   String result = "";
-	   if(customer.isPresent()) {
-		   result = "fail";
-	   }
-	   else result="success";
-	   
-	   return result;
-   }
-   
-   @Override
-   public String findCustomerByMobile(String mobile) {
-	   Optional<CustomerSaving> customer = customerAccountEnquiryRepository.findByMobile(mobile);  
-	   String result = "";
-	   if(customer.isPresent()) {
-		   result = "fail";
-	   }
-	   else result="success";
-	   
-	   return result;
-   }
-   
-   @Override
-   public  CustomerVO searchCustomer(String searchKey){
-	   Optional<Customer> customer = CustomerRepository.findByName(searchKey.trim());
-	   CustomerVO customerVO = null;
-	   if(customer.isPresent()) {
-		   customerVO = new CustomerVO();
-		   customerVO.setId(customer.get().getId());
-		   customerVO.setName(customer.get().getName().trim());
-		   customerVO.setEmail(customer.get().getEmail());
-		   customerVO.setAddress(customer.get().getAddress());
-		   customerVO.setMobile(customer.get().getMobile());
-		   customerVO.setImage(customer.get().getImage());
-		   
-	   }
-	   
-	   return customerVO;
-   }
 
-      @Override
-    public List<AccountTypeVO> findAccountTypes() {
-	     List<AccountType> accounts = accountTypeRepository.findAll();
-	     List<AccountTypeVO> accountsVO =  new ArrayList<AccountTypeVO>();
-	     for(AccountType account : accounts) {
-		    AccountTypeVO accountVO = new AccountTypeVO();
-		    BeanUtils.copyProperties(account, accountVO);
-		     accountsVO.add(accountVO);
-	      }
-    	return accountsVO;
-      }
- 
-     @Override
-     public void addPayee(PayeeInfoVO payeeInfoVO) {
-    	 PayeeStatus payeeStatus = new PayeeStatus();
-    	 payeeStatus.setId(1);
-    	 PayeeInfo payeeInfo = new PayeeInfo();
-    	 payeeInfo.setPayeeStatus(payeeStatus);
-		 BeanUtils.copyProperties(payeeInfoVO, payeeInfo);
-		 payeeInfo.setDoe(new Timestamp(new Date().getTime()));
-		 System.out.println(payeeInfo);
-		 payeeRepository.save(payeeInfo);
-     }
-     
-	 @Override
-	 public List<PayeeInfoVO> pendingPayeeList(){
-		   
-		   List<PayeeInfo> payeeInfoList =  payeeRepository.findAll();
-		   List<PayeeInfoVO> payeeInfoVOList = new ArrayList<PayeeInfoVO>();
-		   for(PayeeInfo pi : payeeInfoList) {
-			    PayeeInfoVO piVO = new PayeeInfoVO();
-			    piVO.setPayeeStatus(pi.getPayeeStatus().getName());
-			    BeanUtils.copyProperties(pi, piVO);
-			    payeeInfoVOList.add(piVO);
-		   }
-		   
-		   return payeeInfoVOList;
-	   }
+	@Override
+	public String findCustomerByEmail(String email) {
+		Optional<CustomerSaving> customer = customerAccountEnquiryRepository.findByEmail(email);
+		String result = "";
+		if (customer.isPresent()) {
+			result = "fail";
+		} else
+			result = "success";
 
-	 @Override
-	 public List<PayeeInfoVO> registeredPayeeList(){
-		   
-		   List<PayeeInfo> payeeInfoList =  payeeRepository.findPendingPayee();
-		   List<PayeeInfoVO> payeeInfoVOList = new ArrayList<PayeeInfoVO>();
-		   for(PayeeInfo pi : payeeInfoList) {
-			    PayeeInfoVO piVO = new PayeeInfoVO();
-			    piVO.setPayeeStatus(pi.getPayeeStatus().getName());
-			    BeanUtils.copyProperties(pi, piVO);
-			    payeeInfoVOList.add(piVO);
-		   }
-		   
-		   return payeeInfoVOList;
-	   }
+		return result;
+	}
 
+	@Override
+	public String findCustomerByMobile(String mobile) {
+		Optional<CustomerSaving> customer = customerAccountEnquiryRepository.findByMobile(mobile);
+		String result = "";
+		if (customer.isPresent()) {
+			result = "fail";
+		} else
+			result = "success";
+
+		return result;
+	}
+
+	@Override
+	public CustomerVO searchCustomer(String searchKey) {
+		Optional<Customer> customer = customerRepo.findByName(searchKey.trim());
+		CustomerVO customerVO = null;
+		if (customer.isPresent()) {
+			customerVO = new CustomerVO();
+			customerVO.setId(customer.get().getId());
+			customerVO.setName(customer.get().getName().trim());
+			customerVO.setEmail(customer.get().getEmail());
+			customerVO.setAddress(customer.get().getAddress());
+			customerVO.setMobile(customer.get().getMobile());
+			customerVO.setImage(customer.get().getImage());
+
+		}
+
+		return customerVO;
+	}
+
+	@Override
+	public List<AccountTypeVO> findAccountTypes() {
+		List<AccountType> accounts = accountTypeRepository.findAll();
+		List<AccountTypeVO> accountsVO = new ArrayList<AccountTypeVO>();
+		for (AccountType account : accounts) {
+			AccountTypeVO accountVO = new AccountTypeVO();
+			BeanUtils.copyProperties(account, accountVO);
+			accountsVO.add(accountVO);
+		}
+		return accountsVO;
+	}
+
+	@Override
+	public void addPayee(PayeeInfoVO payeeInfoVO) {
+		PayeeStatus payeeStatus = new PayeeStatus();
+		payeeStatus.setId(1);
+		PayeeInfo payeeInfo = new PayeeInfo();
+		payeeInfo.setPayeeStatus(payeeStatus);
+		BeanUtils.copyProperties(payeeInfoVO, payeeInfo);
+		payeeInfo.setDoe(new Timestamp(new Date().getTime()));
+		System.out.println(payeeInfo);
+		payeeRepository.save(payeeInfo);
+	}
+
+	@Override
+	public List<PayeeInfoVO> pendingPayeeList() {
+
+		List<PayeeInfo> payeeInfoList = payeeRepository.findAll();
+		List<PayeeInfoVO> payeeInfoVOList = new ArrayList<PayeeInfoVO>();
+		for (PayeeInfo pi : payeeInfoList) {
+			PayeeInfoVO piVO = new PayeeInfoVO();
+			piVO.setPayeeStatus(pi.getPayeeStatus().getName());
+			BeanUtils.copyProperties(pi, piVO);
+			payeeInfoVOList.add(piVO);
+		}
+
+		return payeeInfoVOList;
+	}
+
+	@Override
+	public List<PayeeInfoVO> registeredPayeeList() {
+
+		List<PayeeInfo> payeeInfoList = payeeRepository.findPendingPayee();
+		List<PayeeInfoVO> payeeInfoVOList = new ArrayList<PayeeInfoVO>();
+		for (PayeeInfo pi : payeeInfoList) {
+			PayeeInfoVO piVO = new PayeeInfoVO();
+			piVO.setPayeeStatus(pi.getPayeeStatus().getName());
+			BeanUtils.copyProperties(pi, piVO);
+			payeeInfoVOList.add(piVO);
+		}
+
+		return payeeInfoVOList;
+	}
+
+	@Override
+	public List<CustomerVO> searchCustomers(String searchText) {
+		List<Customer> clist = customerRepo.findByNameLikeOrEmailLike(searchText, searchText);
+		List<CustomerVO> customers = null;
+		if (clist.size() != 0) {
+			customers = new ArrayList<>();
+			// List<Customer> customersEntity = optional.get();
+			for (Customer c : clist) {
+				CustomerVO cust = new CustomerVO();
+				BeanUtils.copyProperties(c, cust, new String[] { "id" });
+				cust.setId(c.getId());
+				customers.add(cust);
+			}
+
+		}
+		System.out.println(customers);
+		return customers;
+	}
+@Override
+	public byte[] imageSearch(String email) {
+		byte[] img = null;
+		Optional<Customer> c = customerRepo.findByEmail(email);
+		img = c.get().getImage();
+		return img;
+	}
 }

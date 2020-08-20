@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Application Status</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+<style>
+.ffooter {
+	position: fixed;
+	left: 0;
+	bottom: 0;
+	width: 100%;
+	background-color: red;
+	color: white;
+	text-align: center;
+	height: 30px;
+	background-color: #e9ffe7;
+}
+</style>
+
+<script type="text/javascript">
+ 
+ function searchUsers(){
+$("#body").empty();
+	 var searchText=$("#search").val();
+	var values= fetch("/v3/customer/searchCustomers?searchText="+searchText);
+	
+	var a=values.then(res=>res.json())
+	a.then(function(data){
+		
+		console.log(data.length)
+	/* 	<td id="sno">@mdo</td>
+		<td id="name">@mdo</td>
+		<td id="email">@mdo</td>
+		<td id="gender">@mdo</td>
+		<td id="photo">@mdo</td>
+		<td id="doe">@mdo</td> */
+	var line=data.length;
+		$.each(data,function(key,value){
+			
+			var row=$("#sample").clone();
+			var tablebody=$("#body");
+			tablebody.append(row);
+		/* 	.appendTo("#body");
+ */			
+			
+			console.log(value.name)
+			$("#sno").html(line);
+			
+			$("#name").html(value.name);
+			$("#email").html(value.email);
+			$("#gender").html(value.gender);
+			$("#photo").html("<img src=/v3/load/image?email="+value.email+" style=height:150px;>");
+			$("#doe").html(value.doe);
+	line--;
+			
+		 })
+		 
+		 
+		 
+		 
+		$("#ptable").show();
+	})
+ 	.catch(
+			error=>{
+				console.log('No Data Found');
+				$("#errorMsg").html("Invalid Email or App Ref")
+				$("#ptable").hide();}
+			) 
+ }
+       function messageClear(){
+    	   var searchText=$("#search").val();
+    	   if(searchText.length==0){
+    		   $("#ptable").hide();
+    	   }
+    	   $("#errorMessage").html("");
+    	  
+       }
+ 
+   
+ 
+ </script>
+</head>
+<body>
+	<header style="height: 30px; background-color: #37adda;"> </header>
+	<div class="container">
+		<h2>Search for Users</h2>
+		<img th:src="@{/images/userSearch.png}" alt="Logo"
+			style="height: 140px" /> <br />
+
+		<div style="width: 70%">
+
+			<div class="form-group">
+				<label for="nameOrEmail">Enter Name or Email:</label> <input
+					type="text" style="width: 60%;" class="form-control" name="search"
+					id="search" placeholder="Enter email or name"
+					onkeyup="messageClear();">
+			</div>
+
+
+			<button type="button" class="btn btn-primary"
+				onClick="searchUsers();">Search</button>
+
+			<button type="reset" class="btn btn-danger">Reset</button>
+
+			<a th:href="@{/customer/account/enquiry}">
+				<button type="button" class="btn btn-warning">Customer
+					Enquiry</button>
+			</a> <a th:href="@{/customer/login}">
+				<button type="button" class="btn btn-danger">Login</button>
+			</a> <a th:href="@{/customer/app/status}">
+				<button type="button" class="btn btn-success">Enquiry
+					Status</button>
+			</a> <a th:href="@{/customer/customerSearch}">
+				<button type="button" class="btn btn-success">Customer
+					search</button>
+			</a>
+
+		</div>
+		<hr />
+		<span id="errorMsg" style="color: red"></span>
+		<div id="ptable" style="display: none;">
+			<p>
+				<img th:src="@{/images/result.png}" style="height: 60px" id="ptable">
+				Current Customers
+			</p>
+			<table class="table" id="table">
+				<thead>
+					<tr>
+						<th>S.No</th>
+						<th>Name</th>
+						<th>Email</th>
+						<th>Gender</th>
+						<th>Photo</th>
+						<th>DOE</th>
+
+
+					</tr>
+				</thead>
+				<tbody id="body">
+					
+				</tbody>
+				<tfoot style="display:none;">  <tr id="sample" >
+
+					<td id="sno">@mdo</td>
+					<td id="name">@mdo</td>
+					<td id="email">@mdo</td>
+					<td id="gender">@mdo</td>
+					<td id="photo">@mdo</td>
+					<td id="doe">@mdo</td>
+
+				</tr></tfoot>
+			</table>
+		</div>
+	</div>
+
+
+	<footer class="ffooter"> </footer>
+
+</body>
+</html>

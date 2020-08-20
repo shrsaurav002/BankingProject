@@ -37,6 +37,10 @@ public interface CustomerService {
 
 	List<PayeeInfoVO> registeredPayeeList();
 
+	List<CustomerVO> searchCustomers(String searchText);
+
+	byte[] imageSearch(String email);
+
 	
 
 }

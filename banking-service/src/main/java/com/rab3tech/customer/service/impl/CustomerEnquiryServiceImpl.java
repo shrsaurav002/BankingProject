@@ -195,6 +195,7 @@ public class CustomerEnquiryServiceImpl implements CustomerEnquiryService {
 
 	@Override
 	public CustomerSavingVO findAppStatus(String searchText) {
+		
 		Optional<CustomerSaving> optional = customerAccountEnquiryRepository.findByEmailOrAppref(searchText,
 				searchText);
 		CustomerSavingVO customer = null;
