@@ -315,7 +315,6 @@ public class CustomerServiceImpl implements CustomerService {
 			}
 
 		}
-		System.out.println(customers);
 		return customers;
 	}
 @Override
@@ -325,4 +324,12 @@ public class CustomerServiceImpl implements CustomerService {
 		img = c.get().getImage();
 		return img;
 	}
+
+@Override
+public CustomerVO findByEmail(String email) {
+	Customer cust=customerRepo.findByEmail(email).get();
+	CustomerVO c=new CustomerVO();
+	BeanUtils.copyProperties(cust, c);
+	return c;
+}
 }

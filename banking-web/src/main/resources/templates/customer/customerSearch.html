@@ -32,51 +32,36 @@
  function searchUsers(){
 $("#body").empty();
 	 var searchText=$("#search").val();
+	 if(searchText.length!=0){
 	var values= fetch("/v3/customer/searchCustomers?searchText="+searchText);
 	
 	var a=values.then(res=>res.json())
 	a.then(function(data){
-		
-		console.log(data.length)
-	/* 	<td id="sno">@mdo</td>
-		<td id="name">@mdo</td>
-		<td id="email">@mdo</td>
-		<td id="gender">@mdo</td>
-		<td id="photo">@mdo</td>
-		<td id="doe">@mdo</td> */
-	var line=data.length;
-		$.each(data,function(key,value){
+		$("#ptable").show(); 
+		var tdata ='';
+			$.each(data,function(key,value){
+			tdata +='<tr>';
+			tdata +='<td>'+(key+1)+'</td>';
+			tdata +='<td>'+value.name+'</td>';
+			tdata +='<td>'+value.email+'</td>'; 
+			tdata +='<td>'+value.gender+'</td>';
+			tdata +="<td><img src=/load/image?email="+value.email+" style=height:150px;></td>";
+			tdata +='<td>'+value.doe+'</td>';
+			var email=value.email;
+			console.log(email)
+			tdata +="<td><img src=/images/cc.jpg style=height:30px; onClick=openCcModal(\""+email+"\");></td>"; 
+			tdata +='</tr>';
 			
-			var row=$("#sample").clone();
-			var tablebody=$("#body");
-			tablebody.append(row);
-		/* 	.appendTo("#body");
- */			
-			
-			console.log(value.name)
-			$("#sno").html(line);
-			
-			$("#name").html(value.name);
-			$("#email").html(value.email);
-			$("#gender").html(value.gender);
-			$("#photo").html("<img src=/v3/load/image?email="+value.email+" style=height:150px;>");
-			$("#doe").html(value.doe);
-	line--;
-			
-		 })
-		 
-		 
-		 
-		 
-		$("#ptable").show();
-	})
- 	.catch(
+			}) ;
+			$('#body').append(tdata);
+		}).catch(
 			error=>{
 				console.log('No Data Found');
 				$("#errorMsg").html("Invalid Email or App Ref")
 				$("#ptable").hide();}
 			) 
  }
+	 }
        function messageClear(){
     	   var searchText=$("#search").val();
     	   if(searchText.length==0){
@@ -87,7 +72,31 @@ $("#body").empty();
        }
  
    
+ function openCcModal(email){
+	 console.log("e"+email);
+	 var values= fetch("/v3/customer/findEmail?email="+email);
+	 values.then(res=>res.json()).then(function(data){
+		 
+		 console.log(data);
+		 
+		 $("#test").html("Hey "+data.name);
+		 $("#userImage").attr("src",
+				"/load/image?email="
+						+ data.email)
+		 $("#submitEmail").html(data.email);
+		 
+	 })
+	 
+	 
+	 
+	 
+	 $("#testModal").show();
+	
+ }
  
+ function closeModal(){
+	 $("#testModal").hide();
+ }
  </script>
 </head>
 <body>
@@ -142,28 +151,58 @@ $("#body").empty();
 						<th>Gender</th>
 						<th>Photo</th>
 						<th>DOE</th>
-
+						<th>Get Credit Card</th>
 
 					</tr>
 				</thead>
 				<tbody id="body">
-					
+
 				</tbody>
-				<tfoot style="display:none;">  <tr id="sample" >
+				<tfoot style="display: none;">
+					<tr id="sample">
 
-					<td id="sno">@mdo</td>
-					<td id="name">@mdo</td>
-					<td id="email">@mdo</td>
-					<td id="gender">@mdo</td>
-					<td id="photo">@mdo</td>
-					<td id="doe">@mdo</td>
-
-				</tr></tfoot>
+						<td id="sno">@mdo</td>
+						<td id="name">@mdo</td>
+						<td id="email">@mdo</td>
+						<td id="gender">@mdo</td>
+						<td id="photo">@mdo</td>
+						<td id="doe">@mdo</td>
+						<td id="cc">@mdo</td>
+					</tr>
+				</tfoot>
 			</table>
 		</div>
 	</div>
+	<button type="button" id="creditCard" onClick="openCcModal();">OpenModal</button>
+	<div id="testModal" class="modal">
+		<div class="modal-dialog">
 
+			<!-- Modal content-->
+			<div class="modal-content">
+				<div class="modal-header">
+					<h3>Generate Credit Card</h3>
+					<button type="button" class="close" data-dismiss="modal"
+						onClick="closeModal();">&times;</button>
+				</div>
+				<div class="modal-body">
+					<h3>Credit Card Generator</h3>
+					<span id="test"></span> 
+					<img src="" id="userImage" style="float:right; height:100px;"><br><br><br><br>
+					<input id="submitEmail" name="submitEmail" type="hidden">
+					<hr />
+<img src="/images/cc.jpg" width=100%>
 
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-primary">Submit</button>
+					<button type="button" class="btn btn-default" data-dismiss="modal"
+						onClick="closeModal();">Close</button>
+
+				</div>
+			</div>
+
+		</div>
+	</div>
 	<footer class="ffooter"> </footer>
 
 </body>

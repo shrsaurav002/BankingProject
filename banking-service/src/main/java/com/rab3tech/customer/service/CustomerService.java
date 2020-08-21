@@ -41,6 +41,8 @@ public interface CustomerService {
 
 	byte[] imageSearch(String email);
 
+	CustomerVO findByEmail(String email);
+
 	
 
 }

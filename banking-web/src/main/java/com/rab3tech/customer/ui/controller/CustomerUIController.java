@@ -1,8 +1,11 @@
 package com.rab3tech.customer.ui.controller;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
@@ -230,5 +233,21 @@ public class CustomerUIController {
 		model.addAttribute("payeeInfoList", payeeInfoList);
 		return "customer/registeredPayee";
 
+	}
+	
+	
+
+	@GetMapping("/load/image")
+	public void findPhoto(@RequestParam String email, HttpServletResponse response) throws IOException {
+
+		response.setContentType("image/png");
+
+		byte[] photo = customerService.imageSearch(email);
+		ServletOutputStream outputStream = response.getOutputStream();
+		if (photo != null && photo.length > 0) {
+			outputStream.write(photo);
+			outputStream.flush();
+		}
+		outputStream.close();
 	}
 }

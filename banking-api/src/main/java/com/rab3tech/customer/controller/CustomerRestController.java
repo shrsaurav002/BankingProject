@@ -123,19 +123,11 @@ public class CustomerRestController {
 		return customers;
 
 	}
-	
-	
-	@GetMapping("/load/image")
-	public void findPhoto(@RequestParam String email, HttpServletResponse response) throws IOException {
-
-		response.setContentType("image/png");
-
-		byte[] photo = customerService.imageSearch(email);
-		ServletOutputStream outputStream = response.getOutputStream();
-		if (photo != null && photo.length > 0) {
-			outputStream.write(photo);
-			outputStream.flush();
-		}
-		outputStream.close();
+	@GetMapping("/customer/findEmail")
+public CustomerVO findEmail(@RequestParam String email) {
+		CustomerVO customerVO=customer.findByEmail(email);
+		return customerVO;
+		
 	}
+	
 }
