@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>New Credit Card</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link href='http://fonts.googleapis.com/css?family=Roboto'
+	rel='stylesheet' type='text/css' />
+<!-- use the font -->
+<style>
+body {
+	font-family: 'Roboto', sans-serif;
+	font-size: 28px;
+}
+</style>
+</head>
+<body>
+
+	<header style="height: 30px; background-color:  #55b4ff;"> </header>
+
+	<p th:text="${'Hello  ' + name + '! '}"></p>
+	<p>You have successfully applied for a credit card.</p>
+
+	<hr />
+	The front of your credit card:
+	<p>
+		<img th:src="|cid:frontPhoto|" height=200px/>
+	</p>
+
+	<hr />
+	The back of your credit card:
+	<p>
+		<img th:src="|cid:backPhoto|" height=200px/>
+	</p>
+
+	Regards,
+	<br />
+	<em th:text="${sign}"></em>
+	<p th:text="${address}"></p>
+	<p th:text="${email}"></p>
+	<img th:src="|cid:signIcon|" />
+</body>
+</html>

@@ -1,12 +1,12 @@
 package com.rab3tech.customer.controller;
 
-import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Optional;
-
-import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
@@ -21,9 +21,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.rab3tech.customer.service.CustomerService;
 import com.rab3tech.customer.service.LoginService;
+import com.rab3tech.dao.entity.CreditCardEntity;
 import com.rab3tech.utils.PasswordGenerator;
 import com.rab3tech.vo.ApplicationResponseVO;
 import com.rab3tech.vo.ChangePasswordRequestVO;
+import com.rab3tech.vo.CreditCardVO;
 import com.rab3tech.vo.CustomerVO;
 import com.rab3tech.vo.LoginRequestVO;
 import com.rab3tech.vo.LoginVO;
@@ -123,11 +125,52 @@ public class CustomerRestController {
 		return customers;
 
 	}
+
 	@GetMapping("/customer/findEmail")
-public CustomerVO findEmail(@RequestParam String email) {
-		CustomerVO customerVO=customer.findByEmail(email);
+	public CustomerVO findEmail(@RequestParam String email) {
+		CustomerVO customerVO = customer.findByEmail(email);
 		return customerVO;
-		
+
 	}
-	
+
+	@GetMapping("/customer/createCcData")
+	public CreditCardVO generateCreditCard(@RequestParam String email, @RequestParam int id) {
+		CreditCardVO creditcard = new CreditCardVO();
+		CustomerVO customerVO = customer.findByEmail(email);
+		creditcard.setCardNumber((long) (Math.random() * Math.pow(10, 16)));
+		creditcard.setExpDate(new Date());
+		creditcard.setName(customerVO.getName());
+		double code = 0;
+		while (code < 100 || code > 1000) {
+			code = Math.random() * 1000;
+		}
+		creditcard.setSecCode((int) code);
+		return creditcard;
+	}
+
+	@PostMapping("/customer/saveCreditCard")
+	public String createCreditCard(@RequestParam Map<String, CreditCardVO> credit) {
+		System.out.println(credit);
+		CreditCardEntity ccEntity = new CreditCardEntity();
+		Map<String, Object> ccMap = new HashMap<>();
+		for (Entry<String, CreditCardVO> e : credit.entrySet()) {
+			String key = e.getKey().substring(7, e.getKey().length() - 1);
+			ccMap.put(key, e.getValue());
+		}
+		for (Entry<String, Object> e : ccMap.entrySet()) {
+			System.out.println("key+ " + e.getKey() + " , " + e.getValue());
+		}
+		ccEntity.setApr(12.35);
+		ccEntity.setCardNumber((long) ccMap.get("cardNumber"));
+		ccEntity.setCashbackBonus(50.32);
+		ccEntity.setCreditScore(700);
+		ccEntity.setCurrentBalance(600d);
+//		ccEntity.setExpDate( (Date) credit.get("expDate"));
+//		ccEntity.setMinPayment(35d);
+//		ccEntity.setName((String) credit.get("apr"));
+//		ccEntity.setSecCode( (int) credit.get("apr"));
+//		ccEntity.setStatementBalance( 1000d);
+		System.out.println(ccEntity);
+		return "success";
+	}
 }

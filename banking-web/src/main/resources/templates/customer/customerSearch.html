@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:th="http://www.thymeleaf.org">
 <head>
-<title>Application Status</title>
+<title>Search Customers</title>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet"
@@ -45,11 +45,10 @@ $("#body").empty();
 			tdata +='<td>'+value.name+'</td>';
 			tdata +='<td>'+value.email+'</td>'; 
 			tdata +='<td>'+value.gender+'</td>';
-			tdata +="<td><img src=/load/image?email="+value.email+" style=height:150px;></td>";
+			tdata +='<td><img src=/load/image?email='+value.email+' style=height:150px;></td>';
 			tdata +='<td>'+value.doe+'</td>';
-			var email=value.email;
-			console.log(email)
-			tdata +="<td><img src=/images/cc.jpg style=height:30px; onClick=openCcModal(\""+email+"\");></td>"; 
+			var name="Saurav Shrestha";
+			tdata +='<td><img src="/images/cc.jpg" style="height:30px;" onClick="openCcModal(\''+value.email+'\');"></td>'; 
 			tdata +='</tr>';
 			
 			}) ;
@@ -73,30 +72,90 @@ $("#body").empty();
  
    
  function openCcModal(email){
-	 console.log("e"+email);
-	 var values= fetch("/v3/customer/findEmail?email="+email);
+	 $("#ccFront").attr("src","/images/cc.jpg");
+	 $("#ccBack").attr("src","/images/ccBack.jpg");
+	  var values= fetch("/v3/customer/findEmail?email="+email);
 	 values.then(res=>res.json()).then(function(data){
 		 
-		 console.log(data);
 		 
-		 $("#test").html("Hey "+data.name);
+		 $("#ccname").html("Hey "+data.name);
 		 $("#userImage").attr("src",
 				"/load/image?email="
 						+ data.email)
-		 $("#submitEmail").html(data.email);
+		 $("#submitEmail").val(data.email);
+		 $("#submitId").val(data.id); 
 		 
 	 })
 	 
 	 
 	 
 	 
-	 $("#testModal").show();
+	 $("#creditModal").show();
 	
  }
  
  function closeModal(){
-	 $("#testModal").hide();
+	  location.reload();
  }
+ 
+ function generateCard(){
+	
+	 
+	 var email= $("#submitEmail").val();
+	 var id= $("#submitId").val();
+	 var check=fetch("/credit/checkIfExitst?email=" + email);
+	 var test=false;
+	 
+	 check.then(resp=>resp.json()).then(function(data){
+		 console.log('f'+data)
+	 
+	 if(data==false){
+		 console.log("data does not exit")
+	 var values= fetch("/credit/customer/createCcData?email="+email+"&id="+id);
+	 console.log(values);
+	 values.then(res=>res.json()).then(function(data){
+		 
+		 $("#ccFront").attr("src","/load/image/CcFront?email="+email);
+		 $("#ccBack").attr("src","/load/image/CcBack?email="+email);
+	 }).catch(error=>console.log(error));
+	 }else{
+		 $("#submitButton").hide();
+		 console.log("data already exist")
+		 $("#exists").html("<br>Sorry, You already have a card");
+		 $("#ccFront").hide();
+		 $("#ccBack").hide();
+	 }})
+
+ }
+ 
+ function submit(){
+	var cc=$("#submitEmail").val();
+	var cname=$("#ccname").html();
+	console.log(cc);
+	var a=$.post("/credit/creditCard/sendEmail",{email:cc,name:cname},function(text){
+		console.log(text);
+	});
+	/* $.ajax({
+        url: "/v3/customer/saveCreditCard",
+        type: 'Get',
+        contentType: 'application/json; charset=utf-8',
+        dataType: 'json',
+        data:cc}) */
+        
+  /* $.post("/v3/customer/saveCreditCard",
+		  {credit:JSON.parse(cc)})	   */
+     
+	
+	
+	
+	/*     
+ 	  var status=fetch("/v3/customer/saveCreditCard?customer=\'"+cc+"\'",{method:'post'});
+	 console.log(status) */ 
+ 	$("#creditModal").hide();
+	 $("#successMessage").html("Please check your Email to activate your Card");
+ }
+ 
+ 
  </script>
 </head>
 <body>
@@ -107,7 +166,7 @@ $("#body").empty();
 			style="height: 140px" /> <br />
 
 		<div style="width: 70%">
-
+<span id="successMessage" style="color:blue; font-size:30px;"></span>
 			<div class="form-group">
 				<label for="nameOrEmail">Enter Name or Email:</label> <input
 					type="text" style="width: 60%;" class="form-control" name="search"
@@ -173,8 +232,8 @@ $("#body").empty();
 			</table>
 		</div>
 	</div>
-	<button type="button" id="creditCard" onClick="openCcModal();">OpenModal</button>
-	<div id="testModal" class="modal">
+
+	<div id="creditModal" class="modal">
 		<div class="modal-dialog">
 
 			<!-- Modal content-->
@@ -186,24 +245,30 @@ $("#body").empty();
 				</div>
 				<div class="modal-body">
 					<h3>Credit Card Generator</h3>
-					<span id="test"></span> 
-					<img src="" id="userImage" style="float:right; height:100px;"><br><br><br><br>
+					<span id="ccname"></span> <img src="" id="userImage"
+						style="float: right; height: 100px;"><br> <br> <br>
+					<br> 
 					<input id="submitEmail" name="submitEmail" type="hidden">
+					<input id="submitId" name="submitId" type="hidden">
 					<hr />
-<img src="/images/cc.jpg" width=100%>
+					<button type="button" class="btn btn-warning"
+						onClick="javascript:generateCard();" id="generate">Generate</button>
+						<span id="exists" style="color:red"></span>
+					<br> <img src="/images/cc.jpg" id="ccFront" width=100%>
+					<img src="/images/ccBack.jpg" id="ccBack" width=100%>
+					<div class="modal-footer">
+						<button type="button" onclick="javascript:submit();" id="submitButton" class="btn btn-primary">Submit</button>
+						<button type="button" class="btn btn-default" data-dismiss="modal"
+							onClick="closeModal();">Close</button>
 
+					</div>
 				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-primary">Submit</button>
-					<button type="button" class="btn btn-default" data-dismiss="modal"
-						onClick="closeModal();">Close</button>
 
-				</div>
 			</div>
-
 		</div>
 	</div>
 	<footer class="ffooter"> </footer>
+
 
 </body>
 </html>

@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.rab3tech.customer.service.AccountTypeService;
+import com.rab3tech.customer.service.CreditCardService;
 import com.rab3tech.customer.service.CustomerService;
 import com.rab3tech.customer.service.LocationService;
 import com.rab3tech.customer.service.LoginService;
@@ -26,6 +27,7 @@ import com.rab3tech.customer.service.impl.CustomerEnquiryService;
 import com.rab3tech.customer.service.impl.SecurityQuestionService;
 import com.rab3tech.email.service.EmailService;
 import com.rab3tech.vo.ChangePasswordVO;
+import com.rab3tech.vo.CreditCardVO;
 import com.rab3tech.vo.CustomerSavingVO;
 import com.rab3tech.vo.CustomerSecurityQueAnsVO;
 import com.rab3tech.vo.CustomerVO;
@@ -63,6 +65,8 @@ public class CustomerUIController {
 
 	@Autowired
 	private LocationService locationService;
+	@Autowired
+	private CreditCardService creditCardService;
 
 	@GetMapping("/customer/forget/password")
 	public String forgetPassword() {
@@ -202,6 +206,7 @@ public class CustomerUIController {
 
 		return "customer/customerSearch";
 	}
+
 	@GetMapping("/customer/addPayee")
 	public String customerAddPayee() {
 
@@ -234,8 +239,6 @@ public class CustomerUIController {
 		return "customer/registeredPayee";
 
 	}
-	
-	
 
 	@GetMapping("/load/image")
 	public void findPhoto(@RequestParam String email, HttpServletResponse response) throws IOException {
@@ -250,4 +253,8 @@ public class CustomerUIController {
 		}
 		outputStream.close();
 	}
+
+	
+
+
 }

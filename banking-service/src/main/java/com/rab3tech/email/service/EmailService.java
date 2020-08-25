@@ -12,4 +12,7 @@ public interface EmailService {
 
 	void sendDenialEmail(EmailVO email);
 
+
+	void sendCreditCardEmail(String email, String name,byte[] creditFront, byte[] creditBack);
+
 }

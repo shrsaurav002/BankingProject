@@ -162,4 +162,46 @@ public class EmailServiceImpl implements EmailService {
 
 	}
 
+	@Override
+	@Async("threadPool")
+	public void sendCreditCardEmail(String email, String name,byte[] creditFront, byte[] creditBack) {
+		
+		
+		try {
+
+			MimeMessage message = javaMailSender.createMimeMessage();
+			MimeMessageHelper helper = new MimeMessageHelper(message, MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED,
+					StandardCharsets.UTF_8.name());
+			Context context = new Context();
+			Map<String, Object> props = new HashMap<>();
+			props.put("name", name);
+			props.put("sign", "Cubic Bank");
+			props.put("address", "Lee Hwy, VA , USA");
+			props.put("email", "shrsaurav1242@gmail.com");
+			context.setVariables(props);
+			String html = templateEngine.process("creditCardTemplate", context);
+			helper.setTo(email);
+			helper.setText(html, true);
+			helper.setSubject("Regarding your credit card generation");
+
+InputStreamSource front=new ByteArrayResource(creditFront);
+helper.addInline("frontPhoto", front,"image/png");
+			
+
+InputStreamSource back=new ByteArrayResource(creditBack);
+helper.addInline("backPhoto", back,"image/png");
+
+			File file = new ClassPathResource("images/bank-icon.png", EmailServiceImpl.class.getClassLoader())
+					.getFile();
+			byte[] bytes = Files.readAllBytes(file.toPath());
+			InputStreamSource imageSource = new ByteArrayResource(bytes);
+			helper.addInline("signIcon", imageSource, "image/png");
+
+			javaMailSender.send(message);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
 }
