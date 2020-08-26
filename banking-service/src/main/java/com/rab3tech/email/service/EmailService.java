@@ -1,6 +1,9 @@
 package com.rab3tech.email.service;
 
+import javax.validation.Valid;
+
 import com.rab3tech.vo.EmailVO;
+import com.rab3tech.vo.PayeeInfoVO;
 
 public interface EmailService {
 
@@ -14,5 +17,7 @@ public interface EmailService {
 
 
 	void sendCreditCardEmail(String email, String name,byte[] creditFront, byte[] creditBack);
+
+	void sendUrnEmail(@Valid PayeeInfoVO payeeInfoVO, int urn);
 
 }

@@ -173,4 +173,12 @@ public class CustomerRestController {
 		System.out.println(ccEntity);
 		return "success";
 	}
+
+	@GetMapping("/customer/findPayeeUrn")
+	public String checkUrn(@RequestParam String payeeName, @RequestParam String customerId) {
+		String urn = "";
+		int urnVal = customer.findPayeeUrn(payeeName, customerId);
+		return urn + urnVal;
+
+	}
 }

@@ -43,8 +43,11 @@ function clearMsg(){
 	   $("#errorMessage").html("");
 }  
 
-function openModalApprove(){
-	   
+function openModalApprove(email,name){
+	console.log(email+" "+name)
+	   $("#customerId").val(email);
+	   $("#payeeNameIn").val(name);
+	   $("#buttonValue").val("accept")
 	   $("#editApprovePayeePopup").modal('show');
 }
 
@@ -94,7 +97,7 @@ function openModalApprove(){
     <td th:text="${payeeVO.remarks}"/>
     <td th:text="${payeeVO.payeeStatus}"/>
     <td> 
-         <button type="button" class="btn btn-info" th:onclick="|openModalApprove()|">Approve</button>
+         <button type="button" class="btn btn-info" th:onclick="|openModalApprove('${payeeVO.customerId}','${payeeVO.payeeName}')|">Approve</button>
          <button type="button" class="btn btn-info" th:onclick="|openModalReject(${payeeVO.id})|">Reject</button>
      </td>
   
@@ -113,11 +116,13 @@ function openModalApprove(){
   <!-- The APPROVE PAYEE Modal -->
   <div class="modal" id="editApprovePayeePopup">
     <div class="modal-dialog">
+      <form th:action="@{/customer/account/confirmPayee}" method="POST">
       <div class="modal-content">
         <!-- Modal Header -->
-        
-        <input type="hidden" name="cid" id="cid"/>
-      
+         
+        <input type="hidden" name="customerId" id="customerId"/>
+      <input type="hidden" name="payeeNameIn" id="payeeNameIn"/>
+      <input type="hidden" name="buttonValue" id="buttonValue"/>
         <div class="modal-header">
           <h2 class="modal-title">
           <img src="" id="photophoto" style="height: 60px;"/>
@@ -129,7 +134,7 @@ function openModalApprove(){
         <div class="modal-body">
            
             URN
-            <input type="text" name="urn" id="urn" class="form-control">
+            <input type="text" name="urnNumber" id="urn" class="form-control">
            
         </div>
         
@@ -137,7 +142,7 @@ function openModalApprove(){
         <div class="modal-footer">
           <button type="submit" class="btn btn-danger">Approve payee</button>
         </div>
-      </div>
+      </div></form>
     </div>
   </div>
  

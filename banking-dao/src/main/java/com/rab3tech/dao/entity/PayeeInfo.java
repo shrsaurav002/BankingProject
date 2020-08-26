@@ -3,6 +3,7 @@ package com.rab3tech.dao.entity;
 import java.io.Serializable;
 import java.sql.Timestamp;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -11,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotEmpty;
 
 @Entity
 @Table(name = "payee_informations_tbl")
@@ -27,6 +29,8 @@ public class PayeeInfo implements Serializable {
 	private Timestamp doe;
 	private Timestamp dom;
 	private String remarks;
+	@OneToOne(cascade=CascadeType.ALL)
+	@JoinColumn(name="PayeeStat")
 	private PayeeStatus payeeStatus;
 	private int urn;
 

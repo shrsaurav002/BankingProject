@@ -31,7 +31,7 @@ public interface CustomerService {
 
 	String findCustomerByMobile(String mobile);
 
-	void addPayee(PayeeInfoVO payeeInfoVO);
+	int addPayee(PayeeInfoVO payeeInfoVO);
 
 	List<PayeeInfoVO> pendingPayeeList();
 
@@ -42,6 +42,10 @@ public interface CustomerService {
 	byte[] imageSearch(String email);
 
 	CustomerVO findByEmail(String email);
+
+	void updatePayee(String username, String name,String type);
+
+	int findPayeeUrn(String payeeName, String customerId);
 
 	
 

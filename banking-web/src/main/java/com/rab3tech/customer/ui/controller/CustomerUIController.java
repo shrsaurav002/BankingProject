@@ -7,6 +7,7 @@ import java.util.Optional;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,6 +17,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.rab3tech.customer.service.AccountTypeService;
@@ -65,8 +67,6 @@ public class CustomerUIController {
 
 	@Autowired
 	private LocationService locationService;
-	@Autowired
-	private CreditCardService creditCardService;
 
 	@GetMapping("/customer/forget/password")
 	public String forgetPassword() {
@@ -213,15 +213,29 @@ public class CustomerUIController {
 		return "customer/addPayee";
 	}
 
+	@PostMapping("/customer/account/confirmPayee")
+	public String confirmPayee(@RequestParam("urnNumber") int urn, @RequestParam("customerId") String username,
+			@RequestParam("payeeNameIn") String name, @RequestParam("buttonValue") String submitButton, Model model) {
+		customerService.updatePayee(username, name, submitButton);
+		if (submitButton.equalsIgnoreCase("accept")) {
+			model.addAttribute("successMessage", "Successfully Confirmed");
+		} else {
+			model.addAttribute("successMessage", "Successfully Rejected");
+		}
+		return "customer/addPayee";
+	}
+
 	@PostMapping("/customer/account/addPayee")
-	public String newPayee(@ModelAttribute("payeeInfoVO") PayeeInfoVO payeeInfoVO, Model model) {
+	public String newPayee(@ModelAttribute("payeeInfoVO") @Valid PayeeInfoVO payeeInfoVO, Model model) {
 		System.out
 				.println("MY CUSTOMER USERID =========================================" + payeeInfoVO.getCustomerId());
 		// String loginId = loginService.findUserByName(payeeInfoVO.getPayeeName());
 		// payeeInfoVO.setCustomerId(loginId);
-		customerService.addPayee(payeeInfoVO);
+		int urn=customerService.addPayee(payeeInfoVO);
+		emailService.sendUrnEmail(payeeInfoVO,urn);
 		model.addAttribute("successMessage", "Payee added successfully");
-		return "customer/addPayee";
+		model.addAttribute("payeeDetail", payeeInfoVO);
+		return "customer/payeeConfirm";
 	}
 
 	@GetMapping("/customer/pendingPayee")
@@ -253,8 +267,5 @@ public class CustomerUIController {
 		}
 		outputStream.close();
 	}
-
-	
-
 
 }

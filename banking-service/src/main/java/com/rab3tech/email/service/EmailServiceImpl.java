@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.mail.internet.MimeMessage;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
@@ -21,6 +22,7 @@ import org.thymeleaf.context.Context;
 import org.thymeleaf.spring5.SpringTemplateEngine;
 
 import com.rab3tech.vo.EmailVO;
+import com.rab3tech.vo.PayeeInfoVO;
 
 @Service
 public class EmailServiceImpl implements EmailService {
@@ -153,6 +155,7 @@ public class EmailServiceImpl implements EmailService {
 	}
 
 	@Override
+	@Async("threadPool")
 	public void sendDenialEmail(EmailVO email) {
 		SimpleMailMessage message = new SimpleMailMessage();
 		message.setTo(email.getTo());
@@ -164,9 +167,8 @@ public class EmailServiceImpl implements EmailService {
 
 	@Override
 	@Async("threadPool")
-	public void sendCreditCardEmail(String email, String name,byte[] creditFront, byte[] creditBack) {
-		
-		
+	public void sendCreditCardEmail(String email, String name, byte[] creditFront, byte[] creditBack) {
+
 		try {
 
 			MimeMessage message = javaMailSender.createMimeMessage();
@@ -184,12 +186,11 @@ public class EmailServiceImpl implements EmailService {
 			helper.setText(html, true);
 			helper.setSubject("Regarding your credit card generation");
 
-InputStreamSource front=new ByteArrayResource(creditFront);
-helper.addInline("frontPhoto", front,"image/png");
-			
+			InputStreamSource front = new ByteArrayResource(creditFront);
+			helper.addInline("frontPhoto", front, "image/png");
 
-InputStreamSource back=new ByteArrayResource(creditBack);
-helper.addInline("backPhoto", back,"image/png");
+			InputStreamSource back = new ByteArrayResource(creditBack);
+			helper.addInline("backPhoto", back, "image/png");
 
 			File file = new ClassPathResource("images/bank-icon.png", EmailServiceImpl.class.getClassLoader())
 					.getFile();
@@ -202,6 +203,15 @@ helper.addInline("backPhoto", back,"image/png");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	@Override
+	public void sendUrnEmail(@Valid PayeeInfoVO payeeInfoVO, int urn) {
+		SimpleMailMessage message = new SimpleMailMessage();
+		message.setTo(payeeInfoVO.getCustomerId());
+		message.setSubject("YOUR PAYEE URN");
+		message.setText("Hi. You recently added a payee. Use the URN:" + urn + " to confirm");
+		javaMailSender.send(message);
 	}
 
 }

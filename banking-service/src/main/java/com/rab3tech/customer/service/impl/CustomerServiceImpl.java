@@ -259,15 +259,39 @@ public class CustomerServiceImpl implements CustomerService {
 	}
 
 	@Override
-	public void addPayee(PayeeInfoVO payeeInfoVO) {
+	public int addPayee(PayeeInfoVO payeeInfoVO) {
 		PayeeStatus payeeStatus = new PayeeStatus();
 		payeeStatus.setId(1);
 		PayeeInfo payeeInfo = new PayeeInfo();
 		payeeInfo.setPayeeStatus(payeeStatus);
 		BeanUtils.copyProperties(payeeInfoVO, payeeInfo);
+		payeeInfo.setPayeeStatus(payeeStatus);
+
 		payeeInfo.setDoe(new Timestamp(new Date().getTime()));
-		System.out.println(payeeInfo);
+		int urnNo = (int) (Math.random() * Math.pow(10, 5));
+		payeeInfo.setUrn(urnNo);
 		payeeRepository.save(payeeInfo);
+		return urnNo;
+	}
+
+	@Override
+	public void updatePayee(String username, String name, String button) {
+		PayeeInfo payeeInfo = payeeRepository.findPayeeDetails(username, name);
+		PayeeStatus payStat = new PayeeStatus();
+		if (button.equalsIgnoreCase("accept")) {
+			payStat.setId(2);
+		} else {
+			payStat.setId(3);
+		}
+		payeeInfo.setPayeeStatus(payStat);
+
+	}
+
+	@Override
+	public int findPayeeUrn(String payeeName, String customerId) {
+		PayeeInfo payeeInfo = payeeRepository.findPayeeDetails(customerId, payeeName);
+
+		return payeeInfo.getUrn();
 	}
 
 	@Override
@@ -276,10 +300,12 @@ public class CustomerServiceImpl implements CustomerService {
 		List<PayeeInfo> payeeInfoList = payeeRepository.findAll();
 		List<PayeeInfoVO> payeeInfoVOList = new ArrayList<PayeeInfoVO>();
 		for (PayeeInfo pi : payeeInfoList) {
-			PayeeInfoVO piVO = new PayeeInfoVO();
-			piVO.setPayeeStatus(pi.getPayeeStatus().getName());
-			BeanUtils.copyProperties(pi, piVO);
-			payeeInfoVOList.add(piVO);
+			if (pi.getPayeeStatus().getId() == 1) {
+				PayeeInfoVO piVO = new PayeeInfoVO();
+				piVO.setPayeeStatus(pi.getPayeeStatus().getName());
+				BeanUtils.copyProperties(pi, piVO);
+				payeeInfoVOList.add(piVO);
+			}
 		}
 
 		return payeeInfoVOList;
@@ -317,7 +343,8 @@ public class CustomerServiceImpl implements CustomerService {
 		}
 		return customers;
 	}
-@Override
+
+	@Override
 	public byte[] imageSearch(String email) {
 		byte[] img = null;
 		Optional<Customer> c = customerRepo.findByEmail(email);
@@ -325,11 +352,12 @@ public class CustomerServiceImpl implements CustomerService {
 		return img;
 	}
 
-@Override
-public CustomerVO findByEmail(String email) {
-	Customer cust=customerRepo.findByEmail(email).get();
-	CustomerVO c=new CustomerVO();
-	BeanUtils.copyProperties(cust, c);
-	return c;
-}
+	@Override
+	public CustomerVO findByEmail(String email) {
+		Customer cust = customerRepo.findByEmail(email).get();
+		CustomerVO c = new CustomerVO();
+		BeanUtils.copyProperties(cust, c);
+		return c;
+	}
+
 }

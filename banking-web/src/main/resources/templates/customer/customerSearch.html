@@ -72,8 +72,11 @@ $("#body").empty();
  
    
  function openCcModal(email){
-	 $("#ccFront").attr("src","/images/cc.jpg");
-	 $("#ccBack").attr("src","/images/ccBack.jpg");
+	 $("#generate").show();
+	 $("#exists").empty();
+	 
+	 $("#ccFront").show().attr("src","/images/cc.jpg");
+	 $("#ccBack").show().attr("src","/images/ccBack.jpg");
 	  var values= fetch("/v3/customer/findEmail?email="+email);
 	 values.then(res=>res.json()).then(function(data){
 		 
@@ -95,7 +98,9 @@ $("#body").empty();
  }
  
  function closeModal(){
-	  location.reload();
+	
+	 $("#creditModal").hide();
+	  /* location.reload(); */
  }
  
  function generateCard(){
@@ -119,6 +124,7 @@ $("#body").empty();
 		 $("#ccBack").attr("src","/load/image/CcBack?email="+email);
 	 }).catch(error=>console.log(error));
 	 }else{
+		 $("#generate").hide();
 		 $("#submitButton").hide();
 		 console.log("data already exist")
 		 $("#exists").html("<br>Sorry, You already have a card");
@@ -253,9 +259,9 @@ $("#body").empty();
 					<hr />
 					<button type="button" class="btn btn-warning"
 						onClick="javascript:generateCard();" id="generate">Generate</button>
-						<span id="exists" style="color:red"></span>
-					<br> <img src="/images/cc.jpg" id="ccFront" width=100%>
-					<img src="/images/ccBack.jpg" id="ccBack" width=100%>
+						<span id="exists" style="color:red; font-size:25px;"></span>
+					<br> <img src="" id="ccFront" width=100%>
+					<img src="" id="ccBack" width=100%>
 					<div class="modal-footer">
 						<button type="button" onclick="javascript:submit();" id="submitButton" class="btn btn-primary">Submit</button>
 						<button type="button" class="btn btn-default" data-dismiss="modal"

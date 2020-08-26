@@ -2,6 +2,9 @@ package com.rab3tech.vo;
 
 import java.sql.Timestamp;
 
+import javax.validation.constraints.NotEmpty;
+
+
 import lombok.Data;
 
 
@@ -9,9 +12,13 @@ import lombok.Data;
 public class PayeeInfoVO {
 
 	private int id;
+	@NotEmpty(message="Account Number Can Not be Empty")
 	private String payeeAccountNo;
+	@NotEmpty(message="Name can not be Empty")
 	private String payeeName;
+	@NotEmpty(message="Please Enter a NickName")
 	private String payeeNickName;
+	
 	private String customerId;
 	private Timestamp doe;
 	private Timestamp dom;
