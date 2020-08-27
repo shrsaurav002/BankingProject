@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -208,8 +209,9 @@ public class CustomerUIController {
 	}
 
 	@GetMapping("/customer/addPayee")
-	public String customerAddPayee() {
-
+	public String customerAddPayee(Model model) {
+PayeeInfoVO payeeInfoVO=new PayeeInfoVO();
+		model.addAttribute("payeeInfoVO",payeeInfoVO);
 		return "customer/addPayee";
 	}
 
@@ -226,16 +228,25 @@ public class CustomerUIController {
 	}
 
 	@PostMapping("/customer/account/addPayee")
-	public String newPayee(@ModelAttribute("payeeInfoVO") @Valid PayeeInfoVO payeeInfoVO, Model model) {
-		System.out
-				.println("MY CUSTOMER USERID =========================================" + payeeInfoVO.getCustomerId());
-		// String loginId = loginService.findUserByName(payeeInfoVO.getPayeeName());
-		// payeeInfoVO.setCustomerId(loginId);
-		int urn=customerService.addPayee(payeeInfoVO);
-		emailService.sendUrnEmail(payeeInfoVO,urn);
-		model.addAttribute("successMessage", "Payee added successfully");
-		model.addAttribute("payeeDetail", payeeInfoVO);
-		return "customer/payeeConfirm";
+	public String newPayee(@ModelAttribute("payeeInfoVO") @Valid PayeeInfoVO payeeInfoVO, BindingResult result,HttpSession session,
+			Model model) {
+		LoginVO login=(LoginVO) session.getAttribute("userSessionVO");
+		String custID=login.getUsername();
+		payeeInfoVO.setCustomerId(custID);
+		if (result.hasErrors()) {
+			model.addAttribute("payeeDetail", payeeInfoVO);
+			return "customer/addPayee";
+		} else {
+			System.out.println(
+					"MY CUSTOMER USERID =========================================" + payeeInfoVO.getCustomerId());
+			// String loginId = loginService.findUserByName(payeeInfoVO.getPayeeName());
+			// payeeInfoVO.setCustomerId(loginId);
+			int urn = customerService.addPayee(payeeInfoVO);
+			emailService.sendUrnEmail(payeeInfoVO, urn);
+			model.addAttribute("successMessage", "Payee added successfully");
+			model.addAttribute("payeeDetail", payeeInfoVO);
+			return "customer/payeeConfirm";
+		}
 	}
 
 	@GetMapping("/customer/pendingPayee")

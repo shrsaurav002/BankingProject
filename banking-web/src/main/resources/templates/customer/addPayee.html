@@ -44,7 +44,7 @@
 
 <script type="text/javascript">
 	function validateForm() {
-		var tpayeeAcc = $("#payeeAccountNo").val();
+		/* var tpayeeAcc = $("#payeeAccountNo").val();
 		var ttpayeeAcc = $("#accNumberConfirm").val();
 		var tpayeeName = $("#payeeName").val();
 		var tpayeeNick = $("#payeeNickName").val();
@@ -92,7 +92,7 @@
 		} else {
 			$("#errorMessage").html("");
 			$("#payeeEmail").css("borderColor", "inherit");
-		}
+		}  */
 		document.addPayeeForm.submit();
 	}
 </script>
@@ -117,7 +117,7 @@
 
 
 			<form th:action="@{/customer/account/addPayee}" method="POST" th:object="${payeeInfoVO}" name="addPayeeForm">
-				<input type="hidden" th:value="${session.userSessionVO.username}" th:name="customerId" /> 
+				<!-- <input type="hidden" th:value="${session.userSessionVO.username}" th:name="customerId" />  -->
 				<span id="errorMessage"  th:utext="${error}" style="color: red; font-size: 14px;"></span> 
 				<span id="errorMessage" th:utext="${successMessage}" style="color: blue; font-size: 14px;"></span> <br />
 
@@ -126,15 +126,18 @@
 					<div class="column">
 						<label for="payeeAccountNo">Payee Account name:</label> 
 						<br /> 
-						<input type="text" style="width: 100%;" class="form-control" id="payeeName" name="payeeName" placeholder="Enter the payee name">
-						 <br> <label for="payeeName">Account Number:</label> <br /> 
-						 <input type="text" style="width: 100%;" class="form-control" id="payeeAccountNo" name="payeeAccountNo"	placeholder="Enter the payee account number">
+						<input type="text"  style="width: 100%;" class="form-control" th:field="*{payeeName}" placeholder="Enter the payee name">
+						<span th:if="${#fields.hasErrors('payeeName')}" th:errors="*{payeeName}" style="color:red">Name Error</span>
+					 	 <br> <label for="payeeName">Account Number:</label> <br /> 
+						 <input type="text" style="width: 100%;" class="form-control" th:field="*{payeeAccountNo}" placeholder="Enter the payee account number">
+						  	<span th:if="${#fields.hasErrors('payeeAccountNo')}" th:errors="*{payeeAccountNo}" style="color:red">Account Number Error</span>
 						  <br> <label for="payeeName">Account Email:</label> <br /> 
 						  <input type="text" style="width: 100%;" class="form-control" id="payeeEmail" name="payeeEmail" placeholder="Enter the payee email">
 					</div>
 					<div class="column">
 						<label for="tpayeeAcc">Nickname:</label> 
-						<br /> <input type="text" style="width: 100%;" class="form-control" id="payeeNickName" name="payeeNickName" placeholder="Set nickname">
+						<br /> <input type="text" style="width: 100%;" class="form-control" th:field="*{payeeNickName}" placeholder="Set nickname">
+						<span th:if="${#fields.hasErrors('payeeNickName')}" th:errors="*{payeeNickName}" style="color:red">Account Number Error</span>
 						<br>
 							 <label for="payeeNickName">Confirm Account number:</label> <br />
 							  <input type="text" style="width: 100%;" class="form-control" id="accNumberConfirm" name="accNumberConfirm" placeholder="Confirm the payee account number">

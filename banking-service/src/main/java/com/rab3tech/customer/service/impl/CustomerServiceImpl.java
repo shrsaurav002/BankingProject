@@ -268,8 +268,13 @@ public class CustomerServiceImpl implements CustomerService {
 		payeeInfo.setPayeeStatus(payeeStatus);
 
 		payeeInfo.setDoe(new Timestamp(new Date().getTime()));
-		int urnNo = (int) (Math.random() * Math.pow(10, 5));
+		int urnNo =0;
+		while (urnNo<99999) {
+			urnNo= (int) (Math.random() * Math.pow(10, 6));
+		}
 		payeeInfo.setUrn(urnNo);
+		payeeInfo.setDoe((Timestamp) (new Date()));
+		payeeInfo.setDom((Timestamp) (new Date()));
 		payeeRepository.save(payeeInfo);
 		return urnNo;
 	}

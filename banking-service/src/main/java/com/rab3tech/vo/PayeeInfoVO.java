@@ -12,11 +12,11 @@ import lombok.Data;
 public class PayeeInfoVO {
 
 	private int id;
-	@NotEmpty(message="Account Number Can Not be Empty")
+	@NotEmpty(message="Account Number Can Not Be Empty")
 	private String payeeAccountNo;
-	@NotEmpty(message="Name can not be Empty")
+	@NotEmpty(message="Name Can Not Be Empty")
 	private String payeeName;
-	@NotEmpty(message="Please Enter a NickName")
+	@NotEmpty(message="User Nick Name Can Not Be Empty")
 	private String payeeNickName;
 	
 	private String customerId;
