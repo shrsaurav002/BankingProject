@@ -128,6 +128,12 @@ public class CustomerRestController {
 
 	}
 
+	@GetMapping("/customer/findCustId")
+	public String findCust(@RequestParam int id) {
+		CustomerVO cust = customer.findCustById(id);
+		return cust.getEmail();
+	}
+
 	@GetMapping("/customer/findEmail")
 	public CustomerVO findEmail(@RequestParam String email) {
 		CustomerVO customerVO = customer.findByEmail(email);

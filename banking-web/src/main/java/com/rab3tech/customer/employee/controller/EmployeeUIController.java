@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.rab3tech.customer.service.CustomerEnquiryService;
 import com.rab3tech.customer.service.CustomerService;
-import com.rab3tech.customer.service.impl.CustomerEnquiryService;
 import com.rab3tech.email.service.EmailService;
 import com.rab3tech.utils.BankHttpUtils;
 import com.rab3tech.vo.CustomerAccountInfoVO;

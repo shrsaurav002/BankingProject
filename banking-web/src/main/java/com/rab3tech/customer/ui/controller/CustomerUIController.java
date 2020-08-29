@@ -1,6 +1,7 @@
 package com.rab3tech.customer.ui.controller;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,19 +19,18 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.rab3tech.customer.service.AccountTypeService;
-import com.rab3tech.customer.service.CreditCardService;
+import com.rab3tech.customer.service.CustomerAccountInfoService;
+import com.rab3tech.customer.service.CustomerEnquiryService;
 import com.rab3tech.customer.service.CustomerService;
 import com.rab3tech.customer.service.LocationService;
 import com.rab3tech.customer.service.LoginService;
-import com.rab3tech.customer.service.impl.CustomerEnquiryService;
-import com.rab3tech.customer.service.impl.SecurityQuestionService;
+import com.rab3tech.customer.service.SecurityQuestionService;
 import com.rab3tech.email.service.EmailService;
 import com.rab3tech.vo.ChangePasswordVO;
-import com.rab3tech.vo.CreditCardVO;
+import com.rab3tech.vo.CustomerAccountInfoVO;
 import com.rab3tech.vo.CustomerSavingVO;
 import com.rab3tech.vo.CustomerSecurityQueAnsVO;
 import com.rab3tech.vo.CustomerVO;
@@ -68,6 +68,8 @@ public class CustomerUIController {
 
 	@Autowired
 	private LocationService locationService;
+	@Autowired
+	private CustomerAccountInfoService customerAccountSerice;
 
 	@GetMapping("/customer/forget/password")
 	public String forgetPassword() {
@@ -131,6 +133,7 @@ public class CustomerUIController {
 			logger.debug(customerSavingVO.toString());
 			// model - is hash map which is used to carry data from controller to thyme
 			// leaf!!!!!
+			
 			// model is similar to request scope in jsp and servlet
 			model.addAttribute("customerVO", customerVO);
 			return "customer/customerRegistration"; // thyme leaf
@@ -150,6 +153,7 @@ public class CustomerUIController {
 		mail.setPassword(customerVO.getPassword());
 		emailService.sendUsernamePasswordEmail(mail);
 		System.out.println(customerVO);
+		customerAccountSerice.createNewAccount(customerVO);
 		model.addAttribute("loginVO", new LoginVO());
 		model.addAttribute("message", "Your account has been setup successfully , please check your email.");
 		return "customer/login";
@@ -278,6 +282,15 @@ public class CustomerUIController {
 
 	}
 
+//////////////////////////////////////////////////////////////////
+	@GetMapping("/customer/depositFunds")
+	public String openDepositPage(Model model) {
+		CustomerAccountInfoVO cust = new CustomerAccountInfoVO();
+		model.addAttribute("customerAccountInfoVO", cust);
+		return "customer/depositFunds";
+	}
+
+////////////////////////////////////////////////////////////////////
 	@GetMapping("/load/image")
 	public void findPhoto(@RequestParam String email, HttpServletResponse response) throws IOException {
 

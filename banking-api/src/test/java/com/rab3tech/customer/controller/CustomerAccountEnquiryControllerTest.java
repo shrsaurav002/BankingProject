@@ -25,7 +25,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import com.rab3tech.customer.service.impl.CustomerEnquiryService;
+import com.rab3tech.customer.service.CustomerEnquiryService;
 import com.rab3tech.test.TestUtil;
 import com.rab3tech.vo.CustomerSavingVO;
 public class CustomerAccountEnquiryControllerTest {

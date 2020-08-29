@@ -47,6 +47,6 @@ public interface CustomerService {
 
 	int findPayeeUrn(String payeeName, String customerId);
 
-	
+	CustomerVO findCustById(int id);
 
 }

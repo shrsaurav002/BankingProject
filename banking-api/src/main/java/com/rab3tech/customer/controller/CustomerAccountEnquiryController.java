@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.rab3tech.customer.service.impl.CustomerEnquiryService;
+import com.rab3tech.customer.service.CustomerEnquiryService;
 import com.rab3tech.service.exception.BankServiceException;
 import com.rab3tech.vo.CustomerSavingVO;
 

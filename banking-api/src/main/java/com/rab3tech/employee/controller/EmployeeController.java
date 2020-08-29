@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.rab3tech.customer.service.impl.CustomerEnquiryService;
+import com.rab3tech.customer.service.CustomerEnquiryService;
 import com.rab3tech.email.service.EmailService;
 import com.rab3tech.utils.BankHttpUtils;
 import com.rab3tech.vo.ApplicationResponseVO;

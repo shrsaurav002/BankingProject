@@ -365,4 +365,12 @@ public class CustomerServiceImpl implements CustomerService {
 		return c;
 	}
 
+	@Override
+	public CustomerVO findCustById(int id) {
+		Customer customer=customerRepo.findById(id).get();
+		CustomerVO cust=new CustomerVO();
+		BeanUtils.copyProperties(customer, cust);
+		return cust;
+	}
+
 }

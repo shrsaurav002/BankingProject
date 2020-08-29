@@ -1,4 +1,4 @@
-package com.rab3tech.customer.service.impl;
+package com.rab3tech.customer.service;
 
 import java.util.List;
 

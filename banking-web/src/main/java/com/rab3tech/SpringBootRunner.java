@@ -2,6 +2,7 @@ package com.rab3tech;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 /*@SpringBootApplication
 public class SpringBootRunner extends SpringBootServletInitializer {
@@ -22,10 +23,10 @@ public class SpringBootRunner extends SpringBootServletInitializer {
 
 @SpringBootApplication
 //@EnableDiscoveryClient
-public class SpringBootRunner  {
-	
+public class SpringBootRunner {
+
 	public static void main(String[] args) {
 		SpringApplication.run(SpringBootRunner.class, args);
 	}
-	
+
 }

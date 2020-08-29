@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.rab3tech.customer.service.LoginService;
-import com.rab3tech.customer.service.impl.SecurityQuestionService;
+import com.rab3tech.customer.service.SecurityQuestionService;
 import com.rab3tech.vo.CustomerSecurityQueAnsVO;
 import com.rab3tech.vo.LoginVO;
 import com.rab3tech.vo.SecurityQuestionsVO;
