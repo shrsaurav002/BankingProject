@@ -206,6 +206,7 @@ public class EmailServiceImpl implements EmailService {
 	}
 
 	@Override
+	@Async("threadPool")
 	public void sendUrnEmail(@Valid PayeeInfoVO payeeInfoVO, int urn) {
 		SimpleMailMessage message = new SimpleMailMessage();
 		message.setTo(payeeInfoVO.getCustomerId());

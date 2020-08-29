@@ -26,9 +26,7 @@
 	background-color: #e9ffe7;
 }
 </style>
-
 <script type="text/javascript">
- 
  function searchUsers(){
 $("#body").empty();
 	 var searchText=$("#search").val();
@@ -50,7 +48,6 @@ $("#body").empty();
 			var name="Saurav Shrestha";
 			tdata +='<td><img src="/images/cc.jpg" style="height:30px;" onClick="openCcModal(\''+value.email+'\');"></td>'; 
 			tdata +='</tr>';
-			
 			}) ;
 			$('#body').append(tdata);
 		}).catch(
@@ -67,10 +64,7 @@ $("#body").empty();
     		   $("#ptable").hide();
     	   }
     	   $("#errorMessage").html("");
-    	  
        }
- 
-   
  function openCcModal(email){
 	 $("#generate").show();
 	 $("#exists").empty();
@@ -79,8 +73,6 @@ $("#body").empty();
 	 $("#ccBack").show().attr("src","/images/ccBack.jpg");
 	  var values= fetch("/v3/customer/findEmail?email="+email);
 	 values.then(res=>res.json()).then(function(data){
-		 
-		 
 		 $("#ccname").html("Hey "+data.name);
 		 $("#userImage").attr("src",
 				"/load/image?email="
@@ -89,22 +81,13 @@ $("#body").empty();
 		 $("#submitId").val(data.id); 
 		 
 	 })
-	 
-	 
-	 
-	 
 	 $("#creditModal").show();
-	
  }
- 
  function closeModal(){
-	
 	 $("#creditModal").hide();
 	  /* location.reload(); */
  }
- 
  function generateCard(){
-	
 	 
 	 var email= $("#submitEmail").val();
 	 var id= $("#submitId").val();
@@ -131,9 +114,7 @@ $("#body").empty();
 		 $("#ccFront").hide();
 		 $("#ccBack").hide();
 	 }})
-
  }
- 
  function submit(){
 	var cc=$("#submitEmail").val();
 	var cname=$("#ccname").html();
@@ -150,10 +131,6 @@ $("#body").empty();
         
   /* $.post("/v3/customer/saveCreditCard",
 		  {credit:JSON.parse(cc)})	   */
-     
-	
-	
-	
 	/*     
  	  var status=fetch("/v3/customer/saveCreditCard?customer=\'"+cc+"\'",{method:'post'});
 	 console.log(status) */ 
@@ -172,7 +149,7 @@ $("#body").empty();
 			style="height: 140px" /> <br />
 
 		<div style="width: 70%">
-<span id="successMessage" style="color:blue; font-size:30px;"></span>
+			<span id="successMessage" style="color: blue; font-size: 30px;"></span>
 			<div class="form-group">
 				<label for="nameOrEmail">Enter Name or Email:</label> <input
 					type="text" style="width: 60%;" class="form-control" name="search"
@@ -253,17 +230,17 @@ $("#body").empty();
 					<h3>Credit Card Generator</h3>
 					<span id="ccname"></span> <img src="" id="userImage"
 						style="float: right; height: 100px;"><br> <br> <br>
-					<br> 
-					<input id="submitEmail" name="submitEmail" type="hidden">
+					<br> <input id="submitEmail" name="submitEmail" type="hidden">
 					<input id="submitId" name="submitId" type="hidden">
 					<hr />
 					<button type="button" class="btn btn-warning"
 						onClick="javascript:generateCard();" id="generate">Generate</button>
-						<span id="exists" style="color:red; font-size:25px;"></span>
-					<br> <img src="" id="ccFront" width=100%>
-					<img src="" id="ccBack" width=100%>
+					<span id="exists" style="color: red; font-size: 25px;"></span> <br>
+					<img src="" id="ccFront" width=100%> <img src="" id="ccBack"
+						width=100%>
 					<div class="modal-footer">
-						<button type="button" onclick="javascript:submit();" id="submitButton" class="btn btn-primary">Submit</button>
+						<button type="button" onclick="javascript:submit();"
+							id="submitButton" class="btn btn-primary">Submit</button>
 						<button type="button" class="btn btn-default" data-dismiss="modal"
 							onClick="closeModal();">Close</button>
 

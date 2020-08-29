@@ -10,9 +10,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.validation.constraints.NotEmpty;
 
 @Entity
 @Table(name = "payee_informations_tbl")
@@ -29,17 +30,18 @@ public class PayeeInfo implements Serializable {
 	private Timestamp doe;
 	private Timestamp dom;
 	private String remarks;
-	@OneToOne(cascade=CascadeType.ALL)
-	@JoinColumn(name="PayeeStat")
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "PayeeStat")
 	private PayeeStatus payeeStatus;
 	private int urn;
+	private Customer customer;
 
 	public PayeeInfo() {
 
 	}
 
 	public PayeeInfo(int id, String payeeAccountNo, String payeeName, String payeeNickName, String customerId,
-			Timestamp doe, Timestamp dom, String remarks, PayeeStatus payeeStatus, int urn) {
+			Timestamp doe, Timestamp dom, String remarks, PayeeStatus payeeStatus, int urn, Customer customer) {
 
 		this.id = id;
 		this.payeeAccountNo = payeeAccountNo;
@@ -51,6 +53,7 @@ public class PayeeInfo implements Serializable {
 		this.remarks = remarks;
 		this.payeeStatus = payeeStatus;
 		this.urn = urn;
+		this.customer = customer;
 	}
 
 	@Id
@@ -137,11 +140,21 @@ public class PayeeInfo implements Serializable {
 		this.urn = urn;
 	}
 
+	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@JoinColumn(name = "cust_pay")
+	public Customer getCustomer() {
+		return customer;
+	}
+
+	public void setCustomer(Customer customer) {
+		this.customer = customer;
+	}
+
 	@Override
 	public String toString() {
 		return "PayeeInfo [id=" + id + ", payeeAccountNo=" + payeeAccountNo + ", payeeName=" + payeeName
 				+ ", payeeNickName=" + payeeNickName + ", customerId=" + customerId + ", doe=" + doe + ", dom=" + dom
-				+ ", remarks=" + remarks + ", payeeStatus=" + payeeStatus + ", urn=" + urn + "]";
+				+ ", remarks=" + remarks + ", payeeStatus=" + payeeStatus + ", urn=" + urn + ", customer=" + "]";
 	}
 
 }

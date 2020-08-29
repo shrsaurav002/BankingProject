@@ -60,6 +60,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     .invalidateHttpSession(true) 
     .permitAll()
     .deleteCookies("JSESSIONID");
+    
+    
+    http.sessionManagement().invalidSessionUrl("/customer/timeout");
+    http.sessionManagement().maximumSessions(2);
     /* http.authorizeRequests()*/
     
  /*   .antMatchers("/", "/*.html").permitAll()

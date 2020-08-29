@@ -210,8 +210,8 @@ public class CustomerUIController {
 
 	@GetMapping("/customer/addPayee")
 	public String customerAddPayee(Model model) {
-PayeeInfoVO payeeInfoVO=new PayeeInfoVO();
-		model.addAttribute("payeeInfoVO",payeeInfoVO);
+		PayeeInfoVO payeeInfoVO = new PayeeInfoVO();
+		model.addAttribute("payeeInfoVO", payeeInfoVO);
 		return "customer/addPayee";
 	}
 
@@ -224,15 +224,25 @@ PayeeInfoVO payeeInfoVO=new PayeeInfoVO();
 		} else {
 			model.addAttribute("successMessage", "Successfully Rejected");
 		}
-		return "customer/addPayee";
+		return "customer/pendingPayee";
+	}
+
+	@PostMapping("/customer/account/approvePayee")
+	public String approvePayee(@RequestParam String customerId, @RequestParam String name) {
+		customerService.updatePayee(customerId, name, "accept");
+		return "customer/pendingPayee";
 	}
 
 	@PostMapping("/customer/account/addPayee")
-	public String newPayee(@ModelAttribute("payeeInfoVO") @Valid PayeeInfoVO payeeInfoVO, BindingResult result,HttpSession session,
-			Model model) {
-		LoginVO login=(LoginVO) session.getAttribute("userSessionVO");
-		String custID=login.getUsername();
+	public String newPayee(@Valid @ModelAttribute PayeeInfoVO payeeInfoVO, BindingResult result,
+			@RequestParam String payeeEmail, HttpSession session, Model model) {
+		LoginVO login = (LoginVO) session.getAttribute("userSessionVO");
+		String custID = login.getUsername();
 		payeeInfoVO.setCustomerId(custID);
+		if (!payeeInfoVO.getAccNumberConfirm().equals(payeeInfoVO.getPayeeAccountNo())) {
+			result.rejectValue("accNumberConfirm", "acc.number.notEqual", "The accont numbers does not match");
+			;
+		}
 		if (result.hasErrors()) {
 			model.addAttribute("payeeDetail", payeeInfoVO);
 			return "customer/addPayee";
@@ -241,7 +251,7 @@ PayeeInfoVO payeeInfoVO=new PayeeInfoVO();
 					"MY CUSTOMER USERID =========================================" + payeeInfoVO.getCustomerId());
 			// String loginId = loginService.findUserByName(payeeInfoVO.getPayeeName());
 			// payeeInfoVO.setCustomerId(loginId);
-			int urn = customerService.addPayee(payeeInfoVO);
+			int urn = customerService.addPayee(payeeInfoVO, payeeEmail);
 			emailService.sendUrnEmail(payeeInfoVO, urn);
 			model.addAttribute("successMessage", "Payee added successfully");
 			model.addAttribute("payeeDetail", payeeInfoVO);
@@ -250,8 +260,11 @@ PayeeInfoVO payeeInfoVO=new PayeeInfoVO();
 	}
 
 	@GetMapping("/customer/pendingPayee")
-	public String pendinPayeeList(Model model) {
-		List<PayeeInfoVO> payeeInfoList = customerService.pendingPayeeList();
+	public String pendinPayeeList(Model model, HttpSession session) {
+		LoginVO loginVO = (LoginVO) session.getAttribute("userSessionVO");
+		String email = loginVO.getUsername();
+		System.out.println(email);
+		List<PayeeInfoVO> payeeInfoList = customerService.pendingPayeeList(email);
 		model.addAttribute("payeeInfoList", payeeInfoList);
 		return "customer/pendingPayee";
 

@@ -14,4 +14,6 @@ public interface PayeeRepository extends JpaRepository<PayeeInfo, Integer> {
 
 	@Query("Select t from PayeeInfo t where t.customerId=?1 and t.payeeName=?2")
 	PayeeInfo findPayeeDetails(String username, String name);
+
+	List<PayeeInfo> findByCustomerId(String email);
 }

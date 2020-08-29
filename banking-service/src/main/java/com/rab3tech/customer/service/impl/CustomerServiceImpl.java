@@ -259,22 +259,22 @@ public class CustomerServiceImpl implements CustomerService {
 	}
 
 	@Override
-	public int addPayee(PayeeInfoVO payeeInfoVO) {
+	public int addPayee(PayeeInfoVO payeeInfoVO, String email) {
 		PayeeStatus payeeStatus = new PayeeStatus();
 		payeeStatus.setId(1);
 		PayeeInfo payeeInfo = new PayeeInfo();
 		payeeInfo.setPayeeStatus(payeeStatus);
 		BeanUtils.copyProperties(payeeInfoVO, payeeInfo);
 		payeeInfo.setPayeeStatus(payeeStatus);
-
+		payeeInfo.setCustomer(customerRepo.findByEmail(email).get());
 		payeeInfo.setDoe(new Timestamp(new Date().getTime()));
-		int urnNo =0;
-		while (urnNo<99999) {
-			urnNo= (int) (Math.random() * Math.pow(10, 6));
+		int urnNo = 0;
+		while (urnNo < 99999) {
+			urnNo = (int) (Math.random() * Math.pow(10, 6));
 		}
 		payeeInfo.setUrn(urnNo);
-		payeeInfo.setDoe((Timestamp) (new Date()));
-		payeeInfo.setDom((Timestamp) (new Date()));
+		// payeeInfo.setDoe((Timestamp) (new Date()));
+		// payeeInfo.setDom((Timestamp) (new Date()));
 		payeeRepository.save(payeeInfo);
 		return urnNo;
 	}
@@ -300,9 +300,9 @@ public class CustomerServiceImpl implements CustomerService {
 	}
 
 	@Override
-	public List<PayeeInfoVO> pendingPayeeList() {
+	public List<PayeeInfoVO> pendingPayeeList(String email) {
+		List<PayeeInfo> payeeInfoList = payeeRepository.findByCustomerId(email);
 
-		List<PayeeInfo> payeeInfoList = payeeRepository.findAll();
 		List<PayeeInfoVO> payeeInfoVOList = new ArrayList<PayeeInfoVO>();
 		for (PayeeInfo pi : payeeInfoList) {
 			if (pi.getPayeeStatus().getId() == 1) {

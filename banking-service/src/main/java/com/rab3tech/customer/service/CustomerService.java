@@ -31,9 +31,9 @@ public interface CustomerService {
 
 	String findCustomerByMobile(String mobile);
 
-	int addPayee(PayeeInfoVO payeeInfoVO);
+	int addPayee(PayeeInfoVO payeeInfoVO, String payeeEmail);
 
-	List<PayeeInfoVO> pendingPayeeList();
+	List<PayeeInfoVO> pendingPayeeList(String email);
 
 	List<PayeeInfoVO> registeredPayeeList();
 

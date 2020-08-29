@@ -4,27 +4,39 @@ import java.sql.Timestamp;
 
 import javax.validation.constraints.NotEmpty;
 
-
 import lombok.Data;
-
 
 @Data
 public class PayeeInfoVO {
 
 	private int id;
-	@NotEmpty(message="Account Number Can Not Be Empty")
+	@NotEmpty(message = "Account Number Can Not Be Empty")
 	private String payeeAccountNo;
-	@NotEmpty(message="Name Can Not Be Empty")
+	@NotEmpty(message = "Name Can Not Be Empty")
 	private String payeeName;
-	@NotEmpty(message="User Nick Name Can Not Be Empty")
+	@NotEmpty(message = "User Nick Name Can Not Be Empty")
 	private String payeeNickName;
-	
+	private String accNumberConfirm;
 	private String customerId;
 	private Timestamp doe;
 	private Timestamp dom;
 	private String remarks;
 	private String payeeStatus;
 	private int urn;
+	
+	
+	private CustomerVO customer;
+	
+	
+	
+	public CustomerVO getCustomer() {
+		return customer;
+	}
+	public void setCustomer(CustomerVO customer) {
+		this.customer = customer;
+	}
+	
+	
 	public int getId() {
 		return id;
 	}
@@ -48,6 +60,12 @@ public class PayeeInfoVO {
 	}
 	public void setPayeeNickName(String payeeNickName) {
 		this.payeeNickName = payeeNickName;
+	}
+	public String getAccNumberConfirm() {
+		return accNumberConfirm;
+	}
+	public void setAccNumberConfirm(String accNumberConfirm) {
+		this.accNumberConfirm = accNumberConfirm;
 	}
 	public String getCustomerId() {
 		return customerId;
@@ -85,6 +103,12 @@ public class PayeeInfoVO {
 	public void setUrn(int urn) {
 		this.urn = urn;
 	}
-	
-	
+	@Override
+	public String toString() {
+		return "PayeeInfoVO [id=" + id + ", payeeAccountNo=" + payeeAccountNo + ", payeeName=" + payeeName
+				+ ", payeeNickName=" + payeeNickName + ", accNumberConfirm=" + accNumberConfirm + ", customerId="
+				+ customerId + ", doe=" + doe + ", dom=" + dom + ", remarks=" + remarks + ", payeeStatus=" + payeeStatus
+				+ ", urn=" + urn + "]";
+	}
+
 }
