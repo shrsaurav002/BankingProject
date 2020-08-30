@@ -9,8 +9,11 @@ import com.rab3tech.dao.entity.PayeeInfo;
 
 public interface PayeeRepository extends JpaRepository<PayeeInfo, Integer> {
 
-	@Query("SELECT tt FROM PayeeInfo tt where tt.payeeStatus.id = 2")
+	@Query("SELECT tt FROM PayeeInfo tt where tt.payeeStatus.id = 3")
 	List<PayeeInfo> findPendingPayee();
+
+	@Query("SELECT tt FROM PayeeInfo tt where tt.payeeStatus.id = 2 and tt.customerId=?1")
+	List<PayeeInfo> findRegisteredPayee(String email);
 
 	@Query("Select t from PayeeInfo t where t.customerId=?1 and t.payeeName=?2")
 	PayeeInfo findPayeeDetails(String username, String name);

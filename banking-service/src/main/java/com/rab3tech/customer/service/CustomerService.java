@@ -35,7 +35,7 @@ public interface CustomerService {
 
 	List<PayeeInfoVO> pendingPayeeList(String email);
 
-	List<PayeeInfoVO> registeredPayeeList();
+	List<PayeeInfoVO> registeredPayeeList(String email);
 
 	List<CustomerVO> searchCustomers(String searchText);
 
@@ -48,5 +48,9 @@ public interface CustomerService {
 	int findPayeeUrn(String payeeName, String customerId);
 
 	CustomerVO findCustById(int id);
+
+	boolean checkIfExists(String num);
+
+	boolean checkEmailByNumber(String payeeEmail,String payeeAccountNo);
 
 }

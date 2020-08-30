@@ -28,6 +28,7 @@ import com.rab3tech.utils.PasswordGenerator;
 import com.rab3tech.vo.ApplicationResponseVO;
 import com.rab3tech.vo.ChangePasswordRequestVO;
 import com.rab3tech.vo.CreditCardVO;
+import com.rab3tech.vo.CustomerAccountInfoVO;
 import com.rab3tech.vo.CustomerVO;
 import com.rab3tech.vo.LoginRequestVO;
 import com.rab3tech.vo.LoginVO;
@@ -201,4 +202,7 @@ public class CustomerRestController {
 		appResp.setUserid(customerId);
 		return appResp;
 	}
+
+	
+
 }

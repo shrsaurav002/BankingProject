@@ -317,9 +317,9 @@ public class CustomerServiceImpl implements CustomerService {
 	}
 
 	@Override
-	public List<PayeeInfoVO> registeredPayeeList() {
+	public List<PayeeInfoVO> registeredPayeeList(String email) {
 
-		List<PayeeInfo> payeeInfoList = payeeRepository.findPendingPayee();
+		List<PayeeInfo> payeeInfoList = payeeRepository.findRegisteredPayee(email);
 		List<PayeeInfoVO> payeeInfoVOList = new ArrayList<PayeeInfoVO>();
 		for (PayeeInfo pi : payeeInfoList) {
 			PayeeInfoVO piVO = new PayeeInfoVO();
@@ -367,10 +367,28 @@ public class CustomerServiceImpl implements CustomerService {
 
 	@Override
 	public CustomerVO findCustById(int id) {
-		Customer customer=customerRepo.findById(id).get();
-		CustomerVO cust=new CustomerVO();
+		Customer customer = customerRepo.findById(id).get();
+		CustomerVO cust = new CustomerVO();
 		BeanUtils.copyProperties(customer, cust);
 		return cust;
+	}
+
+	@Override
+	public boolean checkIfExists(String num) {
+		Optional<CustomerAccountInfo> customerAcc = customerAccountInfoRepository.findByAccountNumber(num);
+		if (customerAcc.isPresent()) {
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public boolean checkEmailByNumber(String payeeEmail, String payeeAccountNo) {
+		Optional<CustomerAccountInfo> customerAcc = customerAccountInfoRepository.findByAccountNumber(payeeAccountNo);
+		if (payeeEmail.equalsIgnoreCase(customerAcc.get().getCustomerId().getEmail())) {
+			return true;
+		}
+		return false;
 	}
 
 }

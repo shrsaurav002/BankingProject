@@ -82,7 +82,7 @@ function clearMsg(){
  
   <tbody>
   <tr th:each="payeeVO,iter: ${payeeInfoList}">
-    <td><input type="checkbox" id="payeeSelected" name="payeeSelected"></td>
+    <td><input type="checkbox" id="*{payeeInfoList}" name="payeeSelected"></td>
     <td th:text="${payeeVO.payeeName}"/>
     <td th:text="${payeeVO.payeeNickName}"/>
     <td th:text="${payeeVO.payeeAccountNo}"/>

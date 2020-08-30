@@ -1,18 +1,13 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:th="http://www.thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
 <title>Search Customers</title>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet"
-	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
-<script
-	src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-<script
-	src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-<script
-	src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
 <style>
 .ffooter {
 	position: fixed;
@@ -81,10 +76,10 @@ $("#body").empty();
 		 $("#submitId").val(data.id); 
 		 
 	 })
-	 $("#creditModal").show();
+	 $("#creditModal").modal("show");
  }
  function closeModal(){
-	 $("#creditModal").hide();
+	 $("#creditModal").modal("hide");
 	  /* location.reload(); */
  }
  function generateCard(){
@@ -145,35 +140,33 @@ $("#body").empty();
 	<header style="height: 30px; background-color: #37adda;"> </header>
 	<div class="container">
 		<h2>Search for Users</h2>
-		<img th:src="@{/images/userSearch.png}" alt="Logo"
-			style="height: 140px" /> <br />
+		<img th:src="@{/images/userSearch.png}" alt="Logo" style="height: 140px" />
+		<br />
 
 		<div style="width: 70%">
 			<span id="successMessage" style="color: blue; font-size: 30px;"></span>
 			<div class="form-group">
-				<label for="nameOrEmail">Enter Name or Email:</label> <input
-					type="text" style="width: 60%;" class="form-control" name="search"
-					id="search" placeholder="Enter email or name"
-					onkeyup="messageClear();">
+				<label for="nameOrEmail">Enter Name or Email:</label>
+				<input type="text" style="width: 60%;" class="form-control" name="search" id="search"
+					placeholder="Enter email or name" onkeyup="messageClear();">
 			</div>
 
 
-			<button type="button" class="btn btn-primary"
-				onClick="searchUsers();">Search</button>
+			<button type="button" class="btn btn-primary" onClick="searchUsers();">Search</button>
 
 			<button type="reset" class="btn btn-danger">Reset</button>
 
 			<a th:href="@{/customer/account/enquiry}">
-				<button type="button" class="btn btn-warning">Customer
-					Enquiry</button>
-			</a> <a th:href="@{/customer/login}">
+				<button type="button" class="btn btn-warning">Customer Enquiry</button>
+			</a>
+			<a th:href="@{/customer/login}">
 				<button type="button" class="btn btn-danger">Login</button>
-			</a> <a th:href="@{/customer/app/status}">
-				<button type="button" class="btn btn-success">Enquiry
-					Status</button>
-			</a> <a th:href="@{/customer/customerSearch}">
-				<button type="button" class="btn btn-success">Customer
-					search</button>
+			</a>
+			<a th:href="@{/customer/app/status}">
+				<button type="button" class="btn btn-success">Enquiry Status</button>
+			</a>
+			<a th:href="@{/customer/customerSearch}">
+				<button type="button" class="btn btn-success">Customer search</button>
 			</a>
 
 		</div>
@@ -216,33 +209,34 @@ $("#body").empty();
 		</div>
 	</div>
 
-	<div id="creditModal" class="modal">
+	<div id="creditModal" class="modal modal-fade">
 		<div class="modal-dialog">
 
 			<!-- Modal content-->
 			<div class="modal-content">
 				<div class="modal-header">
 					<h3>Generate Credit Card</h3>
-					<button type="button" class="close" data-dismiss="modal"
-						onClick="closeModal();">&times;</button>
+					<button type="button" class="close" data-dismiss="modal" onClick="closeModal();">&times;</button>
 				</div>
 				<div class="modal-body">
 					<h3>Credit Card Generator</h3>
-					<span id="ccname"></span> <img src="" id="userImage"
-						style="float: right; height: 100px;"><br> <br> <br>
-					<br> <input id="submitEmail" name="submitEmail" type="hidden">
+					<span id="ccname"></span>
+					<img src="" id="userImage" style="float: right; height: 100px;">
+					<br>
+					<br>
+					<br>
+					<br>
+					<input id="submitEmail" name="submitEmail" type="hidden">
 					<input id="submitId" name="submitId" type="hidden">
 					<hr />
-					<button type="button" class="btn btn-warning"
-						onClick="javascript:generateCard();" id="generate">Generate</button>
-					<span id="exists" style="color: red; font-size: 25px;"></span> <br>
-					<img src="" id="ccFront" width=100%> <img src="" id="ccBack"
-						width=100%>
+					<button type="button" class="btn btn-warning" onClick="javascript:generateCard();" id="generate">Generate</button>
+					<span id="exists" style="color: red; font-size: 25px;"></span>
+					<br>
+					<img src="" id="ccFront" width=100%>
+					<img src="" id="ccBack" width=100%>
 					<div class="modal-footer">
-						<button type="button" onclick="javascript:submit();"
-							id="submitButton" class="btn btn-primary">Submit</button>
-						<button type="button" class="btn btn-default" data-dismiss="modal"
-							onClick="closeModal();">Close</button>
+						<button type="button" onclick="javascript:submit();" id="submitButton" class="btn btn-primary">Submit</button>
+						<button type="button" class="btn btn-default" data-dismiss="modal" onClick="closeModal();">Close</button>
 
 					</div>
 				</div>

@@ -1,7 +1,6 @@
 package com.rab3tech.customer.ui.controller;
 
 import java.io.IOException;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -133,7 +132,7 @@ public class CustomerUIController {
 			logger.debug(customerSavingVO.toString());
 			// model - is hash map which is used to carry data from controller to thyme
 			// leaf!!!!!
-			
+
 			// model is similar to request scope in jsp and servlet
 			model.addAttribute("customerVO", customerVO);
 			return "customer/customerRegistration"; // thyme leaf
@@ -247,6 +246,17 @@ public class CustomerUIController {
 			result.rejectValue("accNumberConfirm", "acc.number.notEqual", "The accont numbers does not match");
 			;
 		}
+		boolean test = customerService.checkIfExists(payeeInfoVO.getAccNumberConfirm());
+		if (!test) {
+			result.rejectValue("payeeAccountNo", "acc.number.notPresent",
+					"The accont numbers does not exists. Please check the number");
+			;
+		}
+		if (payeeEmail.length() == 0
+				|| customerService.checkEmailByNumber(payeeEmail, payeeInfoVO.getPayeeAccountNo())) {
+			result.rejectValue("payeeAccountNo", "acc.email.empty", "Please Enter Valid Email");
+			;
+		}
 		if (result.hasErrors()) {
 			model.addAttribute("payeeDetail", payeeInfoVO);
 			return "customer/addPayee";
@@ -275,8 +285,10 @@ public class CustomerUIController {
 	}
 
 	@GetMapping("/customer/registeredPayee")
-	public String registeredPayeeList(Model model) {
-		List<PayeeInfoVO> payeeInfoList = customerService.registeredPayeeList();
+	public String registeredPayeeList(HttpSession session, Model model) {
+		LoginVO loginVO = (LoginVO) session.getAttribute("userSessionVO");
+		String customerEmail = loginVO.getUsername();
+		List<PayeeInfoVO> payeeInfoList = customerService.registeredPayeeList(customerEmail);
 		model.addAttribute("payeeInfoList", payeeInfoList);
 		return "customer/registeredPayee";
 

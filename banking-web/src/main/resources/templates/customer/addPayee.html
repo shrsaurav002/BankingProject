@@ -1,18 +1,13 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:th="http://www.thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
 <title>Add payee Page</title>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet"
-	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
-<script
-	src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-<script
-	src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-<script
-	src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
 
 <style>
 .ffooter {
@@ -44,13 +39,14 @@
 
 <script type="text/javascript">
 	function validateForm() {
-		/* var tpayeeAcc = $("#payeeAccountNo").val();
+		var tpayeeAcc = $("#payeeAccountNo").val();
 		var ttpayeeAcc = $("#accNumberConfirm").val();
 		var tpayeeName = $("#payeeName").val();
 		var tpayeeNick = $("#payeeNickName").val();
 		//	var tpayeeEmail=$("payeeEmail").val
 		var tremark = $("#remarks").val();
 		var tpayeeAccConfirm = $("#accNumberConfirm").val();
+
 		if (tpayeeAcc.length == 0) {
 			$("#errorMessage").html("Please enter the payee account number");
 			$("#payeeAcc").css("borderColor", "red");
@@ -85,16 +81,17 @@
 		else {
 			$("#errorMessage").html("");
 			$("#payeeName").css("borderColor", "inherit");
-		} */
-		/* if (tpayeeEmail.length == 0) {
-			$("#errorMessage").html("Please enter the payee account number");
-			$("#payeeEmail").css("borderColor", "red");
-			$("#payeeEmail").focus();
-			return;
-		} else {
-			$("#errorMessage").html("");
-			$("#payeeEmail").css("borderColor", "inherit");
-		}   */
+		}
+		/* 	if (tpayeeEmail.length == 0) {
+				$("#errorMessage").html("Please enter the payee account number");
+				$("#payeeEmail").css("borderColor", "red");
+				$("#payeeEmail").focus();
+				return;
+			} else {
+				$("#errorMessage").html("");
+				$("#payeeEmail").css("borderColor", "inherit");
+			}
+		 */
 		document.addPayeeForm.submit();
 	}
 </script>
@@ -103,69 +100,78 @@
 	<header style="height: 30px; background-color: maroon; color: white;">
 
 
-		Hello Mr. <span th:utext="${session.userSessionVO.username}"
-			th:unless="${session == null}" style="font-weight: bold;"></span>
+		Hello Mr.
+		<span th:utext="${session.userSessionVO.username}" th:unless="${session == null}" style="font-weight: bold;"></span>
 	</header>
 	<div class="container">
-		<br /> <br /> <a th:href="@{/customer/pendingPayee}">
+		<br />
+		<br />
+		<a th:href="@{/customer/pendingPayee}">
 			<button type="button" class="btn btn-success">Pending payee</button>
-		</a> <a th:href="@{/customer/registeredPayee}">
-			<button type="button" class="btn btn-info">My registered
-				payees</button>
-		</a> <a th:href="@{/customer/logout}"><button type="button"
-				class="btn btn-warning">Logout</button></a> <br /> <br />
+		</a>
+		<a th:href="@{/customer/registeredPayee}">
+			<button type="button" class="btn btn-info">My registered payees</button>
+		</a>
+		<a th:href="@{/customer/logout}">
+			<button type="button" class="btn btn-warning">Logout</button>
+		</a>
+		<br />
+		<br />
 
 		<div class="container">
 
 
-			<form th:action="@{/customer/account/addPayee}" method="POST"
-				th:object="${payeeInfoVO}" name="addPayeeForm">
+			<form th:action="@{/customer/account/addPayee}" method="POST" th:object="${payeeInfoVO}" name="addPayeeForm">
 				<!-- <input type="hidden" th:value="${session.userSessionVO.username}" th:name="customerId" />  -->
-				<span id="errorMessage" th:utext="${error}"
-					style="color: red; font-size: 14px;"></span> <span
-					id="errorMessage" th:utext="${successMessage}"
-					style="color: blue; font-size: 14px;"></span> <br />
+				<span id="errorMessage" th:utext="${error}" style="color: red; font-size: 14px;"></span>
+				<span id="errorMessage" th:utext="${successMessage}" style="color: blue; font-size: 14px;"></span>
+				<br />
 
 
 				<div class="row">
 					<div class="column">
-						<label for="payeeAccountNo">Payee Account name:</label> <br /> <input
-							type="text" style="width: 100%;" class="form-control"
-							th:field="*{payeeName}" placeholder="Enter the payee name">
-						<span th:if="${#fields.hasErrors('payeeName')}"
-							th:errors="*{payeeName}" style="color: red">Name Error</span> <br>
-						<label for="payeeName">Account Number:</label> <br /> <input
-							type="text" style="width: 100%;" class="form-control"
-							th:field="*{payeeAccountNo}"
-							placeholder="Enter the payee account number"> <span
-							th:if="${#fields.hasErrors('payeeAccountNo')}"
-							th:errors="*{payeeAccountNo}" style="color: red">Account
+						<label for="payeeAccountName">Payee Account name:</label>
+						<br />
+						<input type="text" style="width: 100%;" class="form-control" th:field="*{payeeName}"
+							placeholder="Enter the payee name">
+						<span th:if="${#fields.hasErrors('payeeName')}" th:errors="*{payeeName}" style="color: red">Name Error</span>
+						<br>
+						<label for="payeeName">Account Number:</label>
+						<br />
+						<input type="text" style="width: 100%;" class="form-control" th:field="*{payeeAccountNo}"
+							placeholder="Enter the payee account number">
+						<span th:if="${#fields.hasErrors('payeeAccountNo')}" th:errors="*{payeeAccountNo}" style="color: red">Account
 							Number Error</span>
-						<br> <label for="payeeEmail">Account Email:</label> <br /> 
-						  <input type="text" style="width: 100%;" class="form-control" name="payeeEmail" placeholder="Enter the payee email">
+						<br>
+						<label for="payeeEmail">Account Email:</label>
+						<br />
+						<input type="text" style="width: 100%;" class="form-control" id="payeeEmail" name="payeeEmail"
+							placeholder="Enter the payee email">
+					
 					</div>
 					<div class="column">
-						<label for="tpayeeAcc">Nickname:</label> <br /> <input
-							type="text" style="width: 100%;" class="form-control"
-							th:field="*{payeeNickName}" placeholder="Set nickname"> <span
-							th:if="${#fields.hasErrors('payeeNickName')}"
-							th:errors="*{payeeNickName}" style="color: red">Account
-							Number Error</span> <br> <label for="payeeNickName">Confirm
-							Account number:</label> <br /> <input type="text" style="width: 100%;"
-							class="form-control" th:field="*{accNumberConfirm}"
-							placeholder="Confirm the payee account number"> <span
-							th:if="${#fields.hasErrors('accNumberConfirm')}"
-							th:errors="*{accNumberConfirm}" style="color: red"></span> <br>
-						<label for="remarks">Remarks:</label> <br /> <input type="text"
-							style="width: 100%; align: center" class="form-control"
-							id="remark" name="remarks">
+						<label for="tpayeeAcc">Nickname:</label>
+						<br />
+						<input type="text" style="width: 100%;" class="form-control" th:field="*{payeeNickName}"
+							placeholder="Set nickname">
+						<span th:if="${#fields.hasErrors('payeeNickName')}" th:errors="*{payeeNickName}" style="color: red">Account
+							Number Error</span>
+						<br>
+						<label for="payeeNickName">Confirm Account number:</label>
+						<br />
+						<input type="text" style="width: 100%;" class="form-control" th:field="*{accNumberConfirm}"
+							placeholder="Confirm the payee account number">
+						<span th:if="${#fields.hasErrors('accNumberConfirm')}" th:errors="*{accNumberConfirm}" style="color: red"></span>
+						<br>
+						<label for="remarks">Remarks:</label>
+						<br />
+						<input type="text" style="width: 100%; align: center" class="form-control" id="remark" name="remarks">
 					</div>
 				</div>
 
 
 
-				<button type="button" id="submitButton" onclick="validateForm();"
-					class="btn btn-primary">Add payee</button>
+				<button type="button" id="submitButton" onclick="validateForm();" class="btn btn-primary">Add payee</button>
 
 			</form>
 		</div>
