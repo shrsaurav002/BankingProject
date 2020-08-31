@@ -6,6 +6,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+
+import javax.servlet.http.HttpSession;
+
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,8 +47,6 @@ public class CustomerRestController {
 	private CustomerService customer;
 	@Autowired
 	private JavaMailSender javaMailSender;
-	@Autowired
-	private CustomerService customerService;
 
 	// { "loginid":"nagen@gmail.com",
 	// "passcode":"2938939",
@@ -193,7 +194,7 @@ public class CustomerRestController {
 
 	@DeleteMapping("/customer/rejectPayee")
 	public ApplicationResponseVO delete(@RequestParam String customerId, @RequestParam String name) {
-		customerService.updatePayee(customerId, name, "reject");
+		customer.updatePayee(customerId, name, "reject");
 		ApplicationResponseVO appResp = new ApplicationResponseVO();
 		appResp.setCode(917);
 		appResp.setId(2);
@@ -203,6 +204,12 @@ public class CustomerRestController {
 		return appResp;
 	}
 
-	
+@GetMapping("/customer/checkAccNumber")
+public String checkAccNumber(HttpSession session) {
+	LoginVO login=(LoginVO) session.getAttribute("userSessionVO");
+	String accNum=customer.getAccountNumber(login);
+	return accNum;
+			
+}
 
 }

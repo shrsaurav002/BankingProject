@@ -39,8 +39,31 @@
 
 <script type="text/javascript">
 	function validateForm() {
+		var accNum = $("#accNumberConfirm").val()
+		var accNumConfirm = $("#accountNumber").val();
+		var promise=fetch("/v3/customer/checkAccNumber");
+		promise.then(resp=>resp.text()).then(function (data){
+			if(accNum!=data){
+				$("#errorMessage").html("The account number does not Exist. Please check your Account Number");
+				$("#accountNumber").focus();
+				return;
+			}else{
+				$("#errorMessage").html();
+				$("#accountNumber").css("borderColor", "inherit");
+			}
+		})
+		if (accNum != accNumConfirm) {
+			$("#errorMessage").html("The account number does not Match");
+			$("#accNumberConfirm").focus();
+			$("#accountNumber").focus();
+			return;
+		} else {
+			$("#errorMessage").html();
+			$("#accNumberConfirm").css("borderColor", "inherit");
+			$("#accountNumber").css("borderColor", "inherit");
+		}
 
-		document.addPayeeForm.submit();
+	 	document.depositFunds.submit(); 
 	}
 </script>
 </head>
@@ -69,23 +92,24 @@
 		<div class="container">
 
 
-			<form action="" method="POST" th:object="${customerAccountInfoVO}" name="depositFunds">
+			<form th:action="@{/customer/depositFunds}" method="POST" th:object="${customerAccountInfoVO}" name="depositFunds">
 				<!-- <input type="hidden" th:value="${session.userSessionVO.username}" th:name="customerId" />  -->
 				<span id="errorMessage" th:utext="${error}" style="color: red; font-size: 14px;"></span>
 				<span id="errorMessage" th:utext="${successMessage}" style="color: blue; font-size: 14px;"></span>
-				<span id="headline" style="color: green; font-size: 22px;">Deposit Money</span>
+				<span id="headline" style="color: green; font-size: 22px;">Deposit Money To Your Account</span>
 				<hr />
 				<br />
 				<label for="accNumber">Account Number</label>
-				<input th:type="text" th:field="*{accountNumber}" class="form-control" style="width: 50%">
+				<input th:type="text" name="accountNumber" id="accountNumber" class="form-control" style="width: 50%">
 				<label for="accNumberConfirm">Confirm Account Number</label>
 				<input th:type="text" id="accNumberConfirm" class="form-control" style="width: 50%">
 				<label for="depositAmount">Deposit Amount</label>
-				<input th:type="text" id="depositAmount" name="depositAmount" class="form-control" style="width: 50%">
+				<input th:type="number" id="depositAmount" name="depositAmount" class="form-control" style="width: 50%">
 				<label for="trDate">Transfer Date</label>
-				<input th:type="datetime-local" th:field="*{StatusAsOf}" class="form-control" style="width: 50%">
-				<br><hr/>
-				<button class="btn btn-info" type="button">Deposit</button>
+				<input th:type="date" name="date" class="form-control" style="width: 50%">
+				<br>
+				<hr />
+				<button class="btn btn-info" type="button" th:onClick="|validateForm();|">Deposit</button>
 			</form>
 		</div>
 	</div>

@@ -1,6 +1,9 @@
 package com.rab3tech.customer.ui.controller;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,6 +31,7 @@ import com.rab3tech.customer.service.LocationService;
 import com.rab3tech.customer.service.LoginService;
 import com.rab3tech.customer.service.SecurityQuestionService;
 import com.rab3tech.email.service.EmailService;
+import com.rab3tech.vo.AccountTypeVO;
 import com.rab3tech.vo.ChangePasswordVO;
 import com.rab3tech.vo.CustomerAccountInfoVO;
 import com.rab3tech.vo.CustomerSavingVO;
@@ -289,6 +293,8 @@ public class CustomerUIController {
 		LoginVO loginVO = (LoginVO) session.getAttribute("userSessionVO");
 		String customerEmail = loginVO.getUsername();
 		List<PayeeInfoVO> payeeInfoList = customerService.registeredPayeeList(customerEmail);
+		List<String> accountTypes=customerService.findAccountTypesByUsername(loginVO);
+		model.addAttribute("accountType",accountTypes);
 		model.addAttribute("payeeInfoList", payeeInfoList);
 		return "customer/registeredPayee";
 
@@ -299,6 +305,22 @@ public class CustomerUIController {
 	public String openDepositPage(Model model) {
 		CustomerAccountInfoVO cust = new CustomerAccountInfoVO();
 		model.addAttribute("customerAccountInfoVO", cust);
+		return "customer/depositFunds";
+	}
+
+	@PostMapping("/customer/depositFunds")
+	public String depositMoney(@RequestParam String accountNumber, @RequestParam float depositAmount,
+			@RequestParam String date, Model model) {
+		System.out.println(date);
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+		Date date1 = null;
+		try {
+			date1 = format.parse(date);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		customerService.depositMoney(accountNumber, depositAmount, date1);
+
 		return "customer/depositFunds";
 	}
 

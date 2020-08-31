@@ -1,111 +1,146 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"
-    xmlns:th="http://www.thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <title>Registered payees page</title>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
-  
-  <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
-  <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
-  
-  
-   
-  <script type="text/javascript">
-  $(document).ready(function() {
-       // $('#enquiryList').DataTable();
-    } );
-  </script>
-  
-  <style>
+<title>Registered payees page</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+
+<script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
+
+
+
+<script type="text/javascript">
+	$(document).ready(function() {
+		// $('#enquiryList').DataTable();
+	});
+</script>
+
+<style>
 .ffooter {
-  position: fixed;
-  left: 0;
-  bottom: 0;
-  width: 100%;
-  background-color: red;
-  color: white;
-  text-align: center;
-  height: 30px;
-  background-color:#e9ffe7;
+	position: fixed;
+	left: 0;
+	bottom: 0;
+	width: 100%;
+	background-color: red;
+	color: white;
+	text-align: center;
+	height: 30px;
+	background-color: #e9ffe7;
 }
 </style>
 
 <script type="text/javascript">
-  
-function clearMsg(){
-	   $("#errorMessage").html("");
-}  
+	function clearMsg() {
+		$("#errorMessage").html("");
+	}
 
-  
+	function openModalFunction() {
+		$("#transferModal").modal("show");
+	}
 </script>
 
 </head>
 <body>
 
 
-<header style="height: 30px;background-color: maroon;color:white;">
- 
-</header>
-<div class="container">
-  <br/><br/>
-  <a th:href="@{/customer/addPayee}"> 
-  <button type="button" class="btn btn-primary">Add payee</button>
-  </a>
+	<header style="height: 30px; background-color: maroon; color: white;"> </header>
+	<div class="container">
+		<br />
+		<br />
+		<a th:href="@{/customer/addPayee}">
+			<button type="button" class="btn btn-primary">Add payee</button>
+		</a>
 
-<a th:href="@{/customer/pendingPayee}">
-<button type="button" class="btn btn-success">Pending payee</button>
-</a>
- <a th:href="@{/customer/logout}"><button type="button" class="btn btn-warning">Logout</button></a>
- <br/>
-  <div style="width: 100%">
- <hr/>
-    <table id="enquiryList" class="table table-striped table-bordered" style="width:100%">
-  <thead>
-  <tr>
-  <td></td>
-  <td> Payee name </td>
-  <td> Nickname </td>
-  <td> Payee account number </td>
-   <td>Confirmation date</td>
-   <td> Remark</td>
-   <td> Status </td>
+		<a th:href="@{/customer/pendingPayee}">
+			<button type="button" class="btn btn-success">Pending payee</button>
+		</a>
+		<a th:href="@{/customer/logout}">
+			<button type="button" class="btn btn-warning">Logout</button>
+		</a>
+		<br />
+		<div style="width: 100%">
+			<hr />
+			<table id="enquiryList" class="table table-striped table-bordered" style="width: 100%">
+				<thead>
+					<tr>
+						<td></td>
+						<td>Payee name</td>
+						<td>Nickname</td>
+						<td>Payee account number</td>
+						<td>Confirmation date</td>
+						<td>Remark</td>
+						<td>Status</td>
 
-  </tr>
-  </thead>
- 
-  <tbody>
-  <tr th:each="payeeVO,iter: ${payeeInfoList}">
-    <td><input type="checkbox" id="*{payeeInfoList}" name="payeeSelected"></td>
-    <td th:text="${payeeVO.payeeName}"/>
-    <td th:text="${payeeVO.payeeNickName}"/>
-    <td th:text="${payeeVO.payeeAccountNo}"/>
-    <td th:text="${#dates.format(payeeVO.dom, 'dd-MMM-yyyy HH:mm')}"></td>
-    <td th:text="${payeeVO.remarks}"/>
-    <td th:text="${payeeVO.payeeStatus}"/>
+					</tr>
+				</thead>
 
-     
-    
-  </tr>
-  </tbody>
-  </table>
- 
-   <br/>
- 
-    <button type="button" id="submitButton"  class="btn btn-primary">Make a transfert</button>
-  </div>
-</div>
-<footer  class="ffooter">
-</footer>
+				<tbody>
+					<tr th:each="payeeVO,iter: ${payeeInfoList}">
+						<td>
+							<input type="checkbox" id="*{payeeInfoList}" name="payeeSelected">
+						</td>
+						<td th:text="${payeeVO.payeeName}" />
+						<td th:text="${payeeVO.payeeNickName}" />
+						<td th:text="${payeeVO.payeeAccountNo}" />
+						<td th:text="${#dates.format(payeeVO.dom, 'dd-MMM-yyyy HH:mm')}"></td>
+						<td th:text="${payeeVO.remarks}" />
+						<td th:text="${payeeVO.payeeStatus}" />
 
 
- 
+
+					</tr>
+				</tbody>
+			</table>
+
+			<br />
+
+			<button type="button" id="submitButton" class="btn btn-primary" th:onClick="|openModalFunction();|">Make a
+				transfer</button>
+		</div>
+	</div>
+	<footer class="ffooter"> </footer>
+
+	<div class="modal fade" id="transferModal" tabindex="-1" role="dialog" aria-labelledby="transferModal"
+		aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="transferTitle">Transfer Money</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<h3>Please fill the following Information</h3>
+					<label for="transferFrom">Transfer From</label>
+					<select style="width: 60%;" class="form-control" th:field="*{accountType}">
+						<option th:each="name :${accountType}" th:value="${name}" th:text="${name}"></option>
+					</select>
+					<label for="transferFrom">Transfer To</label>
+					<input type="text" class="form-control">
+					<label for="transferFrom">Transfer Date</label>
+					<input type="text" class="form-control">
+					<label for="transferFrom">Transfer Amount</label>
+					<input type="text" class="form-control">
+					<label for="memo">Memo(optional)</label>
+					<input type="text" class="form-control">
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+					<button type="button" class="btn btn-primary">Send Money</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
 
 </body>
 </html>

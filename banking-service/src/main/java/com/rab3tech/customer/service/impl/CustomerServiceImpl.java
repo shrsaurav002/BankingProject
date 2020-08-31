@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,6 +24,7 @@ import com.rab3tech.customer.dao.repository.CustomerAccountApprovedRepository;
 import com.rab3tech.customer.dao.repository.CustomerAccountEnquiryRepository;
 import com.rab3tech.customer.dao.repository.CustomerAccountInfoRepository;
 import com.rab3tech.customer.dao.repository.CustomerRepository;
+import com.rab3tech.customer.dao.repository.LoginRepository;
 import com.rab3tech.customer.dao.repository.PayeeRepository;
 import com.rab3tech.customer.dao.repository.RoleRepository;
 import com.rab3tech.customer.service.CustomerService;
@@ -44,6 +46,7 @@ import com.rab3tech.vo.AccountTypeVO;
 import com.rab3tech.vo.CustomerAccountInfoVO;
 import com.rab3tech.vo.CustomerUpdateVO;
 import com.rab3tech.vo.CustomerVO;
+import com.rab3tech.vo.LoginVO;
 import com.rab3tech.vo.PayeeInfoVO;
 import com.rab3tech.vo.RoleVO;
 
@@ -80,6 +83,8 @@ public class CustomerServiceImpl implements CustomerService {
 
 	@Autowired
 	private PayeeRepository payeeRepository;
+	@Autowired
+	private LoginRepository loginRepo;
 
 	@Override
 	public CustomerAccountInfoVO createBankAccount(int csaid) {
@@ -389,6 +394,41 @@ public class CustomerServiceImpl implements CustomerService {
 			return true;
 		}
 		return false;
+	}
+
+	@Override
+	public String getAccountNumber(LoginVO loginVO) {
+		Login login = loginRepo.findByLoginid(loginVO.getUsername()).get();
+		CustomerAccountInfo cust = customerAccountInfoRepository.findByCustomerId(login);
+		return cust.getAccountNumber();
+	}
+
+	@Async
+	@Override
+	public void depositMoney(String accountNumber, float depositAmount, Date date1) {
+		CustomerAccountInfo acc = customerAccountInfoRepository.findByAccountNumber(accountNumber).get();
+		if (date1.after(new Date())) {
+			try {
+				Thread.sleep(30000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+		acc.setStatusAsOf(date1);
+		acc.setTavBalance(depositAmount + acc.getTavBalance());
+		acc.setAvBalance(depositAmount);
+
+	}
+
+	@Override
+	public List<String> findAccountTypesByUsername(LoginVO customerEmail) {
+		Login login = loginRepo.findByLoginid(customerEmail.getUsername()).get();
+		List<CustomerAccountInfo> custAcc = customerAccountInfoRepository.findAllByCustomerId(login);
+		List<String> accounts = new ArrayList<>();
+		for (CustomerAccountInfo c : custAcc) {
+			accounts.add(c.getAccountType().getName());
+		}
+		return accounts;
 	}
 
 }
