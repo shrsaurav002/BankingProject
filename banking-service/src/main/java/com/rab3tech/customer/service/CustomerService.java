@@ -49,8 +49,6 @@ public interface CustomerService {
 
 	int findPayeeUrn(String payeeName, String customerId);
 
-	CustomerVO findCustById(int id);
-
 	boolean checkIfExists(String num);
 
 	boolean checkEmailByNumber(String payeeEmail, String payeeAccountNo);
@@ -60,5 +58,9 @@ public interface CustomerService {
 	void depositMoney(String accountNumber, float depositAmount, Date date1);
 
 	List<String> findAccountTypesByUsername(LoginVO loginVO);
+
+	String findCustByAccountNum(String accNo);
+
+	float findAccountBalance(LoginVO loginVO);
 
 }

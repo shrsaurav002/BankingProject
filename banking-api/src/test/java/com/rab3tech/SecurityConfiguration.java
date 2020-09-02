@@ -59,7 +59,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     .logoutSuccessUrl("/logout/success")
     .invalidateHttpSession(true) 
     .permitAll()
-    .deleteCookies("JSESSIONID");
+    .deleteCookies("JSESSIONID")
+    .and()
+    .rememberMe().key("uniqueAndSecret").tokenValiditySeconds(86400);
     
     
     http.sessionManagement().invalidSessionUrl("/customer/timeout");

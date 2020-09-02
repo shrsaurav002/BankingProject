@@ -1,18 +1,13 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:th="http://www.thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
 <title>Application Status</title>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet"
-	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
-<script
-	src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-<script
-	src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-<script
-	src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
 <style>
 .ffooter {
 	position: fixed;
@@ -28,7 +23,10 @@
 </style>
 
 <script type="text/javascript">
- 
+ jQuery(document).ready(function(){
+	 
+	 
+ });
  function checkStatus(){
 
 	 var searchText=$("#statusId").val();
@@ -115,37 +113,33 @@
 	<div class="container">
 		<h2>Check Application Status</h2>
 		<img th:src="@{/images/app.png}" alt="Logo" style="height: 140px" />
-		<br /> <span th:utext="${error}"
-			style="color: red; font-size: 18px; font-weight: bold;"
-			id="errorMessage"></span> <span th:utext="${message}"
-			style="color: blue; font-size: 18px; font-weight: bold;"></span>
+		<br />
+		<span th:utext="${error}" style="color: red; font-size: 18px; font-weight: bold;" id="errorMessage"></span>
+		<span th:utext="${message}" style="color: blue; font-size: 18px; font-weight: bold;"></span>
 		<div style="width: 70%">
-			<form th:action="@{/customer/appStatus}" method="Get" id="appStatus"
-				name="appStatus">
+			<form th:action="@{/customer/appStatus}" method="Get" id="appStatus" name="appStatus">
 				<div class="form-group">
-					<label for="statusId">Enter App Ref or Email:</label> <input
-						type="text" style="width: 60%;" class="form-control"
-						name="statusId" id="statusId" placeholder="Enter ref or email"
-						onkeyup="messageClear();">
+					<label for="statusId">Enter App Ref or Email:</label>
+					<input type="text" style="width: 60%;" class="form-control" name="statusId" id="statusId"
+						placeholder="Enter ref or email" onkeyup="messageClear();">
 				</div>
 
 
-				<button type="button" class="btn btn-primary"
-					onClick="checkStatus();">Check Status</button>
+				<button type="button" class="btn btn-primary" onClick="checkStatus();">Check Status</button>
 
 				<button type="reset" class="btn btn-danger">Reset</button>
 
 				<a th:href="@{/customer/account/enquiry}">
-					<button type="button" class="btn btn-warning">Customer
-						Enquiry</button>
-				</a> <a th:href="@{/customer/login}">
+					<button type="button" class="btn btn-warning">Customer Enquiry</button>
+				</a>
+				<a th:href="@{/customer/login}">
 					<button type="button" class="btn btn-danger">Login</button>
-				</a> <a th:href="@{/customer/app/status}">
-					<button type="button" class="btn btn-success">Enquiry
-						Status</button>
-				</a> <a th:href="@{/customer/customerSearch}">
-					<button type="button" class="btn btn-success">Customer
-						search</button>
+				</a>
+				<a th:href="@{/customer/app/status}">
+					<button type="button" class="btn btn-success">Enquiry Status</button>
+				</a>
+				<a th:href="@{/customer/customerSearch}">
+					<button type="button" class="btn btn-success">Customer search</button>
 				</a>
 			</form>
 		</div>

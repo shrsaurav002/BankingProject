@@ -371,14 +371,6 @@ public class CustomerServiceImpl implements CustomerService {
 	}
 
 	@Override
-	public CustomerVO findCustById(int id) {
-		Customer customer = customerRepo.findById(id).get();
-		CustomerVO cust = new CustomerVO();
-		BeanUtils.copyProperties(customer, cust);
-		return cust;
-	}
-
-	@Override
 	public boolean checkIfExists(String num) {
 		Optional<CustomerAccountInfo> customerAcc = customerAccountInfoRepository.findByAccountNumber(num);
 		if (customerAcc.isPresent()) {
@@ -429,6 +421,22 @@ public class CustomerServiceImpl implements CustomerService {
 			accounts.add(c.getAccountType().getName());
 		}
 		return accounts;
+	}
+
+	@Override
+	public String findCustByAccountNum(String accNo) {
+		CustomerAccountInfo customerInfo = customerAccountInfoRepository.findByAccountNumber(accNo).get();
+		Login customer = customerInfo.getCustomerId();
+
+		return customer.getLoginid();
+	}
+
+	@Override
+	public float findAccountBalance(LoginVO loginVO) {
+		Login login = loginRepo.findByLoginid(loginVO.getUsername()).get();
+		String number = customerAccountInfoRepository.findByCustomerId(login).getAccountNumber();
+		CustomerAccountInfo balance = customerAccountInfoRepository.findByCustomerIdAndAccountNumber(login, number);
+		return balance.getTavBalance();
 	}
 
 }

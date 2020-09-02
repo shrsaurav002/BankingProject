@@ -144,5 +144,13 @@ public class Login {
 		this.locked = locked;
 	}
 
+	@Override
+	public String toString() {
+		return "Login [loginid=" + loginid + ", name=" + name + ", password=" + password + ", locked=" + locked
+				+ ", noOfAttempt=" + noOfAttempt + ", llt=" + llt + ", lwap=" + lwap + ", email=" + email
+				+ ", passwordExpire=" + passwordExpire + ", token=" + token + ", customerQuestionAnswers="
+				+ customerQuestionAnswers + ", roles=" + roles + "]";
+	}
+
 
 }

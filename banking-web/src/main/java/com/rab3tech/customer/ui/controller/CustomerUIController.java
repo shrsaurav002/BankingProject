@@ -27,17 +27,19 @@ import com.rab3tech.customer.service.AccountTypeService;
 import com.rab3tech.customer.service.CustomerAccountInfoService;
 import com.rab3tech.customer.service.CustomerEnquiryService;
 import com.rab3tech.customer.service.CustomerService;
+import com.rab3tech.customer.service.FundTransferService;
 import com.rab3tech.customer.service.LocationService;
 import com.rab3tech.customer.service.LoginService;
 import com.rab3tech.customer.service.SecurityQuestionService;
 import com.rab3tech.email.service.EmailService;
-import com.rab3tech.vo.AccountTypeVO;
+import com.rab3tech.utils.Utils;
 import com.rab3tech.vo.ChangePasswordVO;
 import com.rab3tech.vo.CustomerAccountInfoVO;
 import com.rab3tech.vo.CustomerSavingVO;
 import com.rab3tech.vo.CustomerSecurityQueAnsVO;
 import com.rab3tech.vo.CustomerVO;
 import com.rab3tech.vo.EmailVO;
+import com.rab3tech.vo.FundTransferVO;
 import com.rab3tech.vo.LoginVO;
 import com.rab3tech.vo.PayeeInfoVO;
 
@@ -73,6 +75,8 @@ public class CustomerUIController {
 	private LocationService locationService;
 	@Autowired
 	private CustomerAccountInfoService customerAccountSerice;
+	@Autowired
+	private FundTransferService fundTransferService;
 
 	@GetMapping("/customer/forget/password")
 	public String forgetPassword() {
@@ -281,7 +285,6 @@ public class CustomerUIController {
 	public String pendinPayeeList(Model model, HttpSession session) {
 		LoginVO loginVO = (LoginVO) session.getAttribute("userSessionVO");
 		String email = loginVO.getUsername();
-		System.out.println(email);
 		List<PayeeInfoVO> payeeInfoList = customerService.pendingPayeeList(email);
 		model.addAttribute("payeeInfoList", payeeInfoList);
 		return "customer/pendingPayee";
@@ -293,8 +296,8 @@ public class CustomerUIController {
 		LoginVO loginVO = (LoginVO) session.getAttribute("userSessionVO");
 		String customerEmail = loginVO.getUsername();
 		List<PayeeInfoVO> payeeInfoList = customerService.registeredPayeeList(customerEmail);
-		List<String> accountTypes=customerService.findAccountTypesByUsername(loginVO);
-		model.addAttribute("accountType",accountTypes);
+		List<String> accountTypes = customerService.findAccountTypesByUsername(loginVO);
+		model.addAttribute("accountType", accountTypes);
 		model.addAttribute("payeeInfoList", payeeInfoList);
 		return "customer/registeredPayee";
 
@@ -311,7 +314,6 @@ public class CustomerUIController {
 	@PostMapping("/customer/depositFunds")
 	public String depositMoney(@RequestParam String accountNumber, @RequestParam float depositAmount,
 			@RequestParam String date, Model model) {
-		System.out.println(date);
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 		Date date1 = null;
 		try {
@@ -320,7 +322,7 @@ public class CustomerUIController {
 			e.printStackTrace();
 		}
 		customerService.depositMoney(accountNumber, depositAmount, date1);
-
+		model.addAttribute("success", "Successfully Deposited $" + depositAmount);
 		return "customer/depositFunds";
 	}
 
@@ -339,4 +341,43 @@ public class CustomerUIController {
 		outputStream.close();
 	}
 
+	// Transfer Money:
+	@GetMapping("/customer/transferMoney")
+	public String showFirstTransferPage(Model model) {
+		/*
+		 * LoginVO loginVO = (LoginVO) session.getAttribute("userSessionVO");
+		 * List<String>
+		 * accountTypes=customerService.findAccountTypesByUsername(loginVO);
+		 * model.addAttribute("accountType",accountTypes);
+		 */
+		FundTransferVO fundTransferVO = new FundTransferVO();
+		model.addAttribute("fundTransferVO", fundTransferVO);
+		return "customer/transferMoney";
+	}
+
+	@PostMapping("/customer/transferMoney")
+	public String showConfirmationPage(@ModelAttribute FundTransferVO fundTransferVO, Model model) {
+
+		int n = Utils.genOTP();
+		fundTransferVO.setOtp(n);
+		System.out.println(fundTransferVO);
+		model.addAttribute(fundTransferVO);
+		return "customer/transferConfirm";
+	}
+
+	@PostMapping("/customer/sendMoneyToPayee")
+	public String sendMoneyToPayee(@ModelAttribute FundTransferVO fundTransferVO, @Valid @RequestParam int otpEnter,
+			BindingResult br, Model model, HttpSession session) {
+		System.out.println(fundTransferVO);
+		if (fundTransferVO.getOtp() != otpEnter) {
+			br.rejectValue("otp", "otp Does Not Match", "The entered OTP does not match. Check your email");
+		}
+		if (br.hasErrors()) {
+			model.addAttribute("fundTransferVO", fundTransferVO);
+			return "customer/transferConfirm";
+		}
+		LoginVO loginVO = (LoginVO) session.getAttribute("userSessionVO");
+		fundTransferService.transfer(fundTransferVO, loginVO);
+		return "customer/dashboard";
+	}
 }

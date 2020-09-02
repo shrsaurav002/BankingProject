@@ -28,6 +28,7 @@ import com.rab3tech.customer.service.CustomerService;
 import com.rab3tech.customer.service.LoginService;
 import com.rab3tech.dao.entity.CreditCardEntity;
 import com.rab3tech.utils.PasswordGenerator;
+import com.rab3tech.utils.Utils;
 import com.rab3tech.vo.ApplicationResponseVO;
 import com.rab3tech.vo.ChangePasswordRequestVO;
 import com.rab3tech.vo.CreditCardVO;
@@ -35,6 +36,7 @@ import com.rab3tech.vo.CustomerAccountInfoVO;
 import com.rab3tech.vo.CustomerVO;
 import com.rab3tech.vo.LoginRequestVO;
 import com.rab3tech.vo.LoginVO;
+import com.rab3tech.vo.PayeeInfoVO;
 
 @RestController
 @CrossOrigin(origins = "*")
@@ -130,10 +132,10 @@ public class CustomerRestController {
 
 	}
 
-	@GetMapping("/customer/findCustId")
-	public String findCust(@RequestParam int id) {
-		CustomerVO cust = customer.findCustById(id);
-		return cust.getEmail();
+	@GetMapping("/customer/findCustByAccNo")
+	public String findCust(@RequestParam String accNo) {
+		String cust = customer.findCustByAccountNum(accNo);
+		return cust;
 	}
 
 	@GetMapping("/customer/findEmail")
@@ -204,12 +206,39 @@ public class CustomerRestController {
 		return appResp;
 	}
 
-@GetMapping("/customer/checkAccNumber")
-public String checkAccNumber(HttpSession session) {
-	LoginVO login=(LoginVO) session.getAttribute("userSessionVO");
-	String accNum=customer.getAccountNumber(login);
-	return accNum;
-			
-}
+	@GetMapping("/customer/checkAccNumber")
+	public String checkAccNumber(HttpSession session) {
+		LoginVO login = (LoginVO) session.getAttribute("userSessionVO");
+		String accNum = customer.getAccountNumber(login);
+		return accNum;
 
+	}
+
+	@GetMapping("/customer/fetchAccounts")
+	public List<String> fetchUserAccounts(HttpSession session) {
+		LoginVO loginVO = (LoginVO) session.getAttribute("userSessionVO");
+		List<String> accountTypes = customer.findAccountTypesByUsername(loginVO);
+		return accountTypes;
+
+	}
+
+	@GetMapping("/customer/fetchYourRegistered")
+	public List<PayeeInfoVO> fetchRegisteredAccounts(HttpSession session) {
+		LoginVO loginVO = (LoginVO) session.getAttribute("userSessionVO");
+		List<PayeeInfoVO> accounts = customer.registeredPayeeList(loginVO.getUsername());
+		return accounts;
+	}
+
+	@GetMapping("/customer/getAccountBalance")
+	public float fetchUserBalance(HttpSession session) {
+		LoginVO loginVO = (LoginVO) session.getAttribute("userSessionVO");
+		float amount = customer.findAccountBalance(loginVO);
+		return amount;
+	}
+
+	@GetMapping("/customer/generateNewOTP")
+	public int genNewOTP() {
+		int n = Utils.genOTP();
+		return n;
+	}
 }
