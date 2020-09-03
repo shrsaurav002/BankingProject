@@ -41,7 +41,7 @@
 		var regPayee=fetch("/v3/customer/fetchYourRegistered")
 		regPayee.then(response=>response.json()).then(function(data1){
 			$('#toAccount').empty();
-			$('#toAccount').append('<option disabled selected value="">Select one</option')
+			$('#toAccount').append('<option disabled selected value="">Select one</option>')
 			$.each(data1, function(i, p) {
 				var show=p.payeeAccountNo+" - "+p.payeeName;
 			    $('#toAccount').append($('<option></option>').val(show).html(show));
@@ -86,7 +86,7 @@
 		var sentTo=$("#toAccount").val	();
 		var amount=$("#amount").val();
 		var remarks=$("#remarks").val();
-		
+		console.log(balance)
 		if (sentFrom==null){
 			$("#errorMessage").html("Please select an account to Transfer from");
 			$("#fromAccount").focus();
@@ -102,11 +102,11 @@
 			$("#amount").focus();
 			return;
 		}
-		if (balance<amount){
+	 	if (balance<amount){
 			$("#errorMessage").html("You do not have enough funds for this transfer");
 			$("#amount").focus();
 			return;
-		}
+		} 
 		if (remarks.length==0){
 			$("#errorMessage").html("Please enter a valid remark");
 			$("#remarks").focus();
@@ -132,6 +132,9 @@
 	<br />
 	<br />
 	<div class="container">
+		<a th:href="@{/customer/dashboard}">
+			<button type="button" class="btn btn-success">Dashboard</button>
+		</a>
 		<a th:href="@{/customer/addPayee}">
 			<button type="button" class="btn btn-primary">Add payee</button>
 		</a>

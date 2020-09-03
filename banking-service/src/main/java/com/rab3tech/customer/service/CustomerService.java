@@ -63,4 +63,6 @@ public interface CustomerService {
 
 	float findAccountBalance(LoginVO loginVO);
 
+	boolean deleteAccountCompletely(String email, int id);
+
 }

@@ -10,10 +10,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.Cascade;
 
 @Entity
 @Table(name = "payee_informations_tbl")
@@ -30,7 +30,7 @@ public class PayeeInfo implements Serializable {
 	private Timestamp doe;
 	private Timestamp dom;
 	private String remarks;
-	@OneToOne(cascade = CascadeType.ALL)
+	@OneToOne
 	@JoinColumn(name = "PayeeStat")
 	private PayeeStatus payeeStatus;
 	private int urn;
@@ -140,7 +140,8 @@ public class PayeeInfo implements Serializable {
 		this.urn = urn;
 	}
 
-	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@OneToOne(fetch = FetchType.EAGER, orphanRemoval = true)
+	@Cascade(value = org.hibernate.annotations.CascadeType.ALL)
 	@JoinColumn(name = "cust_pay")
 	public Customer getCustomer() {
 		return customer;

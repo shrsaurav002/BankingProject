@@ -1,6 +1,8 @@
 
 package com.rab3tech.vo;
 
+import java.util.Date;
+
 import lombok.Data;
 
 @Data
@@ -12,6 +14,14 @@ public class FundTransferVO {
 	private float amount;
 	private String remarks;
 	private int otp;
+	private Date transactionDate;
+	
+	public Date getTransactionDate() {
+		return transactionDate;
+	}
+	public void setTransactionDate(Date transactionDate) {
+		this.transactionDate = transactionDate;
+	}
 	public FundTransferVO() {
 		super();
 		// TODO Auto-generated constructor stub

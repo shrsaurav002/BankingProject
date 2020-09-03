@@ -1,6 +1,5 @@
 package com.rab3tech.dao.entity;
 
-
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -13,14 +12,15 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Cascade;
+
 /**
  * 
- * @author nagendra.yadav
- * 00051230383783
+ * @author nagendra.yadav 00051230383783
  * 
  */
 @Entity
-@Table(name="customer_account_information_tbl")
+@Table(name = "customer_account_information_tbl")
 public class CustomerAccountInfo {
 
 	private long id;
@@ -32,10 +32,10 @@ public class CustomerAccountInfo {
 	private float avBalance;
 	private Date StatusAsOf;
 	private AccountType accountType;
-	
 
 	@OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "customerId", nullable = false)
+	@Cascade(value = org.hibernate.annotations.CascadeType.ALL)
+	@JoinColumn(name = "customerId", nullable = false)
 	public Login getCustomerId() {
 		return customerId;
 	}
@@ -45,7 +45,7 @@ public class CustomerAccountInfo {
 	}
 
 	@OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "accountType", nullable = false)
+	@JoinColumn(name = "accountType", nullable = false)
 	public AccountType getAccountType() {
 		return accountType;
 	}
@@ -55,7 +55,7 @@ public class CustomerAccountInfo {
 	}
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	public long getId() {
 		return id;
 	}
@@ -88,8 +88,6 @@ public class CustomerAccountInfo {
 		this.branch = branch;
 	}
 
-	
-
 	public float getTavBalance() {
 		return tavBalance;
 	}
@@ -116,14 +114,9 @@ public class CustomerAccountInfo {
 
 	@Override
 	public String toString() {
-		return "CustomerAccountInfo [id=" + id + ", customerId=" + customerId
-				+ ", accountNumber=" + accountNumber + ", currency=" + currency
-				+ ", branch=" + branch + ", tavBalance=" + tavBalance
-				+ ", avBalance=" + avBalance + ", StatusAsOf=" + StatusAsOf
-				+ "]";
+		return "CustomerAccountInfo [id=" + id + ", customerId=" + customerId + ", accountNumber=" + accountNumber
+				+ ", currency=" + currency + ", branch=" + branch + ", tavBalance=" + tavBalance + ", avBalance="
+				+ avBalance + ", StatusAsOf=" + StatusAsOf + "]";
 	}
-	
-	
 
 }
-

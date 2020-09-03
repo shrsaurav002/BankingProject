@@ -12,6 +12,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Cascade;
+
 /**
  * 
  * @author This is pojo/model which is used to carry data from view to
@@ -21,7 +23,6 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "customer_tbl")
 public class Customer {
-
 	private int id;
 	private String name;
 	private String address;
@@ -39,10 +40,10 @@ public class Customer {
 	private Login login;
 	private Timestamp doe;
 	private Timestamp dom;
-	
-	
-	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name="userid")
+
+	@OneToOne
+	@Cascade(value = org.hibernate.annotations.CascadeType.ALL)
+	@JoinColumn(name = "userid")
 	public Login getLogin() {
 		return login;
 	}
@@ -51,8 +52,7 @@ public class Customer {
 		this.login = login;
 	}
 
-
-	@Column(columnDefinition="longblob")
+	@Column(columnDefinition = "longblob")
 	public byte[] getImage() {
 		return image;
 	}
@@ -182,8 +182,5 @@ public class Customer {
 	public void setDom(Timestamp dom) {
 		this.dom = dom;
 	}
-	
-	
-
 
 }

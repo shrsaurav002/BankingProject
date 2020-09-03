@@ -1,10 +1,14 @@
 
 package com.rab3tech.dao.entity;
 
+import java.util.Date;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
+
+import org.hibernate.annotations.Cascade;
 
 @Entity
 public class FundTransferEntity {
@@ -14,13 +18,24 @@ public class FundTransferEntity {
 	private int id;
 
 	@OneToOne
+	@Cascade(value = org.hibernate.annotations.CascadeType.ALL)
 	private CustomerAccountInfo sentFrom;
 
 	@OneToOne
+	@Cascade(value = org.hibernate.annotations.CascadeType.ALL)
 	private CustomerAccountInfo sentTo;
 	private float amount;
 	private String remarks;
 	private int otp;
+	private Date transactionDate;
+
+	public Date getTransactionDate() {
+		return transactionDate;
+	}
+
+	public void setTransactionDate(Date transactionDate) {
+		this.transactionDate = transactionDate;
+	}
 
 	public int getId() {
 		return id;
@@ -73,7 +88,7 @@ public class FundTransferEntity {
 	@Override
 	public String toString() {
 		return "FundTransferEntity [id=" + id + ", sentFrom=" + sentFrom + ", sentTo=" + sentTo + ", amount=" + amount
-				+ ", remarks=" + remarks + ", otp=" + otp + "]";
+				+ ", remarks=" + remarks + ", otp=" + otp + ", transactionDate=" + transactionDate + "]";
 	}
 
 	public FundTransferEntity(int id, CustomerAccountInfo sentFrom, CustomerAccountInfo sentTo, float amount,

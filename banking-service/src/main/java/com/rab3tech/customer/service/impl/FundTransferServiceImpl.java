@@ -1,5 +1,10 @@
 package com.rab3tech.customer.service.impl;
 
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +44,29 @@ public class FundTransferServiceImpl implements FundTransferService {
 		fundTransferEntity.setAmount(fundTransferVO.getAmount());
 		fundTransferEntity.setRemarks(fundTransferVO.getRemarks());
 		fundTransferEntity.setOtp(0);
+		fundTransferEntity.setTransactionDate(new Date());
 		fundRepo.save(fundTransferEntity);
+	}
+
+	@Override
+	public List<FundTransferVO> findTransactionByUser(String username) {
+		Optional<List<FundTransferEntity>> optional = fundRepo.findBySender(username);
+		if (optional.isPresent()) {
+			List<FundTransferEntity> entities = optional.get();
+			List<FundTransferVO> transferVO = entities.stream().map(t -> {
+				FundTransferVO fundTransfer = new FundTransferVO();
+				fundTransfer.setSentTo(t.getSentTo().getAccountNumber() +" "+ t.getSentTo().getCustomerId().getName());
+				fundTransfer.setAmount(t.getAmount());
+				fundTransfer.setRemarks(t.getRemarks());
+				fundTransfer.setSentFrom(t.getSentFrom().getAccountType().getName());
+				fundTransfer.setTransactionDate(t.getTransactionDate());
+				return fundTransfer;
+			}).collect(Collectors.toList());
+			return transferVO;
+		} else {
+			return null;
+		}
+
 	}
 
 }

@@ -6,15 +6,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Optional;
 
 import javax.servlet.http.HttpSession;
-
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.rab3tech.customer.service.CustomerService;
+import com.rab3tech.customer.service.FundTransferService;
 import com.rab3tech.customer.service.LoginService;
 import com.rab3tech.dao.entity.CreditCardEntity;
 import com.rab3tech.utils.PasswordGenerator;
@@ -32,8 +31,8 @@ import com.rab3tech.utils.Utils;
 import com.rab3tech.vo.ApplicationResponseVO;
 import com.rab3tech.vo.ChangePasswordRequestVO;
 import com.rab3tech.vo.CreditCardVO;
-import com.rab3tech.vo.CustomerAccountInfoVO;
 import com.rab3tech.vo.CustomerVO;
+import com.rab3tech.vo.FundTransferVO;
 import com.rab3tech.vo.LoginRequestVO;
 import com.rab3tech.vo.LoginVO;
 import com.rab3tech.vo.PayeeInfoVO;
@@ -49,6 +48,8 @@ public class CustomerRestController {
 	private CustomerService customer;
 	@Autowired
 	private JavaMailSender javaMailSender;
+	@Autowired
+	private FundTransferService fundTransferService;
 
 	// { "loginid":"nagen@gmail.com",
 	// "passcode":"2938939",
@@ -240,5 +241,12 @@ public class CustomerRestController {
 	public int genNewOTP() {
 		int n = Utils.genOTP();
 		return n;
+	}
+
+	@GetMapping("/customer/transactionHistory")
+	public List<FundTransferVO> statement(HttpSession session) {
+		LoginVO login=(LoginVO) session.getAttribute("userSessionVO");
+		List<FundTransferVO> fundTransfers =fundTransferService.findTransactionByUser(login.getUsername());
+		return fundTransfers;
 	}
 }

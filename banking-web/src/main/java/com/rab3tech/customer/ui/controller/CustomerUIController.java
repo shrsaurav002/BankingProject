@@ -361,7 +361,7 @@ public class CustomerUIController {
 		int n = Utils.genOTP();
 		fundTransferVO.setOtp(n);
 		System.out.println(fundTransferVO);
-		model.addAttribute(fundTransferVO);
+		model.addAttribute("fundTransferVO",fundTransferVO);
 		return "customer/transferConfirm";
 	}
 
@@ -378,6 +378,7 @@ public class CustomerUIController {
 		}
 		LoginVO loginVO = (LoginVO) session.getAttribute("userSessionVO");
 		fundTransferService.transfer(fundTransferVO, loginVO);
+		model.addAttribute("successMessage", "You have succesfully transferred $" + fundTransferVO.getAmount());
 		return "customer/dashboard";
 	}
 }

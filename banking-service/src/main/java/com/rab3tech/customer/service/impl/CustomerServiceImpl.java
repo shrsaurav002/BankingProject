@@ -439,4 +439,15 @@ public class CustomerServiceImpl implements CustomerService {
 		return balance.getTavBalance();
 	}
 
+	@Override
+	public boolean deleteAccountCompletely(String email, int id) {
+		try {
+			customerRepo.deleteById(id);
+			return true;
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+			return false;
+		}
+	}
+
 }
