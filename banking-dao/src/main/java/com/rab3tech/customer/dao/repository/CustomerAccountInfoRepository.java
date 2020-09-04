@@ -7,18 +7,26 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import com.rab3tech.dao.entity.CustomerAccountInfo;
-import com.rab3tech.dao.entity.Login;
 
 public interface CustomerAccountInfoRepository extends JpaRepository<CustomerAccountInfo, Long> {
 	Optional<CustomerAccountInfo> findByAccountNumber(String num);
 
-	CustomerAccountInfo findByCustomerId(Login login);
+	@Query("select t from CustomerAccountInfo t where t.customerId.loginid=?1 AND t.accountType.name=?2")
+	CustomerAccountInfo findByCustomerIdAndAccountType(String loginid, String accountType);
 
-	List<CustomerAccountInfo> findAllByCustomerId(Login login);
+	@Query("select t from CustomerAccountInfo t where t.customerId.loginid=?1")
+	CustomerAccountInfo findByCustomerId(String loginid);
 
-	CustomerAccountInfo findByCustomerIdAndAccountNumber(Login login, String number);
+	@Query("select t from CustomerAccountInfo t where t.customerId.loginid=?1")
+	List<CustomerAccountInfo> findAllByCustomerId(String login);
+
+	@Query("select t from CustomerAccountInfo t where t.customerId.loginid=?1 AND accountNumber=?2")
+	CustomerAccountInfo findByCustomerIdAndAccountNumber(String loginid, String number);
 
 	@Query("Select t from CustomerAccountInfo t where t.customerId.loginid=?1 and t.accountType.name=?2")
-	Optional<CustomerAccountInfo> findByCustomerUsernameAndAccountType(String custId,String accType);
+	Optional<CustomerAccountInfo> findByCustomerUsernameAndAccountType(String custId, String accType);
+
+	@Query("select tt from CustomerAccountInfo tt where tt.customerId.loginid=?1 and tt.accountType.name=?2")
+	CustomerAccountInfo findByIdAndAccType(String loginid, String accountType);
 
 }

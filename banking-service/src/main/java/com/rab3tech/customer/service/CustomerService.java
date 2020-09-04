@@ -53,16 +53,18 @@ public interface CustomerService {
 
 	boolean checkEmailByNumber(String payeeEmail, String payeeAccountNo);
 
-	String getAccountNumber(LoginVO login);
-
 	void depositMoney(String accountNumber, float depositAmount, Date date1);
-
-	List<String> findAccountTypesByUsername(LoginVO loginVO);
 
 	String findCustByAccountNum(String accNo);
 
-	float findAccountBalance(LoginVO loginVO);
-
 	boolean deleteAccountCompletely(String email, int id);
+
+	String getAccountNumber(String loginid);
+
+	float findAccountBalance(String loginid,String accountType);
+
+	List<String> findAccountTypesByUsername(String customerEmail);
+
+	boolean checkIfPayeeExists(String payeeAccountNo, String custID);
 
 }

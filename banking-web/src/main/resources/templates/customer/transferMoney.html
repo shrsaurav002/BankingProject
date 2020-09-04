@@ -25,7 +25,8 @@
 <script type="text/javascript">
 	$(document).ready(function()
 	{
-		var call=fetch("/v3/customer/fetchAccounts");
+		var loginid=$("#loginId").html();
+		var call=fetch("/v3/customer/fetchAccounts?loginid="+loginid);
 		
 		call.then(resp=>resp.json()).then(
 				function(data){
@@ -38,7 +39,7 @@
 			}
 		)
 		
-		var regPayee=fetch("/v3/customer/fetchYourRegistered")
+		var regPayee=fetch("/v3/customer/fetchYourRegistered?loginid="+loginid)
 		regPayee.then(response=>response.json()).then(function(data1){
 			$('#toAccount').empty();
 			$('#toAccount').append('<option disabled selected value="">Select one</option>')
@@ -55,10 +56,12 @@
 	})
 	function balance(){
 		var from=$("#fromAccount").val()
+		var loginid=$("#loginId").html();
+		console.log(from);
 		if(from!=null){
-		var callBalance=fetch("/v3/customer/getAccountBalance?accountType="+from)
+		var callBalance=fetch("/v3/customer/getAccountBalance?loginid="+loginid+"&accountType="+from)
 		callBalance.then(resp=>resp.json()).then(function(data){
-			
+			console.log(data)
 			$("#balance").html("Current Balance: "+data)
 			$("#currentBalance").val(data);
 		})}
@@ -125,7 +128,8 @@
 	<header style="height: 30px; background-color: maroon; color: white;">
 
 		Hello Mr.
-		<span th:utext="${session.userSessionVO.username}" th:unless="${session == null}" style="font-weight: bold;"></span>
+		<span th:utext="${session.userSessionVO.username}" id="loginId" th:unless="${session == null}"
+			style="font-weight: bold;"></span>
 		<span style="float: right; font-weight: bold;" th:utext="${session.userSessionVO.roles}"> </span>
 
 	</header>

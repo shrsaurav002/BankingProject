@@ -1,6 +1,7 @@
 package com.rab3tech.customer.dao.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -19,4 +20,6 @@ public interface PayeeRepository extends JpaRepository<PayeeInfo, Integer> {
 	PayeeInfo findPayeeDetails(String username, String name);
 
 	List<PayeeInfo> findByCustomerId(String email);
+
+	Optional<PayeeInfo> findByCustomerIdAndPayeeAccountNo(String custID, String payeeAccountNo);
 }

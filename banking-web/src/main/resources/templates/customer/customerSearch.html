@@ -45,7 +45,8 @@ $("#body").empty();
 			tdata +='</tr>';
 			}) ;
 			$('#body').append(tdata);
-		}).catch(
+		})
+		.catch(
 			error=>{
 				console.log('No Data Found');
 				$("#errorMsg").html("Invalid Email or App Ref")
@@ -122,11 +123,11 @@ $("#body").empty();
         type: 'Get',
         contentType: 'application/json; charset=utf-8',
         dataType: 'json',
-        data:cc}) */
-        
-  /* $.post("/v3/customer/saveCreditCard",
-		  {credit:JSON.parse(cc)})	   */
-	/*     
+        data:cc}) 
+
+        $.post("/v3/customer/saveCreditCard",
+		  {credit:JSON.parse(cc)})	   
+		  
  	  var status=fetch("/v3/customer/saveCreditCard?customer=\'"+cc+"\'",{method:'post'});
 	 console.log(status) */ 
  	$("#creditModal").hide();

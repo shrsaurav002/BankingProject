@@ -208,32 +208,28 @@ public class CustomerRestController {
 	}
 
 	@GetMapping("/customer/checkAccNumber")
-	public String checkAccNumber(HttpSession session) {
-		LoginVO login = (LoginVO) session.getAttribute("userSessionVO");
-		String accNum = customer.getAccountNumber(login);
+	public String checkAccNumber(@RequestParam String loginid) {
+		String accNum = customer.getAccountNumber(loginid);
 		return accNum;
 
 	}
 
 	@GetMapping("/customer/fetchAccounts")
-	public List<String> fetchUserAccounts(HttpSession session) {
-		LoginVO loginVO = (LoginVO) session.getAttribute("userSessionVO");
-		List<String> accountTypes = customer.findAccountTypesByUsername(loginVO);
+	public List<String> fetchUserAccounts(@RequestParam String loginid) {
+		List<String> accountTypes = customer.findAccountTypesByUsername(loginid);
 		return accountTypes;
 
 	}
 
 	@GetMapping("/customer/fetchYourRegistered")
-	public List<PayeeInfoVO> fetchRegisteredAccounts(HttpSession session) {
-		LoginVO loginVO = (LoginVO) session.getAttribute("userSessionVO");
-		List<PayeeInfoVO> accounts = customer.registeredPayeeList(loginVO.getUsername());
+	public List<PayeeInfoVO> fetchRegisteredAccounts(@RequestParam String loginid) {
+		List<PayeeInfoVO> accounts = customer.registeredPayeeList(loginid);
 		return accounts;
 	}
 
 	@GetMapping("/customer/getAccountBalance")
-	public float fetchUserBalance(HttpSession session) {
-		LoginVO loginVO = (LoginVO) session.getAttribute("userSessionVO");
-		float amount = customer.findAccountBalance(loginVO);
+	public float fetchUserBalance(@RequestParam String loginid, String accountType) {
+		float amount = customer.findAccountBalance(loginid, accountType);
 		return amount;
 	}
 
@@ -244,9 +240,8 @@ public class CustomerRestController {
 	}
 
 	@GetMapping("/customer/transactionHistory")
-	public List<FundTransferVO> statement(HttpSession session) {
-		LoginVO login=(LoginVO) session.getAttribute("userSessionVO");
-		List<FundTransferVO> fundTransfers =fundTransferService.findTransactionByUser(login.getUsername());
+	public List<FundTransferVO> statement(@RequestParam String loginid) {
+		List<FundTransferVO> fundTransfers = fundTransferService.findTransactionByUser(loginid);
 		return fundTransfers;
 	}
 }

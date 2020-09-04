@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.rab3tech.admin.dao.repository.AccountStatusRepository;
 import com.rab3tech.admin.dao.repository.AccountTypeRepository;
 import com.rab3tech.admin.dao.repository.MagicCustomerRepository;
+import com.rab3tech.customer.dao.repository.CreditCardRepository;
 import com.rab3tech.customer.dao.repository.CustomerAccountApprovedRepository;
 import com.rab3tech.customer.dao.repository.CustomerAccountEnquiryRepository;
 import com.rab3tech.customer.dao.repository.CustomerAccountInfoRepository;
@@ -53,7 +54,6 @@ import com.rab3tech.vo.RoleVO;
 @Service
 @Transactional
 public class CustomerServiceImpl implements CustomerService {
-
 	@Autowired
 	private MagicCustomerRepository customerRepository;
 
@@ -389,9 +389,8 @@ public class CustomerServiceImpl implements CustomerService {
 	}
 
 	@Override
-	public String getAccountNumber(LoginVO loginVO) {
-		Login login = loginRepo.findByLoginid(loginVO.getUsername()).get();
-		CustomerAccountInfo cust = customerAccountInfoRepository.findByCustomerId(login);
+	public String getAccountNumber(String loginid) {
+		CustomerAccountInfo cust = customerAccountInfoRepository.findByCustomerId(loginid);
 		return cust.getAccountNumber();
 	}
 
@@ -413,9 +412,8 @@ public class CustomerServiceImpl implements CustomerService {
 	}
 
 	@Override
-	public List<String> findAccountTypesByUsername(LoginVO customerEmail) {
-		Login login = loginRepo.findByLoginid(customerEmail.getUsername()).get();
-		List<CustomerAccountInfo> custAcc = customerAccountInfoRepository.findAllByCustomerId(login);
+	public List<String> findAccountTypesByUsername(String customerEmail) {
+		List<CustomerAccountInfo> custAcc = customerAccountInfoRepository.findAllByCustomerId(customerEmail);
 		List<String> accounts = new ArrayList<>();
 		for (CustomerAccountInfo c : custAcc) {
 			accounts.add(c.getAccountType().getName());
@@ -432,11 +430,9 @@ public class CustomerServiceImpl implements CustomerService {
 	}
 
 	@Override
-	public float findAccountBalance(LoginVO loginVO) {
-		Login login = loginRepo.findByLoginid(loginVO.getUsername()).get();
-		String number = customerAccountInfoRepository.findByCustomerId(login).getAccountNumber();
-		CustomerAccountInfo balance = customerAccountInfoRepository.findByCustomerIdAndAccountNumber(login, number);
-		return balance.getTavBalance();
+	public float findAccountBalance(String loginid, String accountType) {
+		CustomerAccountInfo check = customerAccountInfoRepository.findByIdAndAccType(loginid, accountType);
+		return check.getTavBalance();
 	}
 
 	@Override
@@ -446,6 +442,16 @@ public class CustomerServiceImpl implements CustomerService {
 			return true;
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
+			return false;
+		}
+	}
+
+	@Override
+	public boolean checkIfPayeeExists(String payeeAccountNo, String custID) {
+		Optional<PayeeInfo> optional = payeeRepository.findByCustomerIdAndPayeeAccountNo(custID, payeeAccountNo);
+		if (optional.isPresent()) {
+			return true;
+		} else {
 			return false;
 		}
 	}

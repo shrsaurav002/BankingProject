@@ -12,8 +12,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.Cascade;
-
 /**
  * 
  * @author This is pojo/model which is used to carry data from view to
@@ -41,8 +39,7 @@ public class Customer {
 	private Timestamp doe;
 	private Timestamp dom;
 
-	@OneToOne
-	@Cascade(value = org.hibernate.annotations.CascadeType.ALL)
+	@OneToOne(cascade = CascadeType.ALL,orphanRemoval = true)
 	@JoinColumn(name = "userid")
 	public Login getLogin() {
 		return login;

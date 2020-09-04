@@ -31,7 +31,8 @@
 	}
 	function statement() {
 		$("#body").empty();
-		var test=fetch("/v3/customer/transactionHistory");
+		var login=$("#loginId").html();
+		var test=fetch("/v3/customer/transactionHistory?loginid="+login);
 		test.then(resp=>resp.json()).then(function(data){
 			console.log(data);
 			var tdata ='';
@@ -44,6 +45,7 @@
 				tdata += '<td> $'+value.amount+'</td>';
 				tdata +='</tr>'
 			})
+			
 			$("#body").append(tdata);
 			
 			
@@ -65,7 +67,7 @@
 	<header style="height: 30px; background-color: maroon; color: white;">
 
 		Hello Mr.
-		<span th:utext="${session.userSessionVO.username}" th:unless="${session == null}" style="font-weight: bold;"></span>
+		<span th:utext="${session.userSessionVO.username}" id="loginId" th:unless="${session == null}" style="font-weight: bold;"></span>
 		<span style="float: right; font-weight: bold;" th:utext="${session.userSessionVO.roles}"> </span>
 
 	</header>

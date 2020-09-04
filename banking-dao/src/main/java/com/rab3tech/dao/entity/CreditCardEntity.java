@@ -9,10 +9,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
-import org.hibernate.annotations.Cascade;
-
 @Entity
-public class CreditCardEntity {
+public class CreditCardEntity{
 	@Id
 	private long cardNumber;
 	private int secCode;
@@ -28,7 +26,7 @@ public class CreditCardEntity {
 	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinColumn(name = "customer_id")
 	private Customer customer;
-
+	
 	public String getEmail() {
 		return email;
 	}
@@ -150,5 +148,4 @@ public class CreditCardEntity {
 				+ statementBalance + ", apr=" + apr + ", minPayment=" + minPayment + ", cashbackBonus=" + cashbackBonus
 				+ ", creditScore=" + creditScore + ", customer=" + customer + "]";
 	}
-
 }

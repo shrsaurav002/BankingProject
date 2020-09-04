@@ -39,9 +39,10 @@
 
 <script type="text/javascript">
 	function validateForm() {
+		var loginid=$("#loginid").html();
 		var accNum = $("#accNumberConfirm").val()
 		var accNumConfirm = $("#accountNumber").val();
-		var promise=fetch("/v3/customer/checkAccNumber");
+		var promise=fetch("/v3/customer/checkAccNumber?loginid="+loginid);
 		promise.then(resp=>resp.text()).then(function (data){
 			if(accNum!=data){
 				$("#errorMessage").html("The account number does not Exist. Please check your Account Number");
@@ -71,7 +72,7 @@
 	<header style="height: 30px; background-color: maroon; color: white;">
 
 		Hello Mr.
-		<span th:utext="${session.userSessionVO.username}" th:unless="${session == null}" style="font-weight: bold;"></span>
+		<span th:utext="${session.userSessionVO.username}" id="loginid" th:unless="${session == null}" style="font-weight: bold;"></span>
 		<span style="float: right; font-weight: bold;" th:utext="${session.userSessionVO.roles}"> </span>
 
 	</header>

@@ -260,6 +260,11 @@ public class CustomerUIController {
 					"The accont numbers does not exists. Please check the number");
 			;
 		}
+		boolean check = customerService.checkIfPayeeExists(payeeInfoVO.getPayeeAccountNo(), custID);
+		if (check) {
+			result.rejectValue("payeeAccountNo", "acc.number.exists.for.you",
+					"You already have this account as your payee Or have rejected. Contact the bank!");
+		}
 		if (payeeEmail.length() == 0
 				|| customerService.checkEmailByNumber(payeeEmail, payeeInfoVO.getPayeeAccountNo())) {
 			result.rejectValue("payeeAccountNo", "acc.email.empty", "Please Enter Valid Email");
@@ -296,7 +301,7 @@ public class CustomerUIController {
 		LoginVO loginVO = (LoginVO) session.getAttribute("userSessionVO");
 		String customerEmail = loginVO.getUsername();
 		List<PayeeInfoVO> payeeInfoList = customerService.registeredPayeeList(customerEmail);
-		List<String> accountTypes = customerService.findAccountTypesByUsername(loginVO);
+		List<String> accountTypes = customerService.findAccountTypesByUsername(loginVO.getUsername());
 		model.addAttribute("accountType", accountTypes);
 		model.addAttribute("payeeInfoList", payeeInfoList);
 		return "customer/registeredPayee";
@@ -361,7 +366,7 @@ public class CustomerUIController {
 		int n = Utils.genOTP();
 		fundTransferVO.setOtp(n);
 		System.out.println(fundTransferVO);
-		model.addAttribute("fundTransferVO",fundTransferVO);
+		model.addAttribute("fundTransferVO", fundTransferVO);
 		return "customer/transferConfirm";
 	}
 
