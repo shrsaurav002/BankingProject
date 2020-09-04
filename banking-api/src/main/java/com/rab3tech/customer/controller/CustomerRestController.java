@@ -244,4 +244,10 @@ public class CustomerRestController {
 		List<FundTransferVO> fundTransfers = fundTransferService.findTransactionByUser(loginid);
 		return fundTransfers;
 	}
+	@GetMapping("/customer/convertToWords")
+	public String convertToWords(@RequestParam String amount) {
+		String money=fundTransferService.convertToWords(amount);
+		return money;
+		
+	}
 }

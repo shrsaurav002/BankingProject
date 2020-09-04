@@ -3,7 +3,10 @@ package com.rab3tech.customer.dao.repository;
 import java.util.List;
 import java.util.Optional;
 
+import javax.transaction.Transactional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 import com.rab3tech.dao.entity.CustomerAccountInfo;
@@ -28,5 +31,9 @@ public interface CustomerAccountInfoRepository extends JpaRepository<CustomerAcc
 
 	@Query("select tt from CustomerAccountInfo tt where tt.customerId.loginid=?1 and tt.accountType.name=?2")
 	CustomerAccountInfo findByIdAndAccType(String loginid, String accountType);
+
+	@Query("delete from CustomerAccountInfo c where c.customerId.loginid=?1")
+	@Modifying
+	void deleteByCustomer(String email);
 
 }

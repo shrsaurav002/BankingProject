@@ -85,6 +85,8 @@ public class CustomerServiceImpl implements CustomerService {
 	private PayeeRepository payeeRepository;
 	@Autowired
 	private LoginRepository loginRepo;
+	@Autowired
+	private CreditCardRepository creditRepo;
 
 	@Override
 	public CustomerAccountInfoVO createBankAccount(int csaid) {
@@ -438,6 +440,9 @@ public class CustomerServiceImpl implements CustomerService {
 	@Override
 	public boolean deleteAccountCompletely(String email, int id) {
 		try {
+			creditRepo.deleteByEmail(email);
+			customerAccountInfoRepository.deleteByCustomer(email);
+			loginRepo.deleteById(email);
 			customerRepo.deleteById(id);
 			return true;
 		} catch (Exception e) {

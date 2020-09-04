@@ -9,4 +9,6 @@ import com.rab3tech.dao.entity.CreditCardEntity;
 public interface CreditCardRepository extends JpaRepository<CreditCardEntity, Long> {
 	public Optional<CreditCardEntity> findByEmail(String email);
 
+	public void deleteByEmail(String email);
+
 }

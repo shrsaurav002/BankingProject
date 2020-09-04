@@ -15,6 +15,7 @@ import com.rab3tech.customer.dao.repository.FundTransferRepo;
 import com.rab3tech.customer.service.FundTransferService;
 import com.rab3tech.dao.entity.CustomerAccountInfo;
 import com.rab3tech.dao.entity.FundTransferEntity;
+import com.rab3tech.utils.Utils;
 import com.rab3tech.vo.FundTransferVO;
 import com.rab3tech.vo.LoginVO;
 
@@ -55,7 +56,8 @@ public class FundTransferServiceImpl implements FundTransferService {
 			List<FundTransferEntity> entities = optional.get();
 			List<FundTransferVO> transferVO = entities.stream().map(t -> {
 				FundTransferVO fundTransfer = new FundTransferVO();
-				fundTransfer.setSentTo(t.getSentTo().getAccountNumber() +" "+ t.getSentTo().getCustomerId().getName());
+				fundTransfer
+						.setSentTo(t.getSentTo().getAccountNumber() + " " + t.getSentTo().getCustomerId().getName());
 				fundTransfer.setAmount(t.getAmount());
 				fundTransfer.setRemarks(t.getRemarks());
 				fundTransfer.setSentFrom(t.getSentFrom().getAccountType().getName());
@@ -67,6 +69,12 @@ public class FundTransferServiceImpl implements FundTransferService {
 			return null;
 		}
 
+	}
+
+	@Override
+	public String convertToWords(String amount) {
+
+		return Utils.amountToWords(amount);
 	}
 
 }

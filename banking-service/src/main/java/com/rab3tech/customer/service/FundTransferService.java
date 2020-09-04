@@ -11,4 +11,6 @@ public interface FundTransferService {
 
 	List<FundTransferVO> findTransactionByUser(String username);
 
+	String convertToWords(String amount);
+
 }
