@@ -58,7 +58,7 @@ public class Login {
 		this.token = token;
 	}
 
-	@ManyToMany(cascade = CascadeType.ALL)
+	@ManyToMany
 	 @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "loginid"), inverseJoinColumns = @JoinColumn(name = "rid"))
 	public Set<Role> getRoles() {
 		return roles;

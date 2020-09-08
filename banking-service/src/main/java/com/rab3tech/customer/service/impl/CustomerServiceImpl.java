@@ -25,6 +25,7 @@ import com.rab3tech.customer.dao.repository.CustomerAccountApprovedRepository;
 import com.rab3tech.customer.dao.repository.CustomerAccountEnquiryRepository;
 import com.rab3tech.customer.dao.repository.CustomerAccountInfoRepository;
 import com.rab3tech.customer.dao.repository.CustomerRepository;
+import com.rab3tech.customer.dao.repository.FundTransferRepo;
 import com.rab3tech.customer.dao.repository.LoginRepository;
 import com.rab3tech.customer.dao.repository.PayeeRepository;
 import com.rab3tech.customer.dao.repository.RoleRepository;
@@ -68,7 +69,8 @@ public class CustomerServiceImpl implements CustomerService {
 
 	@Autowired
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
-
+	@Autowired
+	private FundTransferRepo fundRepo;
 	@Autowired
 	private CustomerAccountEnquiryRepository customerAccountEnquiryRepository;
 
@@ -440,10 +442,24 @@ public class CustomerServiceImpl implements CustomerService {
 	@Override
 	public boolean deleteAccountCompletely(String email, int id) {
 		try {
+			fundRepo.deleteByCustomer((long) id);
 			creditRepo.deleteByEmail(email);
+
 			customerAccountInfoRepository.deleteByCustomer(email);
-			loginRepo.deleteById(email);
-			customerRepo.deleteById(id);
+
+			loginRepo.deleteByLoginid(email);
+
+			customerRepo.deleteByEmail(email);
+			payeeRepository.deleteByCustomerId(email);
+			// fundRepo.deleteByCustomer(email);
+
+			// changing status to delete
+			/*
+			 * CustomerSaving cust =
+			 * customerAccountEnquiryRepository.findByEmail(email).get(); AccountStatus as =
+			 * new AccountStatus(); as.setId(7); cust.setStatus(as);
+			 */
+			//
 			return true;
 		} catch (Exception e) {
 			System.out.println(e.getMessage());

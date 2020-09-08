@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 import com.rab3tech.dao.entity.Customer;
@@ -19,8 +20,11 @@ public interface CustomerRepository extends JpaRepository<Customer, Integer> {
 
 	public Optional<Customer> findByMobile(String mobile);
 
-	 @Query("SELECT c from Customer c where c.name like %?1% Or c.email like %?2%")
+	@Query("SELECT c from Customer c where c.name like %?1% Or c.email like %?2%")
 	public List<Customer> findByNameLikeOrEmailLike(String searchText, String srch);
 
 	public Customer findByNameAndEmail(String name, String email);
+
+	@Modifying
+	public void deleteByEmail(String email);
 }

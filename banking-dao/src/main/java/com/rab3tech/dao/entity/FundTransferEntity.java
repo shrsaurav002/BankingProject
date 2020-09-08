@@ -3,12 +3,11 @@ package com.rab3tech.dao.entity;
 
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
-
-import org.hibernate.annotations.Cascade;
 
 @Entity
 public class FundTransferEntity {
@@ -18,11 +17,9 @@ public class FundTransferEntity {
 	private int id;
 
 	@OneToOne
-	@Cascade(value = org.hibernate.annotations.CascadeType.ALL)
 	private CustomerAccountInfo sentFrom;
 
 	@OneToOne
-	@Cascade(value = org.hibernate.annotations.CascadeType.ALL)
 	private CustomerAccountInfo sentTo;
 	private float amount;
 	private String remarks;

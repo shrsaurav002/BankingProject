@@ -3,6 +3,7 @@ package com.rab3tech.dao.entity;
 import java.io.Serializable;
 import java.sql.Timestamp;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -29,8 +30,6 @@ public class PayeeInfo implements Serializable {
 	private Timestamp doe;
 	private Timestamp dom;
 	private String remarks;
-	@OneToOne
-	@JoinColumn(name = "PayeeStat")
 	private PayeeStatus payeeStatus;
 	private int urn;
 	private Customer customer;
@@ -121,7 +120,7 @@ public class PayeeInfo implements Serializable {
 		this.remarks = remarks;
 	}
 
-	@OneToOne(fetch = FetchType.EAGER)
+	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.DETACH)
 	@JoinColumn(name = "payeeStatus", nullable = false)
 	public PayeeStatus getPayeeStatus() {
 		return payeeStatus;
@@ -139,8 +138,7 @@ public class PayeeInfo implements Serializable {
 		this.urn = urn;
 	}
 
-	@OneToOne(fetch = FetchType.EAGER, orphanRemoval = true)
-	@Cascade(value = org.hibernate.annotations.CascadeType.ALL)
+	@OneToOne(fetch = FetchType.EAGER, orphanRemoval = false, cascade = CascadeType.DETACH)
 	@JoinColumn(name = "cust_pay")
 	public Customer getCustomer() {
 		return customer;

@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 import com.rab3tech.dao.entity.PayeeInfo;
@@ -22,4 +23,7 @@ public interface PayeeRepository extends JpaRepository<PayeeInfo, Integer> {
 	List<PayeeInfo> findByCustomerId(String email);
 
 	Optional<PayeeInfo> findByCustomerIdAndPayeeAccountNo(String custID, String payeeAccountNo);
+
+	@Modifying
+	void deleteByCustomerId(String email);
 }

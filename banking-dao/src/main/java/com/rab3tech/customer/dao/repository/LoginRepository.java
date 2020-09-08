@@ -29,7 +29,7 @@ public interface LoginRepository extends JpaRepository<Login, String> {
 			@Param("passcode") String passcode);
 
 	@Modifying
-	void deleteById(String email);
+	void deleteByLoginid(String email);
 
 	public Optional<Login> findByLoginidAndToken(String loginid, String token);
 }

@@ -32,7 +32,7 @@ public class Role {
 		this.description = description;
 	}
 
-	@ManyToMany(cascade = CascadeType.ALL)
+	@ManyToMany(cascade = CascadeType.DETACH)
 	@JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "rid"), inverseJoinColumns = @JoinColumn(name = "loginid"))
 	public Set<Login> getLogins() {
 		return logins;

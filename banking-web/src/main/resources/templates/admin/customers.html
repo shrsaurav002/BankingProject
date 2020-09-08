@@ -146,6 +146,7 @@ function deleteUser(email,id){
 	 var deleteCall=fetch("/v4/admin/deleteCustomer",option);
 	 deleteCall.then(resp=>resp.json()).then(function(data){
 		 console.log(data);
+		 $("#row_"+id).hide();
 	 })
 	
 	
@@ -199,7 +200,7 @@ function deleteUser(email,id){
 					</tr>
 				</thead>
 				<tbody>
-					<tr th:each="customerVO,iter: ${customerVOs}">
+					<tr th:each="customerVO,iter: ${customerVOs}" th:id="${'row_'+customerVO.id}">
 
 						<td>
 							<span th:utext="${iter.index+1}"></span>
@@ -220,10 +221,13 @@ function deleteUser(email,id){
 						<td th:text="${customerVO.email}" />
 						<td th:text="${customerVO.gender}" />
 						<td th:text="${customerVO.mobile}" />
-						<td ><span th:text="${customerVO.userid}"></span>
-							<br><br>
+						<td>
+							<span th:text="${customerVO.userid}"></span>
+							<br>
+							<br>
 							<a href=# th:onClick="|javascript:deleteUser('${customerVO.email}','${customerVO.id}');|">
-							<img th:src="@{/images/delete.PNG}" height=40px></a>
+								<img th:src="@{/images/delete.PNG}" height=40px>
+							</a>
 						</td>
 						<td>
 							<img th:src="@{'/admin/customers/photo?cid=' + ${customerVO.id}}" style="height: 100px;" />

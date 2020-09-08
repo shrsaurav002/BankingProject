@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
-<title>Fund Transfer Page</title>
+<title>Fund Transfer Review Page</title>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
@@ -113,81 +113,81 @@
 		</div>
 	</nav>
 
-		<div class="container">
-			<h2>Fund Transfer Page</h2>
-			<img th:src="@{/images/login.png}" alt="Logo" style="height: 140px" />
-			<br />
-			<span th:utext="${error}" style="color: red; font-size: 18px; font-weight: bold;" id="errorMessage"></span>
-			<span th:utext="${message}" style="color: blue; font-size: 18px; font-weight: bold;"></span>
+	<div class="container">
+		<h2>Fund Transfer Page</h2>
+		<img th:src="@{/images/login.png}" alt="Logo" style="height: 140px" />
+		<br />
+		<span th:utext="${error}" style="color: red; font-size: 18px; font-weight: bold;" id="errorMessage"></span>
+		<span th:utext="${message}" style="color: blue; font-size: 18px; font-weight: bold;"></span>
 
 
-			<form th:action="@{/customer/sendMoneyToPayee}" Method="POST" th:object="${fundTransferVO}" name="sendMoney">
-				<table class="table table-bordered" style="width: 100%;">
-					<thead>
-						<tr>
-							<td colspan="2" id="balance"></td>
-						</tr>
-					</thead>
+		<form th:action="@{/customer/sendMoneyToPayee}" Method="POST" th:object="${fundTransferVO}" name="sendMoney">
+			<table class="table table-bordered" style="width: 100%;">
+				<thead>
 					<tr>
-						<td>
-							<div>
-								<label for="fromAccount">From Account</label>
-								<br />
-								<input type="hidden" th:value="*{sentFrom}" th:field="*{sentFrom}">
-								<span th:utext="*{sentFrom}" style="color: blue;"></span>
+						<td colspan="2" id="balance"></td>
+					</tr>
+				</thead>
+				<tr>
+					<td>
+						<div>
+							<label for="fromAccount">From Account</label>
+							<br />
+							<input type="hidden" th:value="*{sentFrom}" th:field="*{sentFrom}">
+							<span th:utext="*{sentFrom}" style="color: blue;"></span>
 
-								<!-- <select class="form-control" th:field="*{accountType}">
+							<!-- <select class="form-control" th:field="*{accountType}">
 							<option th:each="name :${accountType}" th:value="${name}" th:text="${name}"></option>
 						</select> -->
-							</div>
-						</td>
-						<td>
-							<div>
-								<label for="toAccount">To Account</label>
-								<br />
-								<input type="hidden" th:value="*{sentTo}" th:field="*{sentTo}">
-								<span th:utext="*{sentTo}" style="color: blue;"></span>
+						</div>
+					</td>
+					<td>
+						<div>
+							<label for="toAccount">To Account</label>
+							<br />
+							<input type="hidden" th:value="*{sentTo}" th:field="*{sentTo}">
+							<span th:utext="*{sentTo}" style="color: blue;"></span>
 
-								<!-- 	<select class="form-control" th:field="*{accountType}">
+							<!-- 	<select class="form-control" th:field="*{accountType}">
 							<option th:each="name :${accountType}" th:value="${name}" th:text="${name}"></option>
 						</select> -->
-							</div>
-						</td>
-					</tr>
-					<tr>
-						<td>
-							<div>
-								<label for="amount">Amount</label>
-								<br />
-								<input type="hidden" th:value="*{amount}" th:field="*{amount}">
-								<span th:utext="*{amount}" style="color: blue;"></span>
-							</div>
-						</td>
-						<td>
-							<img src="" id="photophoto" height=100px>
-							<label for="OTP">Enter OTP</label>
-							<input type="number" id="otpEnter" name="otpEnter" placeholder="Check your OTP">
-							<input type="hidden" th:value="*{otp}" th:field="*{otp}">
-							<button type="button" class="btn btn-info" id="resend">Resend</button>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<div>
+							<label for="amount">Amount</label>
 							<br />
-							<span th:if="${#fields.hasErrors('otp')}" th:errors="*{otp}" style="color: red">otp Error</span>
-							<span id="countdown" style="color: blue"></span>
-							<span id="errorOTP" style="color: red"></span>
-						</td>
-					</tr>
-					<tr>
-						<td colspan=2>
-							<label for="remarks">Remarks</label>
-							<br />
-							<input type="hidden" th:value="*{remarks}" th:field="*{remarks}">
-							<span th:utext="*{remarks}" style="color: blue;"></span>
-						</td>
-					</tr>
-				</table>
-				<button type="button" class="btn btn-primary" onClick="validate();">Transfer</button>
-			</form>
+							<input type="hidden" th:value="*{amount}" th:field="*{amount}">
+							<span th:utext="*{amount}" style="color: blue;"></span>
+						</div>
+					</td>
+					<td>
+						<img src="" id="photophoto" height=100px>
+						<label for="OTP">Enter OTP</label>
+						<input type="number" id="otpEnter" name="otpEnter" placeholder="Check your OTP">
+						<input type="hidden" th:value="*{otp}" th:field="*{otp}">
+						<button type="button" class="btn btn-info" id="resend">Resend</button>
+						<br />
+						<span th:if="${#fields.hasErrors('otp')}" th:errors="*{otp}" style="color: red">otp Error</span>
+						<span id="countdown" style="color: blue"></span>
+						<span id="errorOTP" style="color: red"></span>
+					</td>
+				</tr>
+				<tr>
+					<td colspan=2>
+						<label for="remarks">Remarks</label>
+						<br />
+						<input type="hidden" th:value="*{remarks}" th:field="*{remarks}">
+						<span th:utext="*{remarks}" style="color: blue;"></span>
+					</td>
+				</tr>
+			</table>
+			<button type="button" class="btn btn-primary" onClick="validate();">Transfer</button>
+		</form>
 
-		</div>
+	</div>
 	</div>
 	<footer class="ffooter"> </footer>
 </body>

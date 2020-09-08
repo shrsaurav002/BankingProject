@@ -2,6 +2,7 @@ package com.rab3tech.dao.entity;
 
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -31,9 +32,8 @@ public class CustomerAccountInfo {
 	private float avBalance;
 	private Date StatusAsOf;
 	private AccountType accountType;
-
-	@OneToOne(fetch = FetchType.EAGER)
-	@Cascade(value = org.hibernate.annotations.CascadeType.ALL)
+//
+	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.DETACH,orphanRemoval = false)
 	@JoinColumn(name = "customerId", nullable = false)
 	public Login getCustomerId() {
 		return customerId;
@@ -42,8 +42,8 @@ public class CustomerAccountInfo {
 	public void setCustomerId(Login customerId) {
 		this.customerId = customerId;
 	}
-
-	@OneToOne(fetch = FetchType.EAGER)
+//
+	@OneToOne(fetch = FetchType.EAGER,cascade = CascadeType.DETACH, orphanRemoval = false)
 	@JoinColumn(name = "accountType", nullable = false)
 	public AccountType getAccountType() {
 		return accountType;

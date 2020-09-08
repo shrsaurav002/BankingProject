@@ -10,7 +10,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 @Entity
-public class CreditCardEntity{
+public class CreditCardEntity {
 	@Id
 	private long cardNumber;
 	private int secCode;
@@ -23,10 +23,11 @@ public class CreditCardEntity{
 	private Double minPayment;
 	private Double cashbackBonus;
 	private int creditScore;
-	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+
+	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.DETACH)
 	@JoinColumn(name = "customer_id")
 	private Customer customer;
-	
+
 	public String getEmail() {
 		return email;
 	}

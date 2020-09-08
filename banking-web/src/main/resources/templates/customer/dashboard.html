@@ -24,6 +24,8 @@
 </style>
 <script type="text/javascript">
 	function ccModal(email) {
+		$("#ptable").hide();
+		$("#closeTable").hide();
 		console.log(email);
 		$("#creditModal").modal("show");
 		$("#ccFront").attr("src", "/load/image/CcFront?email=" + email);
@@ -45,27 +47,31 @@
 				tdata += '<td> $'+value.amount+'</td>';
 				tdata +='</tr>'
 			})
-			
 			$("#body").append(tdata);
 			
 			
 			
 		})
 		
-					
+				$("#closeTable").show();	
 		$("#ptable").show();
 	}
+	function closetable(){
+		$("#closeTable").hide();
+		$("#ptable").hide();
+	}
 	function picture() {
-
+		$("#ptable").hide();
+		$("#closeTable").hide();
 	}
 	function details() {
-
+		$("#ptable").hide();
+		$("#closeTable").hide();
 	}
 </script>
 </head>
 <body>
-
-	<nav class="navbar navbar-expand-lg navbar-light bg-light">
+	<nav class="navbar navbar-expand-lg navbar-light" style="background:#0000008c;">
 		<a class="navbar-brand" href="#">Chiluminati Bank</a>
 		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
 			aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -217,7 +223,9 @@
 					<td id="amount">@mdo</td>
 				</tr>
 			</tfoot>
+			
 		</table>
+		<button type="button" class="btn btn-dark" style="display:none" id="closeTable" onClick="closetable();">Hide</button>
 	</div>
 	<footer class="ffooter"> </footer>
 </body>

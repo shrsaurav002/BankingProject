@@ -4,6 +4,7 @@ import java.sql.Timestamp;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -64,8 +65,8 @@ public class Location {
 		this.dom = dom;
 	}
 
-	@OneToOne(cascade = CascadeType.DETACH)
-	@JoinColumn(name = "owner", nullable = false)
+	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.DETACH)
+	@JoinColumn(name = "owner")
 	public Login getLogin() {
 		return login;
 	}
