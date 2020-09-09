@@ -1,36 +1,92 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"
-    xmlns:th="http://www.thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <title>Admin Dashboard Page</title>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
-  
-  <style>
+<title>Admin Dashboard Page</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+
+<style>
 .ffooter {
-  position: fixed;
-  left: 0;
-  bottom: 0;
-  width: 100%;
-  background-color: red;
-  color: white;
-  text-align: center;
-  height: 30px;
-  background-color:#e9ffe7;
+	position: fixed;
+	left: 0;
+	bottom: 0;
+	width: 100%;
+	background-color: red;
+	color: white;
+	text-align: center;
+	height: 30px;
+	background-color: #e9ffe7;
 }
 </style>
 </head>
 <body>
+
+	<!-- 	<nav class="navbar navbar-dark bg-dark"> -->
+	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+		<a class="navbar-brand" href="#">Admin Dashboard</a>
+		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+			aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+
+		<div class="collapse navbar-collapse" id="navbarSupportedContent">
+			<ul class="navbar-nav mr-auto">
+				<li class="nav-item active">
+					<a class="nav-link" th:href="@{/admin/dashboard}">
+						DashBoard
+						<span class="sr-only">(current)</span>
+					</a>
+				</li>
+				<li class="nav-item dropdown">
+					<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+						aria-haspopup="true" aria-expanded="false"> Customer Service </a>
+					<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+						<a class="dropdown-item" th:href="@{/admin/enquiries}">Customer Enquiry</a>
+						<a class="dropdown-item" th:href="@{/admin/customers}">Customers</a>
+						<a class="dropdown-item" th:href="@{/admin/security/questions}">Customer Security Questions</a>
+						<a class="dropdown-item" href="#">Customer Transactions</a>
+					</div>
+				</li>
+
+				<li class="nav-item">
+					<a class="nav-link" href=#>Lock/Unlock</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" th:href="@{/admin/locations}">Locations</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href=#>Loan Request</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" th:href="@{/customer/logout}">LogOut</a>
+				</li>
+			</ul>
+			<span th:utext="${session.userSessionVO.username}" id="loginId" th:unless="${session == null}"
+				style="font-weight: bold; color: white"></span>
+			<span style="font-weight: bold; color: white" th:utext="${session.userSessionVO.roles}"> </span>
+			<!-- <form class="form-inline my-2 my-lg-0">
+				<input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+				<button class="btn btn-outline-success my-2 my-sm-0" type="submit" disabled>Search</button>
+			</form> -->
+
+			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+				aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+		</div>
+	</nav>
+	<!-- 
+
 <header style="height: 30px;background-color: maroon;color:white;">
   Hello Mr. <span th:utext="${session.userSessionVO.username}" th:unless="${session == null}" style="font-weight: bold;"></span>
    
-</header>
-<div class="container">
-  <h2>Admin Dashboard Page
+</header> -->
+	<div class="container">
+		<!--   <h2>Admin Dashboard Page
   </h2>
 
    <a th:href="@{/admin/dashboard}">
@@ -52,14 +108,12 @@
 <button type="button" class="btn btn-secondary">Loan Request</button>
 <a th:href="@{/customer/logout}"> 
 <button type="button" class="btn btn-danger">Logout</button>
-</a>
-  <img th:src="@{/images/customer_dashboard.jpg}" alt="page"/>
-   <span th:utext="${error}" style="color: red;font-size: 18px;"></span>
-  <div style="width: 70%">
-  </div>
-</div>
-<footer  class="ffooter">
-</footer>
+</a> -->
+		<img th:src="@{/images/customer_dashboard.jpg}" alt="page" />
+		<span th:utext="${error}" style="color: red; font-size: 18px;"></span>
+		<div style="width: 70%"></div>
+	</div>
+	<footer class="ffooter"> </footer>
 
 </body>
 </html>

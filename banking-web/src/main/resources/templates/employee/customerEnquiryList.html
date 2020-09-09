@@ -60,13 +60,59 @@
 </script>
 </head>
 <body>
-	<header style="height: 30px; background-color: maroon; color: white;">
+
+	<nav class="navbar navbar-expand-lg navbar navbar-light" style="background-color: #95c929a6;">
+		<a class="navbar-brand" href="#">Employee</a>
+		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+			aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+
+		<div class="collapse navbar-collapse" id="navbarSupportedContent">
+			<ul class="navbar-nav mr-auto">
+			<li class="nav-item">
+					<a class="nav-link" th:href="@{/customer/dashboard}">Dashboard</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" th:href="@{/customer/enquiries}">Customer Enquiry</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href=#>Lock/Unlock</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href=#>Customer Transaction</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href=#>Add Security Question(s)</a>
+				</li>
+					<li class="nav-item">
+					<a class="nav-link" th:href="@{/customer/accounts/approved}">Account Approval</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" th:href="@{/customer/logout}">LogOut</a>
+				</li>
+			</ul>
+			<span th:utext="${session.userSessionVO.username}" id="loginId" th:unless="${session == null}"
+				style="font-weight: bold"></span>
+			<span style="font-weight: bold;" th:utext="${session.userSessionVO.roles}"> </span>
+			<!-- <form class="form-inline my-2 my-lg-0">
+				<input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+				<button class="btn btn-outline-success my-2 my-sm-0" type="submit" disabled>Search</button>
+			</form> -->
+
+			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+				aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+		</div>
+	</nav>
+<!-- 	<header style="height: 30px; background-color: maroon; color: white;">
 		Hello Mr. <span th:utext="${session.userSessionVO.username}"
 			th:unless="${session == null}" style="font-weight: bold;"></span>
 
-	</header>
+	</header> -->
 	<div class="container">
-		<h2>Employee Dashboard Page</h2>
+		<!-- <h2>Employee Dashboard Page</h2>
 		<button type="button" class="btn btn-primary">Customer
 			Enquiry</button>
 		<button type="button" class="btn btn-secondary">Lock/Unlock</button>
@@ -78,7 +124,8 @@
 
 		<a th:href="@{/customer/logout}">
 			<button type="button" class="btn btn-warning">Logout</button>
-		</a> <span th:utext="${error}" style="color: red; font-size: 18px;"></span>
+		</a>  -->
+		<span th:utext="${error}" style="color: red; font-size: 18px;"></span>
 		<hr />
 		<div style="width: 100%">
 
