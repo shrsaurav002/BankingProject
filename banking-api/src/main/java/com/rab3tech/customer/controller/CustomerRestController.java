@@ -242,12 +242,14 @@ public class CustomerRestController {
 	@GetMapping("/customer/transactionHistory")
 	public List<FundTransferVO> statement(@RequestParam String loginid) {
 		List<FundTransferVO> fundTransfers = fundTransferService.findTransactionByUser(loginid);
+		System.out.println(fundTransfers);
 		return fundTransfers;
 	}
+
 	@GetMapping("/customer/convertToWords")
 	public String convertToWords(@RequestParam String amount) {
-		String money=fundTransferService.convertToWords(amount);
+		String money = fundTransferService.convertToWords(amount);
 		return money;
-		
+
 	}
 }

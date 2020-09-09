@@ -25,7 +25,7 @@ public class CustomerQuestionAnswer {
 	
 	
 	@ManyToOne(cascade = CascadeType.DETACH)
-	@JoinColumn(name="userid", nullable=false)
+	@JoinColumn(name="userid")
 	public Login getLogin() {
 		return login;
 	}

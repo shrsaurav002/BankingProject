@@ -146,7 +146,8 @@ function deleteUser(email,id){
 	 var deleteCall=fetch("/v4/admin/deleteCustomer",option);
 	 deleteCall.then(resp=>resp.json()).then(function(data){
 		 console.log(data);
-		 $("#row_"+id).hide();
+		 if(data.code==200){
+		 $("#row_"+id).hide();}
 	 })
 	
 	

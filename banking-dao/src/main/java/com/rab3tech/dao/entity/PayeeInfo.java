@@ -139,7 +139,7 @@ public class PayeeInfo implements Serializable {
 	}
 
 	@OneToOne(fetch = FetchType.EAGER, orphanRemoval = false, cascade = CascadeType.DETACH)
-	@JoinColumn(name = "cust_pay")
+	@JoinColumn(name = "cust_pay",nullable = true)
 	public Customer getCustomer() {
 		return customer;
 	}

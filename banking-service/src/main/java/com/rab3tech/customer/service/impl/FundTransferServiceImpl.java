@@ -1,5 +1,6 @@
 package com.rab3tech.customer.service.impl;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -54,16 +55,33 @@ public class FundTransferServiceImpl implements FundTransferService {
 		Optional<List<FundTransferEntity>> optional = fundRepo.findBySender(username);
 		if (optional.isPresent()) {
 			List<FundTransferEntity> entities = optional.get();
-			List<FundTransferVO> transferVO = entities.stream().map(t -> {
-				FundTransferVO fundTransfer = new FundTransferVO();
-				fundTransfer
-						.setSentTo(t.getSentTo().getAccountNumber() + " " + t.getSentTo().getCustomerId().getName());
-				fundTransfer.setAmount(t.getAmount());
-				fundTransfer.setRemarks(t.getRemarks());
-				fundTransfer.setSentFrom(t.getSentFrom().getAccountType().getName());
-				fundTransfer.setTransactionDate(t.getTransactionDate());
-				return fundTransfer;
-			}).collect(Collectors.toList());
+			/*
+			 * List<FundTransferVO> transferVO = entities.stream().map(t -> { FundTransferVO
+			 * fundTransfer = new FundTransferVO();
+			 * fundTransfer.setSentTo(t.getSentTo().getAccountNumber() + " " +
+			 * t.getSentTo().getCustomerId().getName());
+			 * fundTransfer.setAmount(t.getAmount());
+			 * fundTransfer.setRemarks(t.getRemarks());
+			 * fundTransfer.setSentFrom(t.getSentFrom().getAccountType().getName());
+			 * fundTransfer.setTransactionDate(t.getTransactionDate()); return fundTransfer;
+			 * }).collect(Collectors.toList());
+			 */
+			List<FundTransferVO> transferVO = new ArrayList<>();
+			for (FundTransferEntity e : entities) {
+				
+					
+				FundTransferVO fundVO = new FundTransferVO();
+				if (e.getSentTo() != null) {
+				fundVO.setSentTo(e.getSentTo().getAccountNumber() + " " + e.getSentTo().getCustomerId().getName());
+				}else {
+					fundVO.setSentTo("Deleted Account");
+				}
+					fundVO.setAmount(e.getAmount());
+					fundVO.setRemarks(e.getRemarks());
+					fundVO.setSentFrom(e.getSentFrom().getAccountType().getName());
+					fundVO.setTransactionDate(e.getTransactionDate());
+					transferVO.add(fundVO);
+			}
 			return transferVO;
 		} else {
 			return null;
