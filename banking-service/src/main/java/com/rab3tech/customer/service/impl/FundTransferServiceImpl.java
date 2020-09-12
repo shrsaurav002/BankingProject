@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
@@ -33,7 +32,6 @@ public class FundTransferServiceImpl implements FundTransferService {
 		String custId = loginVO.getUsername();
 		CustomerAccountInfo customerFrom = custAccInfoRepo
 				.findByCustomerUsernameAndAccountType(custId, fundTransferVO.getSentFrom()).get();
-		System.out.println(customerFrom);
 		String toAccNo = fundTransferVO.getSentTo().substring(0, 9);
 		CustomerAccountInfo customerTo = custAccInfoRepo.findByAccountNumber(toAccNo).get();
 		customerFrom.setAvBalance(-fundTransferVO.getAmount());
@@ -55,17 +53,7 @@ public class FundTransferServiceImpl implements FundTransferService {
 		Optional<List<FundTransferEntity>> optional = fundRepo.findBySender(username);
 		if (optional.isPresent()) {
 			List<FundTransferEntity> entities = optional.get();
-			/*
-			 * List<FundTransferVO> transferVO = entities.stream().map(t -> { FundTransferVO
-			 * fundTransfer = new FundTransferVO();
-			 * fundTransfer.setSentTo(t.getSentTo().getAccountNumber() + " " +
-			 * t.getSentTo().getCustomerId().getName());
-			 * fundTransfer.setAmount(t.getAmount());
-			 * fundTransfer.setRemarks(t.getRemarks());
-			 * fundTransfer.setSentFrom(t.getSentFrom().getAccountType().getName());
-			 * fundTransfer.setTransactionDate(t.getTransactionDate()); return fundTransfer;
-			 * }).collect(Collectors.toList());
-			 */
+			
 			List<FundTransferVO> transferVO = new ArrayList<>();
 			for (FundTransferEntity e : entities) {
 				
@@ -86,7 +74,17 @@ public class FundTransferServiceImpl implements FundTransferService {
 		} else {
 			return null;
 		}
-
+/*
+			 * List<FundTransferVO> transferVO = entities.stream().map(t -> { FundTransferVO
+			 * fundTransfer = new FundTransferVO();
+			 * fundTransfer.setSentTo(t.getSentTo().getAccountNumber() + " " +
+			 * t.getSentTo().getCustomerId().getName());
+			 * fundTransfer.setAmount(t.getAmount());
+			 * fundTransfer.setRemarks(t.getRemarks());
+			 * fundTransfer.setSentFrom(t.getSentFrom().getAccountType().getName());
+			 * fundTransfer.setTransactionDate(t.getTransactionDate()); return fundTransfer;
+			 * }).collect(Collectors.toList());
+			 */
 	}
 
 	@Override

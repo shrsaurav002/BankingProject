@@ -12,26 +12,26 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 
 @Configuration
 @EnableAsync
-public class ServiceConfig  {
-	
+public class ServiceConfig {
+
 	@PostConstruct
 	public void init() {
 		System.out.println("ServiceConfig!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 	}
-	
+
 	@Bean("threadPool")
-    public TaskExecutor getAsyncExecutor() {
-        ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
-        executor.setCorePoolSize(20);
-        executor.setMaxPoolSize(1000);
-        executor.setWaitForTasksToCompleteOnShutdown(true);
-        executor.setThreadNamePrefix("Async-");
-        return executor;
-    }
-	
-	 @Bean
-	 public TaskScheduler taskScheduler() {
-	     //org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler
-	     return new ThreadPoolTaskScheduler();
-	 }
+	public TaskExecutor getAsyncExecutor() {
+		ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
+		executor.setCorePoolSize(20);
+		executor.setMaxPoolSize(1000);
+		executor.setWaitForTasksToCompleteOnShutdown(true);
+		executor.setThreadNamePrefix("Async-");
+		return executor;
+	}
+
+	@Bean
+	public TaskScheduler taskScheduler() {
+		// org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler
+		return new ThreadPoolTaskScheduler();
+	}
 }

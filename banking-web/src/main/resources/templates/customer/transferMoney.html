@@ -107,12 +107,12 @@
 			$("#toAccount").focus();
 			return;
 		}
-		if (amount<=0){
+		if (parseFloat(amount)<=0){
 			$("#errorMessage").html("Amount has to be over 0");
 			$("#amount").focus();
 			return;
 		}
-	 	if (balance<amount){
+	 	if (parseFloat(balance)<parseFloat(amount)){
 			$("#errorMessage").html("You do not have enough funds for this transfer");
 			$("#amount").focus();
 			return;

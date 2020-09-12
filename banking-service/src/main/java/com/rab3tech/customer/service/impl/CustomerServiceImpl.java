@@ -12,7 +12,10 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.task.TaskExecutor;
+import org.springframework.scheduling.TaskScheduler;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -89,6 +92,8 @@ public class CustomerServiceImpl implements CustomerService {
 	private LoginRepository loginRepo;
 	@Autowired
 	private CreditCardRepository creditRepo;
+	@Autowired
+	private TaskScheduler taskScheduler;
 
 	@Override
 	public CustomerAccountInfoVO createBankAccount(int csaid) {
@@ -398,21 +403,33 @@ public class CustomerServiceImpl implements CustomerService {
 		return cust.getAccountNumber();
 	}
 
-	@Async
 	@Override
 	public void depositMoney(String accountNumber, float depositAmount, Date date1) {
-		CustomerAccountInfo acc = customerAccountInfoRepository.findByAccountNumber(accountNumber).get();
-		if (date1.after(new Date())) {
-			try {
-				Thread.sleep(30000);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		}
-		acc.setStatusAsOf(date1);
-		acc.setTavBalance(depositAmount + acc.getTavBalance());
-		acc.setAvBalance(depositAmount);
+		taskScheduler.schedule(deposit(accountNumber, depositAmount, date1), date1);
+		/*
+		 * CustomerAccountInfo acc =
+		 * customerAccountInfoRepository.findByAccountNumber(accountNumber).get(); if
+		 * (date1.after(new Date())) { try { Thread.sleep(30000); } catch
+		 * (InterruptedException e) { e.printStackTrace(); } } acc.setStatusAsOf(date1);
+		 * acc.setTavBalance(depositAmount + acc.getTavBalance());
+		 * acc.setAvBalance(depositAmount);
+		 */
 
+	}
+
+	private Runnable deposit(String accountNumber, float depositAmount, Date date1) {
+		Runnable rn = new Runnable() {
+
+			@Override
+			public void run() {
+				CustomerAccountInfo acc = customerAccountInfoRepository.findByAccountNumber(accountNumber).get();
+				acc.setStatusAsOf(date1);
+				acc.setTavBalance(depositAmount + acc.getTavBalance());
+				acc.setAvBalance(depositAmount);
+			}
+		};
+
+		return rn;
 	}
 
 	@Override
