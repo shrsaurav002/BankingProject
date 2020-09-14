@@ -76,8 +76,39 @@
 
 </head>
 <body>
-<header style="height: 30px;background-color: maroon;">
-</header>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark" >
+		<a class="navbar-brand" href="#">Chilluminati Bank</a>
+		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+			aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+
+		<div class="collapse navbar-collapse" id="navbarSupportedContent">
+			<ul class="navbar-nav mr-auto">
+				<li class="nav-item active">
+					<a class="nav-link" th:href="@{/customer/login}">
+						Login
+						<span class="sr-only">(current)</span>
+					</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" th:href="@{/customer/account/enquiry}">Customer Enquiry</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" th:href="@{/customer/app/status}">Enquiry Status</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" th:href="@{/customer/customerSearch}">Customer Search</a>
+				</li>
+				
+			</ul>
+					
+		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+			aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+		</div>
+	</nav>
 <div class="container">
   <h2>Customer Login Page
   </h2>
@@ -104,21 +135,11 @@
     
     <button type="reset" class="btn btn-danger">Reset</button>
     
-    <a th:href="@{/customer/account/enquiry}"> 
-    <button type="button" class="btn btn-warning">Customer Enquiry</button>
-    </a>
     
     <a th:href="@{/customer/forget/password}">
-    <button type="button" class="btn btn-danger">Forget Password</button>
+    <button type="button" class="btn btn-success">Forget Password</button>
     </a>
-    
-    <a th:href="@{/customer/app/status}">
-    <button type="button" class="btn btn-success">Enquiry Status</button>
-    </a>
-    
-     <a th:href="@{/customer/customerSearch}">
-    <button type="button" class="btn btn-success">Customer search</button>
-    </a>
+   
   </form>
   </div>
 </div>

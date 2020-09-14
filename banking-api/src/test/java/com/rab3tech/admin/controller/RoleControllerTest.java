@@ -106,18 +106,7 @@ public class RoleControllerTest {
 			verify(loginService, times(1)).updateCustomerRoles(any(RolesUpdateRequest.class));
 	        verifyNoMoreInteractions(loginService);
 	} 
-	@GetMapping("/customer/roles")
-	@ResponseStatus(HttpStatus.OK)
-	public RoleVOWrapper getCustomerRoles(@RequestParam String userid) {
-		List<RoleVO> customerRoles=loginService.findRolesByUserid(userid);
-		List<RoleVO> roleVOs=loginService.findRoles();
-		RoleVOWrapper roleVOWrapper=new RoleVOWrapper();
-		
-		List<Integer>  customersId=customerRoles.stream().map(r->r.getId()).collect(Collectors.toList());
-		roleVOWrapper.setCurrentRoles(customersId);
-		roleVOWrapper.setRoleVOs(roleVOs);
-		return roleVOWrapper;
-	}
+	
 	
 	@Test
 	public void testGetCustomerRoles() throws Exception{
