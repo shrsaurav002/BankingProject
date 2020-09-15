@@ -24,8 +24,6 @@ import com.rab3tech.vo.FundTransferVO;
 import com.rab3tech.vo.LoginVO;
 import com.rab3tech.vo.WireTransferVO;
 
-import ch.qos.logback.core.joran.util.beans.BeanUtil;
-
 @Service
 @Transactional
 public class FundTransferServiceImpl implements FundTransferService {

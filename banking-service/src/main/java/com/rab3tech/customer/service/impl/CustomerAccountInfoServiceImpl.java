@@ -6,16 +6,12 @@ import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.scheduling.config.Task;
 import org.springframework.stereotype.Service;
 
 import com.rab3tech.customer.dao.repository.CustomerAccountEnquiryRepository;
 import com.rab3tech.customer.dao.repository.CustomerAccountInfoRepository;
 import com.rab3tech.customer.dao.repository.LoginRepository;
 import com.rab3tech.customer.service.CustomerAccountInfoService;
-import com.rab3tech.customer.service.CustomerEnquiryService;
-import com.rab3tech.dao.entity.Customer;
 import com.rab3tech.dao.entity.CustomerAccountInfo;
 import com.rab3tech.dao.entity.CustomerSaving;
 import com.rab3tech.vo.CustomerVO;

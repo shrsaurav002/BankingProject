@@ -1,7 +1,5 @@
 package com.rab3tech.vo;
 
-import java.sql.Timestamp;
-
 import lombok.Data;
 
 @Data

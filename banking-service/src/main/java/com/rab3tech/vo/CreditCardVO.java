@@ -2,8 +2,6 @@ package com.rab3tech.vo;
 
 import java.util.Date;
 
-import com.rab3tech.dao.entity.Customer;
-
 public class CreditCardVO {
 	private long cardNumber;
 	private String name;

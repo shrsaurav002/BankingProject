@@ -5,8 +5,6 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
 
-import java.sql.Timestamp;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -118,7 +116,7 @@ public class LoginServiceImplTest {
 		Optional<Login> ologin=Optional.empty();
 		when(loginRepository.findByLoginid("sweta@gmail.com")).thenReturn(ologin);
 		
-		Optional<LoginVO>   optional=loginServiceImpl.findUserByUsername("sweta@gmail.com");
+		//Optional<LoginVO>   optional=loginServiceImpl.findUserByUsername("sweta@gmail.com");
 		//assertTrue(optional.isEmpty());
 	}
 

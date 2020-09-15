@@ -23,10 +23,10 @@ public class ConstructorMethodReference {
 		};
 		
 
-		Supplier<Dog> supplier2=()->new Dog();    //calling default constrcur
+	//	Supplier<Dog> supplier2=()->new Dog();    //calling default constrcur
 		
 		//
-		Supplier<Dog> supplier3=Dog::new; //constructor reference
+//		Supplier<Dog> supplier3=Dog::new; //constructor reference
 		
 		
 		
