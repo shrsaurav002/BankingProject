@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.rab3tech.vo.FundTransferVO;
 import com.rab3tech.vo.LoginVO;
+import com.rab3tech.vo.WireTransferVO;
 
 public interface FundTransferService {
 
@@ -12,5 +13,7 @@ public interface FundTransferService {
 	List<FundTransferVO> findTransactionByUser(String username);
 
 	String convertToWords(String amount);
+
+	void wireTransferInit(WireTransferVO wireTransferVO);
 
 }

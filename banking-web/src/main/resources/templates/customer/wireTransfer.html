@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Wire Transfer Page</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+<style>
+.ffooter {
+	position: fixed;
+	left: 0;
+	bottom: 0;
+	width: 100%;
+	background-color: red;
+	color: white;
+	text-align: center;
+	height: 30px;
+	background-color: #e9ffe7;
+}
+</style>
+
+<script type="text/javascript">
+	$(document).ready(function() {
+		
+		$("#transferAmount").blur(function(){
+		var amount=$(this).val();
+		console.log(amount);
+		var callIn=fetch("/v3/customer/convertToWords?amount="+amount);
+		callIn.then(resp=>resp.text()).then(function(output){
+				console.log(output);
+				$("#inWords").html("<h4>Amount in words</h4>"+output);
+			});//end of fetch
+		})
+		
+		$("#submitForm").click(function(){
+			document.wireTransferForm.submit();
+		})
+	})
+</script>
+
+</head>
+<body>
+	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+		<a class="navbar-brand" href="#">Chilluminati Bank</a>
+		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+			aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+
+		<div class="collapse navbar-collapse" id="navbarSupportedContent">
+			<ul class="navbar-nav mr-auto">
+				<li class="nav-item active">
+					<a class="nav-link" th:href="@{/customer/login}">
+						Login
+						<span class="sr-only">(current)</span>
+					</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" th:href="@{/customer/account/enquiry}">Customer Enquiry</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" th:href="@{/customer/app/status}">Enquiry Status</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" th:href="@{/customer/customerSearch}">Customer Search</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" th:href="@{/customer/wireTransfer}">Wire Transfer</a>
+				</li>
+			</ul>
+
+			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+				aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+		</div>
+	</nav>
+
+	<div class="container">
+		<h2>Wire Transfer Page</h2>
+		<img th:src="@{/images/login.png}" alt="Logo" style="height: 140px" />
+		<br />
+		<span style="color: red; font-size: 18px; font-weight: bold;" id="errorMessage"></span>
+
+
+		<form th:action="@{/customer/wireTransfer}"method="POST" th:object="${wireTransfer}" name="wireTransferForm">
+
+			<table class="table table-bordered" style="width: 100%;">
+				<thead>
+					<tr>
+						<td colspan="2" id="heading">Please fill out the following form</td>
+
+					</tr>
+				</thead>
+				<tr>
+					<td>
+						<div>
+							<label for="sender">Your Name</label>
+							<br />
+							<input class="form-control" th:field="*{sender}">
+
+
+						</div>
+					</td>
+					<td>
+						<div>
+							<label for="senderId">Id Number</label>
+							<br />
+						</div>
+						<div class="input-group mb-3">
+							<div class="input-group-prepend">
+								<select class="form-control">
+									<option value="" selected disabled>select</option>
+									<option>License</option>
+									<option>Passport</option>
+									<option>State ID</option>
+								</select>
+						
+							</div>
+							<input type="text" class="form-control" th:field="*{senderId}">
+						</div>
+
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<div>
+							<label for="senderEmail">Your Email</label>
+							<br />
+							<input class="form-control" th:field="*{senderEmail}">
+
+
+						</div>
+					</td>
+					<td>
+						<div>
+							<label for="senderNumber">Your Contact Number</label>
+							<br />
+							<input class="form-control" th:field="*{senderNumber}">
+
+
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<div>
+							<label for="senderIdVerify">Upload your Id</label>
+							<br />
+							<input type="file" class="form-control" th:field="*{senderIdVerify}">
+
+
+						</div>
+					</td>
+					<td></td>
+
+
+				</tr>
+				<tr>
+					<td>
+						<div>
+							<label for="receiver">Receiver Name</label>
+							<br />
+							<input class="form-control" th:field="*{receiver}">
+						</div>
+					</td>
+					<td>
+						<div>
+							<label for="receiverAddress">Select the closest branch</label>
+							<br />
+							<select style="width: 80%;" class="form-control" th:field="*{receiverAddress}">
+								<option th:each="name :${location}" th:value="${name}" th:text="${name}"></option>
+							</select>
+
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<div>
+							<label for="transferAmount">Input Transfer Amount</label>
+							<br />
+							<input type="text" class="form-control" th:field="*{transferAmount}">
+
+
+						</div>
+					</td>
+					<td>
+						<span style="color: blue" id="inWords"></span>
+					</td>
+
+
+				</tr>
+			</table>
+			<button type="button" class="btn btn-primary" id="submitForm">Transfer</button>
+		</form>
+
+	</div>
+	<footer class="ffooter"> </footer>
+</body>
+</html>

@@ -32,6 +32,7 @@ import com.rab3tech.customer.dao.repository.FundTransferRepo;
 import com.rab3tech.customer.dao.repository.LoginRepository;
 import com.rab3tech.customer.dao.repository.PayeeRepository;
 import com.rab3tech.customer.dao.repository.RoleRepository;
+import com.rab3tech.customer.dao.repository.WireTransferRepo;
 import com.rab3tech.customer.service.CustomerService;
 import com.rab3tech.dao.entity.AccountStatus;
 import com.rab3tech.dao.entity.AccountType;
@@ -43,6 +44,7 @@ import com.rab3tech.dao.entity.Login;
 import com.rab3tech.dao.entity.PayeeInfo;
 import com.rab3tech.dao.entity.PayeeStatus;
 import com.rab3tech.dao.entity.Role;
+import com.rab3tech.dao.entity.WireTransferEntity;
 import com.rab3tech.mapper.CustomerMapper;
 import com.rab3tech.utils.AccountStatusEnum;
 import com.rab3tech.utils.PasswordGenerator;
@@ -54,6 +56,7 @@ import com.rab3tech.vo.CustomerVO;
 import com.rab3tech.vo.LoginVO;
 import com.rab3tech.vo.PayeeInfoVO;
 import com.rab3tech.vo.RoleVO;
+import com.rab3tech.vo.WireTransferVO;
 
 @Service
 @Transactional
@@ -94,6 +97,8 @@ public class CustomerServiceImpl implements CustomerService {
 	private CreditCardRepository creditRepo;
 	@Autowired
 	private TaskScheduler taskScheduler;
+	@Autowired
+	private WireTransferRepo wireTransferRepo;
 
 	@Override
 	public CustomerAccountInfoVO createBankAccount(int csaid) {
@@ -492,6 +497,21 @@ public class CustomerServiceImpl implements CustomerService {
 		} else {
 			return false;
 		}
+	}
+
+	@Override
+	public List<WireTransferVO> findPendingTransfers() {
+		Optional<List<WireTransferEntity>> optional = wireTransferRepo.findPendingTransfers();
+		List<WireTransferVO> wireTransferVOs = new ArrayList<WireTransferVO>();
+		if (optional.isPresent()) {
+			for (WireTransferEntity e : optional.get()) {
+				WireTransferVO wireTransferVO = new WireTransferVO();
+				BeanUtils.copyProperties(e, wireTransferVO);
+				wireTransferVOs.add(wireTransferVO);
+			}
+		}
+		return wireTransferVOs;
+
 	}
 
 }

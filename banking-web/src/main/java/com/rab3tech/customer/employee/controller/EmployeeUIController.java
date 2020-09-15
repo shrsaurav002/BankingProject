@@ -22,75 +22,88 @@ import com.rab3tech.utils.BankHttpUtils;
 import com.rab3tech.vo.CustomerAccountInfoVO;
 import com.rab3tech.vo.CustomerSavingVO;
 import com.rab3tech.vo.EmailVO;
+import com.rab3tech.vo.WireTransferVO;
 
 @Controller
 public class EmployeeUIController {
-	
-    private static final Logger logger = LoggerFactory.getLogger(EmployeeUIController.class);
-	
+
+	private static final Logger logger = LoggerFactory.getLogger(EmployeeUIController.class);
+
 	@Autowired
 	private CustomerEnquiryService customerEnquiryService;
-	
+
 	@Autowired
 	private CustomerService customerService;
-	
+
 	@Value("${customer.registration.url}")
 	private String registrationURL;
-	
+
 	@Autowired
 	private EmailService emailService;
-	
-	
+
 	@PreAuthorize("hasAuthority('EMPLOYEE')")
 	@GetMapping("/customers/account/approve")
 	public String customerAccountApproveGet(@RequestParam int csaid) {
-		CustomerAccountInfoVO accountInfoVO=customerService.createBankAccount(csaid);
+		CustomerAccountInfoVO accountInfoVO = customerService.createBankAccount(csaid);
 		System.out.println(accountInfoVO);
 		return "redirect:/customer/accounts/approved";
 	}
-	
+
 	@PreAuthorize("hasAuthority('EMPLOYEE')")
 	@PostMapping("/customers/account/approve")
 	public String customerAccountApprove(@RequestParam int csaid) {
-		CustomerAccountInfoVO accountInfoVO=customerService.createBankAccount(csaid);
+		CustomerAccountInfoVO accountInfoVO = customerService.createBankAccount(csaid);
 		System.out.println(accountInfoVO);
 		return "redirect:/customer/accounts/approved";
 	}
-	
-	//This is showing customers who are already registered and account is not created so far
-	@GetMapping(value= {"/customer/accounts/approved"})
-    @PreAuthorize("hasAuthority('EMPLOYEE')")
+
+	// This is showing customers who are already registered and account is not
+	// created so far
+	@GetMapping(value = { "/customer/accounts/approved" })
+	@PreAuthorize("hasAuthority('EMPLOYEE')")
 	public String showCustomerAccountsApproved(Model model) {
 		logger.info("showCustomerAccountsApproved is called!!!");
 		List<CustomerSavingVO> pendingApplications = customerEnquiryService.findRegisteredEnquiry();
 		model.addAttribute("applicants", pendingApplications);
-		return "employee/customerAccountsApproved";	//login.html
+		return "employee/customerAccountsApproved"; // login.html
 	}
-	
-	
-	@GetMapping(value= {"/customer/enquiries"})
-    @PreAuthorize("hasAuthority('EMPLOYEE')")
+
+	@GetMapping(value = { "/customer/enquiries" })
+	@PreAuthorize("hasAuthority('EMPLOYEE')")
 	public String showCustomerEnquiry(Model model) {
 		logger.info("showCustomerEnquiry is called!!!");
 		List<CustomerSavingVO> pendingApplications = customerEnquiryService.findPendingEnquiry();
 		model.addAttribute("applicants", pendingApplications);
-		return "employee/customerEnquiryList";	//login.html
+		return "employee/customerEnquiryList"; // login.html
 	}
-	
+
 	@PostMapping("/customers/enquiry/approve")
-	public String customerEnquiryApprove(@RequestParam int csaid,HttpServletRequest request) {
-		CustomerSavingVO customerSavingVO=customerEnquiryService.changeEnquiryStatus(csaid, "APPROVED");
-		String cuuid=BankHttpUtils.generateToken();
+	public String customerEnquiryApprove(@RequestParam int csaid, HttpServletRequest request) {
+		CustomerSavingVO customerSavingVO = customerEnquiryService.changeEnquiryStatus(csaid, "APPROVED");
+		String cuuid = BankHttpUtils.generateToken();
 		customerEnquiryService.updateEnquiryRegId(csaid, cuuid);
-		String registrationLink=BankHttpUtils.getServerBaseURL(request)+"/"+registrationURL+cuuid;
-		//String registrationLink ="http://localhost:8080/v3/customer/registration/complete";
-		EmailVO mail=new EmailVO(customerSavingVO.getEmail(),"javahunk2020@gmail.com","Regarding Customer "+customerSavingVO.getName()+"  Account registration","",customerSavingVO.getName());
+		String registrationLink = BankHttpUtils.getServerBaseURL(request) + "/" + registrationURL + cuuid;
+		// String registrationLink
+		// ="http://localhost:8080/v3/customer/registration/complete";
+		EmailVO mail = new EmailVO(customerSavingVO.getEmail(), "javahunk2020@gmail.com",
+				"Regarding Customer " + customerSavingVO.getName() + "  Account registration", "",
+				customerSavingVO.getName());
 		mail.setRegistrationlink(registrationLink);
 		emailService.sendRegistrationEmail(mail);
 		return "redirect:/customer/enquiries";
 	}
-	
-	
-	// make a deny mapping
+
+	@GetMapping("/employee/wireTransfer")
+	public String wireTransfer(Model model) {
+		List<WireTransferVO> wireTransferVO = customerService.findPendingTransfers();
+		if (wireTransferVO.size() != 0) {
+			model.addAttribute("wireTransfers", wireTransferVO);
+			return "employee/pendingWireTransfer";
+		} else {
+			model.addAttribute("message", "There are no pending transfers");
+			return "customer/dashboard";
+		}
+
+	}
 
 }

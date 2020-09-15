@@ -10,6 +10,7 @@ import com.rab3tech.vo.CustomerVO;
 import com.rab3tech.vo.LoginVO;
 import com.rab3tech.vo.PayeeInfoVO;
 import com.rab3tech.vo.RoleVO;
+import com.rab3tech.vo.WireTransferVO;
 
 public interface CustomerService {
 
@@ -66,5 +67,7 @@ public interface CustomerService {
 	List<String> findAccountTypesByUsername(String customerEmail);
 
 	boolean checkIfPayeeExists(String payeeAccountNo, String custID);
+
+	List<WireTransferVO> findPendingTransfers();
 
 }

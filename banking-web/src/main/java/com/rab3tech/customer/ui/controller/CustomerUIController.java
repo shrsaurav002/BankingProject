@@ -21,6 +21,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.rab3tech.customer.service.AccountTypeService;
@@ -42,6 +43,7 @@ import com.rab3tech.vo.EmailVO;
 import com.rab3tech.vo.FundTransferVO;
 import com.rab3tech.vo.LoginVO;
 import com.rab3tech.vo.PayeeInfoVO;
+import com.rab3tech.vo.WireTransferVO;
 
 /**
  * 
@@ -386,4 +388,22 @@ public class CustomerUIController {
 		model.addAttribute("successMessage", "You have succesfully transferred $" + fundTransferVO.getAmount());
 		return "customer/dashboard";
 	}
+
+	@GetMapping("/customer/wireTransfer")
+	public String sendLargeAmount(Model model) {
+		WireTransferVO wireTransferVO=new WireTransferVO();
+		List<String> locations = locationService.AllLocations();
+		model.addAttribute("location", locations);
+		model.addAttribute("wireTransfer",wireTransferVO);
+		return "customer/wireTransfer";
+	}
+	
+	@PostMapping("/customer/wireTransfer")
+	public String sendMoneyWire(@ModelAttribute WireTransferVO wireTransferVO, Model model) {
+		fundTransferService.wireTransferInit(wireTransferVO);
+		model.addAttribute("message","Your request is processing. You will get an email with confirmation code soon.");
+		return "customer/login";
+		
+	}
+
 }

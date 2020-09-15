@@ -72,12 +72,12 @@ public class Utils {
 		extra.put(19, "Nineteen");
 		// "1 234 567 890"
 		String[] place = { "", "Thousand", "Million", "Billion", "Trillion" };
-		List<String> amountArr=new ArrayList<>();
+		List<String> amountArr = new ArrayList<>();
 		if (amount.contains(".")) {
-			
+
 			amountArr = Arrays.asList(amount.split("\\."));
-		}else {
-		amountArr.add(amount);
+		} else {
+			amountArr.add(amount);
 		}
 		String returnValue = "";
 		for (int z = 0; z < amountArr.size(); z++) {
@@ -122,12 +122,26 @@ public class Utils {
 				n = n / 1000;
 			}
 			if (z == 0) {
-				returnValue =output + " dollars";
+				returnValue = output + " dollars";
 			} else {
 				returnValue = returnValue + " and " + output + " cents";
 			}
 		}
 
-		return returnValue+" only";
+		return returnValue + " only";
+	}
+
+	public static String generateConfirmationNumber() {
+		String SALTCHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+		StringBuilder salt = new StringBuilder();
+		Random rnd = new Random();
+		while (salt.length() < 15) { // length of the random string.
+			int index = (int) (rnd.nextFloat() * SALTCHARS.length());
+			salt.append(SALTCHARS.charAt(index));
+		}
+		String saltStr = salt.toString();
+		System.out.println(saltStr);
+		return saltStr;
+
 	}
 }
