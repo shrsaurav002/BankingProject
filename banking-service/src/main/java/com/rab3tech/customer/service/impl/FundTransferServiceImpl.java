@@ -13,15 +13,18 @@ import org.springframework.stereotype.Service;
 
 import com.rab3tech.customer.dao.repository.CustomerAccountInfoRepository;
 import com.rab3tech.customer.dao.repository.FundTransferRepo;
+import com.rab3tech.customer.dao.repository.RemittanceRepository;
 import com.rab3tech.customer.dao.repository.WireTransferRepo;
 import com.rab3tech.customer.service.FundTransferService;
 import com.rab3tech.dao.entity.CustomerAccountInfo;
 import com.rab3tech.dao.entity.FundTransferEntity;
+import com.rab3tech.dao.entity.RemittanceEntity;
 import com.rab3tech.dao.entity.TransferStatus;
 import com.rab3tech.dao.entity.WireTransferEntity;
 import com.rab3tech.utils.Utils;
 import com.rab3tech.vo.FundTransferVO;
 import com.rab3tech.vo.LoginVO;
+import com.rab3tech.vo.RemittanceVO;
 import com.rab3tech.vo.WireTransferVO;
 
 @Service
@@ -33,14 +36,18 @@ public class FundTransferServiceImpl implements FundTransferService {
 	private WireTransferRepo wireRepo;
 	@Autowired
 	private FundTransferRepo fundRepo;
+	@Autowired
+	private RemittanceRepository remitRepo;
 
 	@Override
 	public void transfer(FundTransferVO fundTransferVO, LoginVO loginVO) {
 		String custId = loginVO.getUsername();
+
 		CustomerAccountInfo customerFrom = custAccInfoRepo
 				.findByCustomerUsernameAndAccountType(custId, fundTransferVO.getSentFrom()).get();
 		String toAccNo = fundTransferVO.getSentTo().substring(0, 9);
 		CustomerAccountInfo customerTo = custAccInfoRepo.findByAccountNumber(toAccNo).get();
+
 		customerFrom.setAvBalance(-fundTransferVO.getAmount());
 		customerFrom.setTavBalance(customerFrom.getTavBalance() - fundTransferVO.getAmount());
 		customerTo.setAvBalance(fundTransferVO.getAmount());
@@ -109,6 +116,20 @@ public class FundTransferServiceImpl implements FundTransferService {
 		transferStatus.setId(1);
 		wireTransferEntity.setTransferStatus(transferStatus);
 		wireRepo.save(wireTransferEntity);
+	}
+
+	@Override
+	public void remittanceService(RemittanceVO remittanceVO, String username) {
+		System.out.println(remittanceVO + " " + username);
+
+		CustomerAccountInfo customerFrom = custAccInfoRepo
+				.findByCustomerUsernameAndAccountType(username, remittanceVO.getSentFrom()).get();
+		String confirm = Utils.generateConfirmationNumber();
+		RemittanceEntity remittanceEntity = new RemittanceEntity();
+		BeanUtils.copyProperties(remittanceVO, remittanceEntity);
+		remittanceEntity.setSentFrom(customerFrom);
+		remittanceEntity.setConfirmCode(confirm);
+		remitRepo.save(remittanceEntity);
 	}
 
 }

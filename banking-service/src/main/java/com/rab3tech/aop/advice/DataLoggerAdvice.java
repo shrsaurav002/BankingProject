@@ -53,26 +53,21 @@ private static final Logger logger = LoggerFactory.getLogger(DataLoggerAdvice.cl
 		logger.info("Time Taken by {} is {}", name, timeTaken);
 		return object;
 	}
-
-/*@Around("@annotation(com.rab3tech.aop.advice.TimeLogger)")
-public Object computeTime(ProceedingJoinPoint joinPoint) {
-	String name=joinPoint.getSignature().getName();
-	long startTime = System.currentTimeMillis();
-	logger.info(" Method name = "+name+" is called at startTime  = "+startTime+" Millies");
-	logger.info(" Method inputs are  {}", Arrays.asList(joinPoint.getArgs()));
-	Object object=null;
-	try {
-		object=joinPoint.proceed();
-	} catch (Throwable e) {
-		e.printStackTrace();
-	}
-	long endTime=System.currentTimeMillis();
-	logger.info(" Method name = "+name+" is called at endTime  =  "+endTime+" Millies");
-	long timeTaken =endTime- startTime;
-	logger.info("Time Taken by {} is {}", name, timeTaken);
-	return object;
-}
-*/
+//complete annotation
+	/*
+	 * @Around("@annotation(com.rab3tech.aop.advice.TimeLogger)") public Object
+	 * tcomputeTime(ProceedingJoinPoint joinPoint) { String
+	 * name=joinPoint.getSignature().getName(); long startTime =
+	 * System.currentTimeMillis();
+	 * logger.info(" Method name = "+name+" is called at startTime  = "
+	 * +startTime+" Millies"); logger.info(" Method inputs are  {}",
+	 * Arrays.asList(joinPoint.getArgs())); Object object=null; try {
+	 * object=joinPoint.proceed(); } catch (Throwable e) {
+	 * logger.error(e.getMessage()); } long endTime=System.currentTimeMillis();
+	 * logger.info(" Method name = "+name+" is called at endTime  =  "
+	 * +endTime+" Millies"); long timeTaken =endTime- startTime;
+	 * logger.info("Time Taken by {} is {}", name, timeTaken); return object; }
+	 */
 
 
 }

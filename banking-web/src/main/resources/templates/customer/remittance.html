@@ -25,16 +25,17 @@
 <script type="text/javascript">
 	$(document).ready(function()
 	{
+		$("#submitTransfer").hide();
 		var loginid=$("#loginId").html();
 		var call=fetch("/v3/customer/fetchAccounts?loginid="+loginid);
 		
 		call.then(resp=>resp.json()).then(
 				function(data){
 					
-					$('#fromAccount').empty();
-					$('#fromAccount').append('<option disabled selected value="">Select one</option')
+					$('#sentFrom').empty();
+					$('#sentFrom').append('<option disabled selected value="">Select one</option')
 					$.each(data, function(i, p) {
-					    $('#fromAccount').append($('<option></option>').val(p).html(p));
+					    $('#sentFrom').append($('<option></option>').val(p).html(p));
 					});
 			}
 		)
@@ -51,6 +52,7 @@
 	
 		$("#amount").blur(function(){
 			var input=$(this).val();
+			
 	var callIn=fetch("/v3/customer/convertToWords?amount="+input);
 	callIn.then(resp=>resp.text()).then(function(output){
 			console.log(output);
@@ -62,7 +64,7 @@
 	
 	})
 	function balance(){
-		var from=$("#fromAccount").val()
+		var from=$("#sentFrom").val()
 		var loginid=$("#loginId").html();
 		console.log(from);
 		if(from!=null){
@@ -92,21 +94,17 @@
 	
 	function validate(){
 		var balance=$("#currentBalance").val();
-		var sentFrom=$("#fromAccount").val();
-		var sentTo=$("#toAccount").val	();
+		var sentFrom=$("#sentFrom").val();
+	
 		var amount=$("#amount").val();
 		var remarks=$("#remarks").val();
 		console.log(balance)
 		if (sentFrom==null){
 			$("#errorMessage").html("Please select an account to Transfer from");
-			$("#fromAccount").focus();
+			$("#sentFrom").focus();
 			return;
 		}
-		if (sentTo==null){
-			$("#errorMessage").html("Please select an account to Transfer to");
-			$("#toAccount").focus();
-			return;
-		}
+
 		if (parseFloat(amount)<=0){
 			$("#errorMessage").html("Amount has to be over 0");
 			$("#amount").focus();
@@ -122,9 +120,19 @@
 			$("#remarks").focus();
 			return;
 		}
-		
-		
-		 document.transferForm.submit(); 
+		if(parseFloat(amount)>1000){
+			$("#errorMessage").html("To send money over $1000 please add a payee account");
+			$("#amount").focus();
+			return;
+		}
+		$("#transfer").hide();
+		$("#sentFrom").attr("readonly","readonly");
+		$("#location").attr("readonly","readonly");
+		$("#recName").attr("readonly","readonly");
+		$("#recPhone").attr("readonly","readonly");
+		$("#amount").attr("readonly","readonly");
+		$("#remarks").attr("readonly","readonly");
+		$("#submitTransfer").show();
 	}
 
 		
@@ -181,52 +189,70 @@
 
 	<div class="container">
 		<h2>Fund Transfer Page</h2>
-		<img th:src="@{/images/login.png}" alt="Logo" style="height: 140px" />
+		<img th:src="@{/images/remit.png}" alt="Logo" style="height: 140px" />
 		<br />
 		<span style="color: red; font-size: 18px; font-weight: bold;" id="errorMessage"></span>
 
 
-		<form th:action="@{/customer/transferMoney}" Method="POST" th:object="${fundTransferVO}" name="transferForm">
+		<form th:action="@{/customer/remitConfirm}" Method="POST" th:object="${remittance}" name="remittance">
 			<input type="hidden" id="currentBalance">
-			<table class="table table-bordered" style="width: 100%;">
-				<thead>
-					<tr>
-						<td colspan="2" id="balance"></td>
-
-
-					</tr>
-				</thead>
+			<br>
+			<table class="table table-bordered">
 				<tr>
 					<td>
 						<div>
-							<label for="fromAccount">From Account</label>
+							<label for="sentFrom">Please select which account you want to send from</label>
 							<br />
-							<select class="form-control" th:field="*{sentFrom}" id="fromAccount" onClick="balance();">
+							<select class="form-control" th:field="*{sentFrom}" th:value="*{sentFrom}" onClick="balance();">
 							</select>
-							<!-- <select class="form-control" th:field="*{accountType}">
-							<option th:each="name :${accountType}" th:value="${name}" th:text="${name}"></option>
-						</select> -->
 						</div>
 					</td>
-					<td>
+					<td id="balance"></td>
+				</tr>
+				<tr>
+					<td colspan=2>
 						<div>
-							<label for="toAccount">To Account</label>
+							<label for="heading">Please fill Out the Receiver Info</label>
 							<br />
-							<select class="form-control" th:field="*{sentTo}" id="toAccount" onClick="print();">
-
-							</select>
-							<!-- 	<select class="form-control" th:field="*{accountType}">
-							<option th:each="name :${accountType}" th:value="${name}" th:text="${name}"></option>
-						</select> -->
 						</div>
 					</td>
 				</tr>
 				<tr>
 					<td>
 						<div>
+							<label for="name">Name</label>
+							<input type="text" th:field="*{recName}" th:value="*{recName}" id="recName" class="form-control"
+								placeholder="Enter the name">
+							<br />
+						</div>
+					</td>
+					<td>
+						<div>
+							<label for="number">Phone Number</label>
+							<input type="text" th:field="*{recPhone}" th:value="*{recPhone}" id="recPhone" class="form-control"
+								placeholder="Enter the Phone Number">
+							<br />
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<div>
+							<label for="location">Location</label>
+							<select class="form-control" th:field="*{location}" th:value="*{location}">
+								<option th:each="l :${location}" th:value="${l}" th:text="${l}"></option>
+							</select>
+							<br />
+						</div>
+					</td>
+					<td></td>
+				</tr>
+				<tr>
+					<td>
+						<div>
 							<label for="amount">Amount</label>
 							<br />
-							<input type="number" class="form-control" th:field="*{amount}" placeholder="Enter the amount">
+							<input type="number" class="form-control" style="width: 80%;" th:field="*{amount}" placeholder="Enter the amount">
 							<span id="inWords"> In Words</span>
 						</div>
 					</td>
@@ -237,11 +263,13 @@
 				<tr>
 					<td colspan=2>
 						<label for="remarks">Remarks</label>
-						<input type="text" th:field="*{remarks}" class="form-control">
+						<input type="text" th:field="*{remarks}" th:value="*{remarks}" id="remarks" class="form-control">
+
 					</td>
 				</tr>
 			</table>
-			<button type="button" class="btn btn-primary" onclick="validate();">Transfer</button>
+			<button type="button" id="transfer" class="btn btn-primary" onclick="validate();">Transfer</button>
+			<button type="submit" id="submitTransfer" class="btn btn-primary">Submit Transfer</button>
 		</form>
 
 	</div>

@@ -96,6 +96,7 @@
 					<div class="dropdown-menu" aria-labelledby="navbarDropdown">
 						<a class="dropdown-item" th:href="@{/customer/transferMoney}">Transfer Funds</a>
 						<a class="dropdown-item" th:href="@{/customer/depositFunds}">Deposit Money</a>
+						<a class="dropdown-item" th:href="@{/customer/remittance}">Remittance</a>
 					</div>
 				</li>
 				<li class="nav-item dropdown">
@@ -127,7 +128,7 @@
 		<span id="successMessage" style="color: blue"></span>
 		<img th:src="@{/images/customer_dashboard.jpg}" alt="page" />
 		<br>
-	
+
 		<br>
 		<span th:utext="${error}" style="color: red; font-size: 18px;"></span>
 		<div style="width: 70%"></div>
