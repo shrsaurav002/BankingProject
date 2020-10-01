@@ -1,6 +1,7 @@
 package com.rab3tech.customer.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,6 +16,9 @@ import com.rab3tech.vo.CreditCardVO;
 @RequestMapping("/credit")
 public class CreditCardController {
 	@Autowired
+	private KafkaTemplate<String, CreditCardVO> kafkaTemplate;
+	private static final String TOPIC = "Kafka_Banking_Project";
+	@Autowired
 	private CreditCardService creditService;
 	@Autowired
 	private EmailService emailS;
@@ -23,6 +27,7 @@ public class CreditCardController {
 	public CreditCardVO generateCreditCard(@RequestParam String email, @RequestParam int id) {
 
 		CreditCardVO credit = creditService.createNewCreditCard(email, id);
+		kafkaTemplate.send(TOPIC, credit);
 		return credit;
 	}
 
